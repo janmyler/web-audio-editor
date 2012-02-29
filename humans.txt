@@ -3,10 +3,10 @@
 
 
 /* TEAM */
-  <your title>: <your name>
-  Site:
-  Twitter:
-  Location:
+  Jan Myler
+  Site: http://janmyler.com
+  Twitter: janmyler
+  Location: Brno, Czech Republic
 
 /* THANKS */
   Names (& URL):
@@ -16,6 +16,7 @@
   Components: Modernizr, jQuery
   Software:
 
+/* Below is only H5BP star – it's so nice-looking  :) */
 
 
                                -o/-
