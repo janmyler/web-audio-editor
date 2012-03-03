@@ -23,23 +23,36 @@
     <script src="js/libs/modernizr-2.5.3-respond-1.1.0.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Heeey man!</h1>
-    </header>
-    <div role="main">
-        <nav>
-            <ul>
-                <li><a href="#">Test</a></li>
-                <li><a href="#">Test 2</a></li>
-                <li><a href="#">Test 3</a></li>
-                <li><a href="#">Test 4</a></li>
-                <li><a href="#">Test 5</a></li>
-            </ul>
-        </nav>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#">Project name</a>
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
     </div>
-    <footer>
-
-    </footer>
+    
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span2" id="app-menu">
+                <!-- Sidebar content -->
+            </div>
+            <div class="span10" id="app-content">
+                <!-- Body content  -->
+            </div>
+        </div>
+    </div>
 
 
     <!-- JavaScript at the bottom for fast page loading -->
