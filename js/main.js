@@ -20,10 +20,11 @@ require.config({
 		backbone  	: 'libs/backbone-0.9.1',
 		text 		: 'libs/text-1.0.7.js',
 		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',
+		order		: 'libs/order-1.0.5',
 		templates	: '../templates' 
 	}
 });
 
 require(['app'], function(App) {
-	App.appTest();	
+	//App.appTest();	
 });

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Web Audio Editor</title>
+    <title>Project name :: Audiee</title>
     <meta name="description" content="">
     <meta name="author" content="Jan Myler">
 
@@ -26,36 +26,73 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <a class="brand" href="#">Project name</a>
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div><!--/.nav-collapse -->
+                <div class="project-name pull-left">
+                    <div class="display">
+                        <label class="name-content">Project name</label>
+                    </div>
+                    <div class="edit">
+                        <!-- <input type="text" class="name-input" value="--hodnota--"> -->
+                    </div>
+                </div>
+                <div class="controls">
+                    Controlls wrapper
+                </div>
+                <div class="app-name">Audiee</div>
+                <!-- <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul> -->
             </div>
         </div>
     </div>
-    
-    <div class="container-fluid">
+    <div class="menubar menubar-fixed">
+        <ul class="nav nav-pills">
+            <li><a href="#" id="file-switch">Show files</a></li>
+            <li><a href="#">item-2</a></li>
+            <li class="active"><a href="#">item-3</a></li>
+            <li><a href="#">item-4</a></li>
+            <li><a href="#">item-5</a></li>
+            <li><a href="#">item-6</a></li>
+        </ul>
+    </div>
+    <div id="app-frame" class="container-fluid">
         <div class="row-fluid">
-            <div class="span2" id="app-menu">
-                <!-- Sidebar content -->
+            <div class="span2" id="file-browser">
+                <div class="inner">
+                    <!-- Sidebar content -->
+                    <ul>
+                        <li>item-1</li>
+                        <li>item-2</li>
+                        <li>item-3</li>
+                        <li>item-4</li>
+                        <li>item-5</li>
+                    </ul>
+                </div>
             </div>
-            <div class="span10" id="app-content">
+            <div class="span12" id="editor-view">
                 <!-- Body content  -->
+                <div class="inner">
+                    <div class="track">
+                        <canvas id="track-1" class="display"></canvas>
+                        <ul class="file_list"></ul>
+                    </div>
+                    <div class="track">
+                        <canvas id="track-2" class="display"></canvas>
+                        <ul class="file_list"></ul>
+                    </div>
+                    <div class="track">
+                        <canvas id="track-3" class="display"></canvas>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
 
     <!-- JavaScript at the bottom for fast page loading -->
+    <script data-main="js/main" src="js/libs/require-1.0.7.js"></script>
 
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
   
