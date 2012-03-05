@@ -5,7 +5,7 @@ body {
   padding-bottom: 40px;
 }
 
-@import "bootstrap/responsive.less";
+//@import "bootstrap/responsive.less";
 
 // google fonts imports
 @import url(http://fonts.googleapis.com/css?family=Cookie);
@@ -37,10 +37,24 @@ body {
   }
 
   .controls {
-    width: 240px;
-    height: 40px;
-    background-color: red;
-    margin: 0 auto;
+    width: 290px;
+    min-width: 290px;
+    margin: 1px auto 0;
+
+    .playing {
+      .buttonBackground(lighten(@orange, 30%), lighten(@orange, 15%));      
+    }
+
+    #time-display {
+      width: 80px;
+      text-align: right;
+      margin: 5px 4px 0 0;
+    }
+
+    // time-display and stop button right margin
+    :nth-child(3) {
+      margin-right: 4px;
+    }
   }
 }
   
