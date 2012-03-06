@@ -26,5 +26,5 @@ require.config({
 });
 
 require(['app'], function(App) {
-	//App.appTest();	
+	App.appTest();	
 });
