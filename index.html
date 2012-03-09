@@ -26,40 +26,42 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <div class="project-name pull-left">
+                <div class="pull-left" id="project-name">
+                    <!-- name_view.html (template) -->
                     <div class="display">
                         <label class="name-content">Project name</label>
                     </div>
-                    <div class="edit">
-                        <!-- <input type="text" class="name-input" value="--hodnota--"> -->
-                    </div>
+                    <!-- /name_view.html (template) -->
                 </div>
-                <div class="controls btn-toolbar">
+                <div class="btn-toolbar" id="playback-controls">
+                    <!-- playback_controls.html (template) -->
                     <input type="text" id="time-display" value="31. 1. 3">
-                    <button class="btn btn-inverse" id="play"><i class="icon-play"></i></button>
+                    <button class="btn" id="play"><i class="icon-play"></i></button>
                     <button class="btn" id="stop"><i class="icon-stop"></i></button>
                     <button class="btn" id="seek-start"><i class="icon-fast-backward"></i></button>
                     <button class="btn" id="seek-end"><i class="icon-fast-forward"></i></button>
+                    <!-- /playback_controls.html (template) -->
                 </div>
             </div>
             <div class="app-name">Audiee</div>
         </div>
     </div>
     <div class="menubar menubar-fixed">
-        <ul class="nav nav-pills">
+        <!-- <ul class="nav nav-pills">
             <li><a href="#" id="file-switch">Show files</a></li>
             <li><a href="#">item-2</a></li>
             <li class="active"><a href="#">item-3</a></li>
             <li><a href="#">item-4</a></li>
             <li><a href="#">item-5</a></li>
             <li><a href="#">item-6</a></li>
-        </ul>
+        </ul> -->
+        placeholder for menu or something...
     </div>
     <div id="app-frame" class="container-fluid">
         <div class="row-fluid">
+            <!-- hidden for now 
             <div class="span2" id="file-browser">
                 <div class="inner">
-                    <!-- Sidebar content -->
                     <ul>
                         <li>item-1</li>
                         <li>item-2</li>
@@ -68,42 +70,92 @@
                         <li>item-5</li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
             <div class="span12" id="editor-view">
-                <!-- Body content  -->
                 <div class="inner">
+                    <div id="time-line"></div>
                     <div class="track">
-                        <canvas id="track-1" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-2" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-3" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-1" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-2" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-3" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-1" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-2" class="display"></canvas>
-                    </div>
-                    <div class="track">
-                        <canvas id="track-3" class="display"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                        <div class="info-wrapper pull-left">
+                            <div class="track-name">
+                                <!-- name_view.html (template) -->
+                                <div class="display">
+                                    <label class="name-content">Track name</label>
+                                </div>
+                                <!-- /name_view.html (template) -->
+                            </div>
+                            <div class="track-controls">
+                                <!-- track_controls.html (template) -->
+                                <button class="btn">M</button>
+                                <button class="btn">S</button>
+                                <!-- /track_controls.html (template) -->
+                            </div>
+                        </div>
+                        <div class="clips-wrapper">
+                            <!-- clip.html (template) -->
+                                <div class="clip">
+                                    <div class="clip-name">
+                                        Clip name
+                                    </div> 
+                                    <canvas>
+                                        
+                                    </canvas>        
+                                </div>
+                                <div class="clip">
+                                    <div class="clip-name">
+                                        Clip name
+                                    </div>
+                                    <canvas>
+                                        
+                                    </canvas>       
 
+                                </div>
+                            <!-- /clip.html (template) -->
+                        </div>
+                    </div>
+                    <div class="track">
+                        <div class="info-wrapper pull-left">
+                            <div class="track-name">
+                                <!-- name_view.html (template) -->
+                                <div class="display">
+                                    <label class="name-content">Track name</label>
+                                </div>
+                                <!-- /name_view.html (template) -->
+                            </div>
+                            <div class="track-controls">
+                                <!-- track_controls.html (template) -->
+                                <button class="btn">M</button>
+                                <button class="btn">S</button>
+                                <!-- /track_controls.html (template) -->
+                            </div>
+                        </div>
+                        <div class="clips-wrapper">
+                            <!-- clip.html (template) -->
+                                <div class="clip">
+                                    <div class="clip-name">
+                                        Clip name
+                                    </div> 
+                                    <canvas>
+                                        
+                                    </canvas>        
+                                </div>
+                                <div class="clip">
+                                    <div class="clip-name">
+                                        Clip name
+                                    </div>
+                                    <canvas>
+                                        
+                                    </canvas>       
+
+                                </div>
+                            <!-- /clip.html (template) -->
+                        </div>
+                    </div>
+                </div> 
+            </div> <!-- /div#editor-view -->
+        </div> 
+    </div> <!-- /div#app-frame -->
+
+    
 
     <!-- JavaScript at the bottom for fast page loading -->
     <script data-main="js/main" src="js/libs/require-1.0.7.js"></script>

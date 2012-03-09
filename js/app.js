@@ -5,10 +5,13 @@
  * Application entry point.
  */
 
-define(['order!jquery', 'order!libs/bootstrap/modal'], function($) {
+define(['models/track', 'models/clip', 'jquery', 'order!underscore', 'order!backbone'], function(Track, Clip) {
 	// test for API support
 	
+	var track = new Track({name: 'Track 1'}),
+		clip = new Clip;
 
+	console.log(track, clip);
 	/*var audioContext = new webkitAudioContext();
 
 	$('#file-switch').on('click', function() {
@@ -89,12 +92,12 @@ define(['order!jquery', 'order!libs/bootstrap/modal'], function($) {
 		dropzone[i].addEventListener('drop', handleFile, false);
 	};
 	*/
-
 	
 	
 	//redraw();
 
 	return {
 		//appTest: appTest
+		//track: track
 	};
 });
