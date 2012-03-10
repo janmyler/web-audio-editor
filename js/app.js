@@ -5,13 +5,30 @@
  * Application entry point.
  */
 
-define(['models/track', 'models/clip', 'jquery', 'order!underscore', 'order!backbone'], function(Track, Clip) {
+define([
+	'jquery',
+	'underscore',
+	'backbone',
+	'views/playback_controls'
+], function($, _, Backbone, PlaybackControls) {
+	var testFunc = function() {
+		console.log('Test:');
+		console.log(Backbone);
+		console.log(_);
+	};
+
+	PlaybackControls.render();
+
+	//function(Track, Clip, PlaybackControls) {
+	//function(PlaybackControls) {
 	// test for API support
 	
-	var track = new Track({name: 'Track 1'}),
-		clip = new Clip;
+	//PlaybackControls.render();
 
-	console.log(track, clip);
+	/*var track = new Track({name: 'Track 1'}),
+		clip = new Clip;*/
+
+//	console.log(track, clip);
 	/*var audioContext = new webkitAudioContext();
 
 	$('#file-switch').on('click', function() {
@@ -99,5 +116,6 @@ define(['models/track', 'models/clip', 'jquery', 'order!underscore', 'order!back
 	return {
 		//appTest: appTest
 		//track: track
+		test: testFunc
 	};
 });

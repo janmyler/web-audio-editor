@@ -12,20 +12,18 @@ require.config({
 		// events
 
 		// libs
-		jquery    	: 'libs/jquery-1.7.1',
-		underscore 	: 'libs/underscore-1.3.1',
-		backbone  	: 'libs/backbone-0.9.1',
+		jquery    	: 'libs/jquery/jquery',
+		underscore 	: 'libs/underscore/underscore-min',
+		backbone  	: 'libs/backbone/backbone-min',
 		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',	// delete?
 		
-		// templates
-		templates	: '../templates',
-
 		// plugins
-		text 		: 'libs/text-1.0.7.js',
-		order		: 'libs/order-1.0.5',
+		text 		: 'libs/require/text',
+		order		: 'libs/require/order'
 	},
 });
 
 require(['app'], function(App) {
+	App.test();
 	//console.log('main:',App);
 });
