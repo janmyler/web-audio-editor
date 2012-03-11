@@ -21,6 +21,7 @@ define([
 			pan: 0.5,
 			muted: false,
 			solo: false,
+			order: 1, // won't be here, will be for purpose of sorting in view
 			// allow minimalization (view purpose)
 			// minimalized: false,
 

@@ -17,7 +17,7 @@ body {
 @trackHeight:     120px;
 @infoWidth:       @trackHeight;
 @infoHeight:      @trackHeight;
-@timelineHeight:  20px;
+@timelineHeight:  30px;
 @menubarHeight: 36px;
 
 // styles for the top navbar
@@ -82,6 +82,7 @@ body {
   position: relative;
   overflow: scroll;
   margin-top: @timelineHeight;
+  background-color: @grayLighter;
 
   .inner {
     padding: 0;
@@ -98,7 +99,6 @@ body {
 
   .track {
     height: @trackHeight;
-    margin-bottom: 5px;
     background-color: #99ACB9;
     border-top: 1px solid #888;
     width: 1500px;

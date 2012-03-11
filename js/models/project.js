@@ -13,6 +13,8 @@ define([
         // default attributes
         defaults: {
             name: 'Untitled',
+            created: Date.now(),
+            user: 'Guest', 
             curr_time: 0           
         },
 

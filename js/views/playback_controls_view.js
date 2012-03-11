@@ -1,6 +1,6 @@
 /*
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: playback_controls.js
+ * Filename: playback_controls_view.js
  * 
  * View for main playback controls.
  */
@@ -19,7 +19,7 @@ define([
             'click #play'       : 'test',
             'click #stop'       : 'test',
             'click #seek-start' : 'test',
-            'click #seek-end'   : 'test'
+            'click #seek-end'   : 'test',
         },
 
         // listeners to a model's changes
@@ -29,7 +29,11 @@ define([
 
         // render function
         render: function() {
-            this.el.children('#time-display').val('0. 0. 0');
+            var time = this.model.get('curr_time'),
+                min  = Math.floor(time / 60),
+                sec  = time % 60;
+            console.log(time, min, sec);
+            this.el.children('#time-display').val(min + ' : ' + sec);
             return this;
         },
 

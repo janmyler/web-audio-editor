@@ -15,7 +15,6 @@ define([
 			name: 'untitled',
 			source: undefined,
 			color: '#3CA9B5',
-			track_id: undefined,
 			track_pos: 0,
 			start_time: 0,
 			end_time: 0

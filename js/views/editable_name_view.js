@@ -1,6 +1,6 @@
 /*
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: editable_name.js
+ * Filename: editable_name_view.js
  * 
  * View for editing the name titles (e.g. project name, track name etc.).
  */

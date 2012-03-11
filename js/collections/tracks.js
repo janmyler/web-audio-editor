@@ -10,13 +10,12 @@ define([
     'backbone',
     'models/track'
 ], function(_, Backbone, Track) {
-	var TrackCollection = Backbone.Collection.extend({
+	var TracksCollection = Backbone.Collection.extend({
         // model reference
-        model: Track,
+        model: Track
 
-
-
+        // other functions will be here ...
 	});
 
-	return new TrackCollection;
+	return new TracksCollection;
 });

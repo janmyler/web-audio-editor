@@ -9,22 +9,35 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/playback_controls',
+	'views/playback_controls_view',
 	'models/project',
-	'views/editable_name',
-	'views/editor'
+	'views/editable_name_view',
+	'views/editor_view'
 ], function($, _, Backbone, PlaybackControls, Project, EditableName, Editor) {
+	var audioContext;
+
 	var init = function() {
+		// browser compatibility test
+		if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
+			alert('Your browser is not supported yet.');
+			return false;
+		}
+
+		// init the app
+		var project = new Project({name: 'New Project', curr_time: 80});
+		(new EditableName({model: project})).render();
+		(new Editor({model: project})).render();
+		(new PlaybackControls({model: project})).render();
 
 	};
-
+	/*
 	(new PlaybackControls).render();
 	var proj = new Project,
 		view = new EditableName({model: proj}),
 		edv = new Editor;
 	view.render();
 	edv.render();
-	
+	*/
 	//function(Track, Clip, PlaybackControls) {
 	//function(PlaybackControls) {
 	// test for API support
@@ -120,6 +133,6 @@ define([
 	//redraw();
 
 	return {	
-		
+		initialize: init
 	};
 });

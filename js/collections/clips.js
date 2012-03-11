@@ -10,12 +10,12 @@ define([
     'backbone',
     'models/clip'
 ], function(_, Backbone, Clip) {
-	var ClipCollection = Backbone.Collection.extend({
+	var ClipsCollection = Backbone.Collection.extend({
 		// model reference
-		model: Clip,
+		model: Clip
 
-
+        // other functions will be here ...
 	});
 
-	return new ClipCollection;
+	return new ClipsCollection;
 });
