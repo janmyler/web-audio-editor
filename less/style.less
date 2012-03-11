@@ -2,7 +2,6 @@
 
 body {
   padding-top: 60px;
-  padding-bottom: 40px;
 }
 
 //@import "bootstrap/responsive.less";
@@ -13,7 +12,22 @@ body {
 /* ===== Primary Styles ========================================================
    Author: Jan Myler <honza.myler@gmail.com>
    ========================================================================== */
+
+// variables
+@trackHeight:     120px;
+@infoWidth:       @trackHeight;
+@infoHeight:      @trackHeight;
+@timelineHeight:  20px;
+@menubarHeight: 36px;
+
+// styles for the top navbar
 .navbar {
+  height: 40px;
+  
+  .navbar-inner {
+    height: 40px;
+  }
+
   .app-name {
     position: absolute;
     top: 0px;
@@ -31,8 +45,9 @@ body {
       .navbar .brand;   // inherit styles from bootstrap
     }
 
-    .name-edit {
-
+    .name-input {
+      margin: 5px 0 7px 0;
+      width: 130px;
     }
   }
 
@@ -50,6 +65,8 @@ body {
       text-align: right;
       margin: 5px 4px 0 0;
       font-size: 18px;
+      cursor: default;
+      .noTextSelection;
 
     }
 
@@ -60,18 +77,22 @@ body {
   }
 }
 
+// styles for the main editor view
 #editor-view { 
-  @trackHeight:  120px;
-  @infoWidth:    @trackHeight;
-  @infoHeight:   @trackHeight;
+  position: relative;
+  overflow: scroll;
+  margin-top: @timelineHeight;
 
   .inner {
     padding: 0;
   }
   
   #time-line {
-    height: 20px;
+    width: 100%;
+    height: @timelineHeight;
     margin-left: @infoWidth;
+    position: fixed;
+    top: @navbarHeight + @menubarHeight + @timelineHeight / 2;
     background-color: @grayLighter;
   }
 
@@ -80,12 +101,15 @@ body {
     margin-bottom: 5px;
     background-color: #99ACB9;
     border-top: 1px solid #888;
+    width: 1500px;
 
     .info-wrapper {
       height: @infoHeight;
       width: @infoWidth;
       overflow: hidden;
       background-color: #ddd;
+      position: relative;
+      z-index: 300;
 
       .track-name {
         padding: 4px;
@@ -128,27 +152,28 @@ body {
   }
 }
 
+// styles for the submenu bar
 .menubar {
 	width: 100%;
-	height: 36px;
+	height: @menubarHeight;
 	#gradient.vertical(#f5f5f5, #eee);
 	border-bottom: 1px solid #c8c8c8;
-}
-.menubar .nav {
+  
+  .nav {
   	margin-bottom: 0;
-}
-.menubar .nav > li > a {
-	margin: 0;
-	padding-top:    11px;
-	padding-bottom: 11px;
-	border-left: 1px solid #f5f5f5;
-	border-right: 1px solid #e5e5e5;
-	-webkit-border-radius: 0;
-	   -moz-border-radius: 0;
-	        border-radius: 0;
-}
-.menubar .nav > .active > a,
-.menubar .nav > .active > a:hover {
+  }
+  .nav > li > a {
+  	margin: 0;
+  	padding-top:    11px;
+  	padding-bottom: 11px;
+  	border-left: 1px solid #f5f5f5;
+  	border-right: 1px solid #e5e5e5;
+  	-webkit-border-radius: 0;
+  	   -moz-border-radius: 0;
+  	        border-radius: 0;
+  }
+  .nav > .active > a,
+  .nav > .active > a:hover {
   	padding-left: 13px;
   	color: #777;
   	background-color: #e9e9e9;
@@ -157,28 +182,28 @@ body {
   	-webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
        -moz-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
             box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
-}
-.menubar .nav > .active > a .caret,
-.menubar .nav > .active > a:hover .caret {
- 	border-top-color: #777;
-}
-.menubar .nav > li:first-child > a,
-.menubar .nav > li:first-child > a:hover {
+  }
+  .nav > .active > a .caret,
+  .nav > .active > a:hover .caret {
+   	border-top-color: #777;
+  }
+  .nav > li:first-child > a,
+  .nav > li:first-child > a:hover {
   	border-left: 0;
   	padding-left: 12px;
   	-webkit-border-radius: 4px 0 0 4px;
        -moz-border-radius: 4px 0 0 4px;
             border-radius: 4px 0 0 4px;
-}
-.menubar .nav > li:last-child > a {
+  }
+  .nav > li:last-child > a {
   	border-right: 0;
-}
-.menubar .dropdown-menu {
+  }
+  .dropdown-menu {
   	-webkit-border-radius: 0 0 4px 4px;
        -moz-border-radius: 0 0 4px 4px;
             border-radius: 0 0 4px 4px;
+  }
 }
-
 //@media (min-width: 980px) {
 @media (min-width: 480px) {
 	.menubar-fixed {
@@ -189,6 +214,15 @@ body {
 		z-index: @zindexTooltip;
 	}
 }
+
+// styles for the editable name views
+.editing .display, .edit {
+    display: none;
+}
+.editing .edit {
+    display: block;
+}
+
 
 #app-frame { margin-top: 30px; padding-left: 0; padding-right: 0; }
 .row-fluid .inner { padding: 10px; }

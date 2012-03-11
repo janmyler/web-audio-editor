@@ -9,16 +9,22 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/playback_controls'
-], function($, _, Backbone, PlaybackControls) {
-	var testFunc = function() {
-		console.log('Test:');
-		console.log(Backbone);
-		console.log(_);
+	'views/playback_controls',
+	'models/project',
+	'views/editable_name',
+	'views/editor'
+], function($, _, Backbone, PlaybackControls, Project, EditableName, Editor) {
+	var init = function() {
+
 	};
 
-	PlaybackControls.render();
-
+	(new PlaybackControls).render();
+	var proj = new Project,
+		view = new EditableName({model: proj}),
+		edv = new Editor;
+	view.render();
+	edv.render();
+	
 	//function(Track, Clip, PlaybackControls) {
 	//function(PlaybackControls) {
 	// test for API support
@@ -113,9 +119,7 @@ define([
 	
 	//redraw();
 
-	return {
-		//appTest: appTest
-		//track: track
-		test: testFunc
+	return {	
+		
 	};
 });

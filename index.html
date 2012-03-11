@@ -26,23 +26,13 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <div class="pull-left" id="project-name">
-                    <!-- name_view.html (template) -->
-                    <div class="display">
-                        <label class="name-content">Project name</label>
-                    </div>
-                    <!-- /name_view.html (template) -->
-                </div>
+                <div class="pull-left editable" id="project-name"></div>
                 <div class="btn-toolbar" id="playback-controls">
-                    <!-- playback_controls.html (template) -->
-                    <!--
-                    <input type="text" id="time-display" value="31. 1. 3">
-                    <button class="btn" id="play"><i class="icon-play"></i></button>
+                    <input type="text" id="time-display" value="">
+                    <button class="btn btn-inverse" id="play"><i class="icon-play"></i></button>
                     <button class="btn" id="stop"><i class="icon-stop"></i></button>
                     <button class="btn" id="seek-start"><i class="icon-fast-backward"></i></button>
                     <button class="btn" id="seek-end"><i class="icon-fast-forward"></i></button>
-                    -->
-                    <!-- /playback_controls.html (template) -->
                 </div>
             </div>
             <div class="app-name">Audiee</div>
@@ -78,7 +68,7 @@
                     <div id="time-line"></div>
                     <div class="track">
                         <div class="info-wrapper pull-left">
-                            <div class="track-name">
+                            <div class="track-name editable">
                                 <!-- name_view.html (template) -->
                                 <div class="display">
                                     <label class="name-content">Track name</label>
@@ -116,7 +106,7 @@
                     </div>
                     <div class="track">
                         <div class="info-wrapper pull-left">
-                            <div class="track-name">
+                            <div class="track-name editable">
                                 <!-- name_view.html (template) -->
                                 <div class="display">
                                     <label class="name-content">Track name</label>

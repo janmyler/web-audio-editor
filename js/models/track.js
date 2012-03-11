@@ -5,11 +5,15 @@
  * Model for single audio track.
  */
 
-define(['jquery', 'underscore', 'backbone'], function() {
+define([
+	'underscore', 
+	'backbone',
+	'collections/clips'
+], function(_, Backbone, Clips) {
 	var Track = Backbone.Model.extend({
 		// default attributes
 		defaults: {
-			name: 'untitled',
+			name: 'Untitled',
 			color: '#356871',
 			// allow +gain? (should be useful) like:
 			// volume_max: 1.4,
@@ -33,8 +37,7 @@ define(['jquery', 'underscore', 'backbone'], function() {
 
 		// initialization
 		initialize: function() {
-			var name = this.get('name') || this.defaults.name;
-			console.log('track ' + name + ' has been initialized');
+			this.clips = Clips;
 		},
 
 		// validation?

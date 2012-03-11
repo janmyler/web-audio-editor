@@ -5,7 +5,11 @@
  * Collection for audio tracks.
  */
 
-define(['models/track'], function(Track) {
+define([
+    'underscore',
+    'backbone',
+    'models/track'
+], function(_, Backbone, Track) {
 	var TrackCollection = Backbone.Collection.extend({
         // model reference
         model: Track,

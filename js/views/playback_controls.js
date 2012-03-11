@@ -8,21 +8,39 @@
 define([
     'underscore',
     'backbone',
-    'text!templates/playback_controls.html'
-], function(_, Backbone, playbackControlsTemplate) {
+], function(_, Backbone) {
 
     var PlaybackControls = Backbone.View.extend({
         // parent DOM element
         el: $('#playback-controls'),
 
+        // DOM events listeners
+        events: {
+            'click #play'       : 'test',
+            'click #stop'       : 'test',
+            'click #seek-start' : 'test',
+            'click #seek-end'   : 'test'
+        },
+
+        // listeners to a model's changes
+        initialize: function() {
+
+        },
+
         // render function
         render: function() {
-            var compiled_template = _.template(playbackControlsTemplate);
-            this.el.html(compiled_template);
+            this.el.children('#time-display').val('0. 0. 0');
             return this;
+        },
+
+        // test debug only
+        test: function(options) {
+            alert('clicked');
+            console.log(options);
         }
+
 
     });
 
-    return new PlaybackControls;
+    return PlaybackControls;
 });

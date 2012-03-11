@@ -24,6 +24,5 @@ require.config({
 });
 
 require(['app'], function(App) {
-	App.test();
-	//console.log('main:',App);
+	//App.init();
 });

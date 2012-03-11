@@ -5,12 +5,14 @@
  * Collection for audio clips.
  */
 
-define(['models/clip'], function(Clip) {
+define([
+    'underscore',
+    'backbone',
+    'models/clip'
+], function(_, Backbone, Clip) {
 	var ClipCollection = Backbone.Collection.extend({
 		// model reference
 		model: Clip,
-
-
 
 
 	});

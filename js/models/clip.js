@@ -5,7 +5,10 @@
  * Model for single audio clip.
  */
 
-define(['jquery', 'underscore', 'backbone'], function() {
+define([
+	'underscore',
+	'backbone'
+], function(_, Backbone) {
 	var Clip = Backbone.Model.extend({
 		// default attributes
 		defaults: {
