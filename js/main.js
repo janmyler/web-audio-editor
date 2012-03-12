@@ -9,9 +9,9 @@ require.config({
 	paths: {
 		// libs
 		jquery    	: 'libs/jquery/jquery',
-		underscore 	: 'libs/underscore/underscore-min',
-		backbone  	: 'libs/backbone/backbone-min',
-		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',	// delete?
+		underscore 	: 'libs/underscore/underscore',
+		backbone  	: 'libs/backbone/backbone',
+		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',	 // TODO delete?
 		
 		// plugins
 		text 		: 'libs/require/text',
@@ -20,6 +20,6 @@ require.config({
 	},
 });
 
-require(['app'], function(App) {
-	App.initialize();
+require(['Audiee'], function(Audiee) {
+	Audiee.initialize();
 });
