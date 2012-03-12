@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: editable_name_view.js
  * 

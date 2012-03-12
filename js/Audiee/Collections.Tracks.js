@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: tracks.js
  * 
@@ -8,7 +8,7 @@
 define([
     'underscore',
     'backbone',
-    'models/track'
+    'Audiee/Models.Track'
 ], function(_, Backbone, Track) {
 	var TracksCollection = Backbone.Collection.extend({
         // model reference

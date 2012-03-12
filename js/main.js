@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: main.js
  * 
@@ -9,7 +9,7 @@ require.config({
 	paths: {
 		// libs
 		jquery    	: 'libs/jquery/jquery',
-		underscore 	: 'libs/underscore/underscore',
+		underscore 	: 'libs/underscore/underscore-min',
 		backbone  	: 'libs/backbone/backbone',
 		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',	 // TODO delete?
 		

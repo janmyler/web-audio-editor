@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: menu_view.js
  * 
@@ -32,7 +32,6 @@ define([
             var tpl = (_.template(modalT))(),
                 $tpl = $(tpl);
 
-                console.log(MESSAGE);
             // register an event
             $tpl.on('change', '#file-name', this._fileSelected);  
             $tpl.modal();           // show the modal window

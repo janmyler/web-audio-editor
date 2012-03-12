@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: app.js
  * 
@@ -9,16 +9,15 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/playback_controls_view',
-	'models/project',
-	'views/editable_name_view',
-	'views/editor_view',
-	'views/menu_view',
-	'!text/templates/alert_modal.html',
+	'Audiee/Views.PlaybackControls',
+	'Audiee/Models.Project',
+	'Audiee/Views.EditableName',
+	'Audiee/Views.Editor',
+	'Audiee/Views.Menu',
+	'text!templates/alert_modal.html',
 	'plugins/modal'
-], function($, _, Backbone,
-	 playbackControlsV, projectM, editableNameV,
-	 editorV, menuV, alertModalT) {
+], function($, _, Backbone, PlaybackControls, Project, EditableName,
+	 Editor, Menu, AlertModal) {
 	var Audiee = Audiee || {};
 
 	var init = function() {
@@ -29,7 +28,6 @@ define([
 		}
 
 		// init the app
-		console.log(MESSAGE);
 		var project = new Project({name: 'New Project'});
 		(new EditableName({model: project})).render();
 		(new Editor({model: project})).render();

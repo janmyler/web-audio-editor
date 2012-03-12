@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: clips.js
  * 
@@ -8,7 +8,7 @@
 define([
     'underscore',
     'backbone',
-    'models/clip'
+    'Audiee/Models.Clip'
 ], function(_, Backbone, Clip) {
 	var ClipsCollection = Backbone.Collection.extend({
 		// model reference

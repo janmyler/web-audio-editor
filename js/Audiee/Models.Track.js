@@ -1,4 +1,4 @@
-/*
+/**
  * Author: Jan Myler <honza.myler@gmail.com>
  * Filename: track.js
  * 
@@ -8,7 +8,7 @@
 define([
 	'underscore', 
 	'backbone',
-	'collections/clips'
+	'Audiee/Collections.Clips'
 ], function(_, Backbone, Clips) {
 	var Track = Backbone.Model.extend({
 		// default attributes
