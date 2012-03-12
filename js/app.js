@@ -12,9 +12,14 @@ define([
 	'views/playback_controls_view',
 	'models/project',
 	'views/editable_name_view',
-	'views/editor_view'
-], function($, _, Backbone, PlaybackControls, Project, EditableName, Editor) {
-	var audioContext;
+	'views/editor_view',
+	'views/menu_view',
+	'!text/templates/alert_modal.html',
+	'plugins/modal'
+], function($, _, Backbone,
+	 playbackControlsV, projectM, editableNameV,
+	 editorV, menuV, alertModalT) {
+	var Audiee = Audiee || {};
 
 	var init = function() {
 		// browser compatibility test
@@ -24,10 +29,12 @@ define([
 		}
 
 		// init the app
-		var project = new Project({name: 'New Project', curr_time: 80});
+		console.log(MESSAGE);
+		var project = new Project({name: 'New Project'});
 		(new EditableName({model: project})).render();
 		(new Editor({model: project})).render();
 		(new PlaybackControls({model: project})).render();
+		(new Menu);
 
 	};
 	/*

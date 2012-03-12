@@ -41,12 +41,6 @@ define([
 			this.clips = Clips;
 		},
 
-		// validation?
-		validate: function(attribs) {
-			if (attribs.attr === undefined)
-				return "Error msg";
-		},
-
 		// debug print
 		print: function() {
 			console.log(this);

@@ -27,8 +27,9 @@ define([
 
         // validation?
         validate: function(attribs) {
-            if (attribs.name.length == 0)
-                return "Project name cannot be empty.";
+            var regex = /^(\w+[\ ]*)+$/;
+            if (!regex.test(attribs.name))
+                return "Project name is invalid.";
         }
 
     });

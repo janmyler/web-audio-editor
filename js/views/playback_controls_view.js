@@ -32,7 +32,6 @@ define([
             var time = this.model.get('curr_time'),
                 min  = Math.floor(time / 60),
                 sec  = time % 60;
-            console.log(time, min, sec);
             this.el.children('#time-display').val(min + ' : ' + sec);
             return this;
         },

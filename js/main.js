@@ -7,10 +7,6 @@
 
 require.config({
 	paths: {
-		// core
-		
-		// events
-
 		// libs
 		jquery    	: 'libs/jquery/jquery',
 		underscore 	: 'libs/underscore/underscore-min',
@@ -19,7 +15,8 @@ require.config({
 		
 		// plugins
 		text 		: 'libs/require/text',
-		order		: 'libs/require/order'
+		order		: 'libs/require/order',
+		plugins		: 'libs/bootstrap'
 	},
 });
 

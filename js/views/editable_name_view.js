@@ -21,7 +21,7 @@ define([
         // DOM events listeners
         events: {
             'dblclick .name-content' : 'edit',
-            'keypress .name-input'   : 'updateOnEnter',
+            'keyup .name-input'      : 'keyupHandler',
             'blur .name-input'       : 'close'
         },
 
@@ -42,18 +42,23 @@ define([
         // switch view into 'editing' mode
         edit: function() {
             this.el.addClass('editing');
-            this.input.focus();
+            this.input.focus().select();
         },
 
         // go to the close function when 'enter' is pressed
-        updateOnEnter: function(e) {
-            if (e.keyCode == 13)
+        keyupHandler: function(e) {
+            if (e.which == 13) {
+                this.model.set({name: this.input.val()});
+                this.el.removeClass('editing');     
+            } else if (e.which == 27) {
                 this.close();
+            }   
+            
         },
 
         // close the 'editing' mode and save the changes to the model
         close: function() {
-            this.model.set({name: this.input.val()});
+            this.input.val(this.model.get('name'));
             this.el.removeClass('editing');
         }
     });
