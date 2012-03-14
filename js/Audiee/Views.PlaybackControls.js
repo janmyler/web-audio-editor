@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: playback_controls_view.js
  * 
  * View for main playback controls.
  */

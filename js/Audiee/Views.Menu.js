@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: menu_view.js
  * 
  * View for application menu.
  */

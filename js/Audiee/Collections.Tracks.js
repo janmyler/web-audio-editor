@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: tracks.js
  * 
  * Collection for audio tracks.
  */

@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: clip.js
  * 
  * Model for single audio clip.
  */
@@ -22,15 +21,8 @@ define([
 
 		// initialization
 		initialize: function() {
-			console.log('clip has been initialized');
-		},
-
-		// validation?
-		validate: function(attribs) {
-			if (attribs.attr === undefined)
-				return "Error msg";
+			console.log('clip ' + this.get('name') + ' has been initialized');
 		}
-
 	});
 
 	return Clip;

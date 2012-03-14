@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: track_view.js
  * 
  * View for main playback controls.
  */

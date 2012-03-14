@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: app.js
  * 
  * Application entry point.
  */
@@ -9,15 +8,36 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'Audiee/Views.PlaybackControls',
+	/*'Audiee/Views.PlaybackControls',
 	'Audiee/Models.Project',
 	'Audiee/Views.EditableName',
 	'Audiee/Views.Editor',
 	'Audiee/Views.Menu',
 	'text!templates/alert_modal.html',
-	'plugins/modal'
-], function($, _, Backbone, PlaybackControls, Project, EditableName,
-	 Editor, Menu, AlertModal) {
+	'plugins/modal'*/
+	'Audiee/Views.Clips',
+	'Audiee/Collections.Clips',
+//], function($, _, Backbone, PlaybackControls, Project, EditableName,
+//		Editor, Menu, AlertModal) {
+], function($, _, Backbone, ClipsV, ClipsC) {
+	var init = function() {
+		// TEST COLLECTION
+		clips = new ClipsC([
+			{name: 'First clip'},
+			{name: 'Second clip'},
+			{name: 'Third clip'},
+			{name: 'Fourth clip'},
+			{name: 'going on'},
+			{name: 'and oonnnnn'}
+		]);
+
+		// clips view
+		new ClipsV({
+			collection: clips,
+			el: '#tracks'
+		}).render();
+	};
+	/*
 	var Audiee = Audiee || {};
 
 	var init = function() {
@@ -34,7 +54,7 @@ define([
 		(new PlaybackControls({model: project})).render();
 		(new Menu);
 
-	};
+	};*/
 	/*
 	(new PlaybackControls).render();
 	var proj = new Project,

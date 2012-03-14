@@ -1,8 +1,7 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: main.js
  * 
- * Require.js shortcut alias definition. 
+ * Require.js paths configuration, application initialization.
  */
 
 require.config({
@@ -20,6 +19,6 @@ require.config({
 	},
 });
 
-require(['Audiee'], function(Audiee) {
-	Audiee.initialize();
+require(['app'], function(App) {
+	App.initialize();
 });

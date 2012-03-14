@@ -1,6 +1,5 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: editor_view.js
  * 
  * View for main editor panel.
  */
