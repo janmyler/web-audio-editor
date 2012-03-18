@@ -1,7 +1,7 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * View for sound visualisation of a single audio clip.
+ * View for clips container within a track.
  */
 
 define([
@@ -16,7 +16,7 @@ define([
 
     return Backbone.View.extend({
         tagName: 'div',
-        className: 'clip-display',
+        className: 'track-display',
 
         template: _.template(
             '<canvas width="{{ width }}" height="{{ height }}">' +
@@ -30,14 +30,15 @@ define([
         },
 
         render: function() {
+            console.log('Display.render()');
             // calculate width and height
-            var width = this.model.get('end_time') - this.model.get('start_time'), // TODO: zoom ratio must be involved
+            var width = this.model.get('max_length') / 1000,    // TODO: change ratio? 1px == 1sec
                 height = 100;
 
             $(this.el).html(this.template({
                 width: width,
                 height: height
-            }));
+            })).width(width);
             return this;
         }
     });

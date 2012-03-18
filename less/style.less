@@ -12,13 +12,18 @@ body {
 /* ===== Primary Styles ========================================================
    Author: Jan Myler <honza.myler@gmail.com>
    ========================================================================== */
+// body padding removal
+body {
+  padding: 0;
+}
 
 // variables
 @trackHeight:     120px;
 @infoWidth:       @trackHeight;
 @infoHeight:      @trackHeight;
 @timelineHeight:  30px;
-@menubarHeight: 36px;
+@menubarHeight:   36px;
+@editorOffset:    100px;
 
 // styles for the top navbar
 .navbar {
@@ -86,7 +91,7 @@ body {
 #editor-view { 
   position: relative;
   overflow: scroll;
-  margin-top: @timelineHeight;
+  margin-top: @editorOffset;
   background-color: @grayLighter;
 
   .inner {
@@ -98,61 +103,71 @@ body {
     height: @timelineHeight;
     margin-left: @infoWidth;
     position: fixed;
-    top: @navbarHeight + @menubarHeight + @timelineHeight / 2;
+    top: @editorOffset;
     background-color: @grayLighter;
+    z-index: 500;
   }
 
   .track {
     height: @trackHeight;
+    position: relative;
     background-color: #99ACB9;
-    border-top: 1px solid #888;
-    width: 1500px;
+    border-top: 1px solid #888;    
 
-    .info-wrapper {
-      height: @infoHeight;
+    .track-name, .track-controls {
+//      height: @infoHeight;
       width: @infoWidth;
       overflow: hidden;
       background-color: #ddd;
       position: relative;
       z-index: 300;
+      float: left;
+    }
 
-      .track-name {
-        padding: 4px;
-        background-color: #fff;
-
-        .name-content {
-          margin-bottom: 0;
-        }
+    .track-name {
+      .name-content {
+        margin-bottom: 0;
+        padding: 6px 4px;
       }
 
-      .track-controls {
-        margin: 20px 0 0 20px;  // change
+      .name-input {
+        margin-bottom: 0;
       }
     }
 
-    .clips-wrapper {
-      position: relative;
+    .track-controls {
+      height: 90px;
+      clear: left;
+    }  
+
+    .track-display > canvas {
+      position: absolute;
+      top: 20px;
+      background-color: hsla(100, 150, 150, 0.7);
+    }
+
+    .track-display {
+      height: @trackHeight;
       margin-left: @infoWidth;
+      position: relative;      
 
       .clip {
-        width: 200px;   // debug only
         height: @trackHeight;
-        display: inline-block;
-
+        position: absolute;
+        overflow: hidden;
+        background-color: red;
+        
         .clip-name {
-          background: #3CA9B5;
-          height: 20px;
+          .name-content {
+            margin-bottom: 0;
+            padding: 1px 2px;
+          }
+
+          .name-input {
+            margin-bottom: 0;
+          }
         }
-
-        canvas {
-          background-color: #333;
-          height: 100px;
-          width: 200px; // debug only
-        } 
-
       }
-      
-
     }
   }
 }

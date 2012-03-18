@@ -1,7 +1,7 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * View for sound visualisation of a single audio clip.
+ * View for a track controls.
  */
 
 define([
@@ -16,12 +16,11 @@ define([
 
     return Backbone.View.extend({
         tagName: 'div',
-        className: 'clip-display',
+        className: 'track-controls',
 
         template: _.template(
-            '<canvas width="{{ width }}" height="{{ height }}">' +
-                'Your browser does not support HTML5 canvas.' +
-            '</canvas>'
+            '<button class="btn">M</button>' +
+            '<button class="btn">S</button>'
         ),
 
         initialize: function() {
@@ -30,14 +29,8 @@ define([
         },
 
         render: function() {
-            // calculate width and height
-            var width = this.model.get('end_time') - this.model.get('start_time'), // TODO: zoom ratio must be involved
-                height = 100;
-
-            $(this.el).html(this.template({
-                width: width,
-                height: height
-            }));
+            console.log('Controls.render()');
+            $(this.el).html(this.template());
             return this;
         }
     });

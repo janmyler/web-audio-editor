@@ -25,7 +25,7 @@ define([
             this.model.bind('change:name', this.changeTitle);
 
             // rewrite title tag with proper project name value
-            $('title').text(this.model.get('name') + ' :: Audiee ♫');
+            $('title').text(this.model.get('name') + ' :: Audiee');
         },
 
         // render function
@@ -40,7 +40,7 @@ define([
 
         // update page title when project name is changed
         changeTitle: function() {
-            $('title').text(this.model.get('name') + ' :: Audiee ♫');
+            $('title').text(this.model.get('name') + ' :: Audiee');
         },
 
     });

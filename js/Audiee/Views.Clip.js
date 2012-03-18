@@ -17,27 +17,34 @@ define([
     };
 
     return Backbone.View.extend({
+        tagName: 'div',
         className: 'clip',
 
         initialize: function() {
             _.bindAll(this, 'render', 'remove');
-            this.model.bind('change', this.render); // prekresluje cely view, to je spatne!
+            //this.model.bind('change', this.render); // TODO: prekresluje cely view, to je spatne!
+            this.model.bind('change:track_pos', this.render);
+            this.model.bind('change:start_time', this.render);
+            this.model.bind('change:end_time', this.render);
             this.model.bind('destroy', this.remove);
         },
 
         render: function() {
-            console.log('rendering clip', e);
-            // rendering canvas width and height?
             var editable_name = new EditableNameV({
                     model: this.model,
                     className: 'clip-name',
                     hasColor: true
                 }),
-                clip_display  = new ClipDisplayV();
+                clip_display  = new ClipDisplayV({
+                    model: this.model
+                });
 
             $(this.el).empty()
+                .css('left', this.model.get('track_pos') + 'px')                    // TODO: zoom ratio must be involved
+                .width(this.model.get('end_time') - this.model.get('start_time'))   // TODO: zoom ratio must be involved
                 .append(editable_name.el)
                 .append(clip_display.el);
+            
             return this;
         },
 

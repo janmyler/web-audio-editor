@@ -1,45 +1,55 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * View for main playback controls.
+ * View for a single editor track.
  */
 
 define([
     'underscore',
     'backbone',
-], function(_, Backbone) {
+    'Audiee/Views.EditableName',
+    'Audiee/Views.TrackDisplay',
+    'Audiee/Views.TrackControls',
+    'Audiee/Views.Clips'
+], function(_, Backbone, EditableNameV, TrackDisplayV, TrackControlsV, ClipsV) {
 
-    var PlaybackControls = Backbone.View.extend({
-        // parent DOM element
-        el: $('#playback-controls'),
+    return Backbone.View.extend({
+        tagName: 'div',
+        className: 'track',
 
-        // DOM events listeners
-        events: {
-            'click #play'       : 'play',
-            'click #stop'       : 'test',
-            'click #seek-start' : 'test',
-            'click #seek-end'   : 'test'
+        initialize: function () {
+            _.bindAll(this, 'render', 'remove');
         },
 
-        // listeners to a model's changes
-        initialize: function() {
-
-        },
-
-        // render function
         render: function() {
-            this.el.children('#time-display').val('0. 0. 0');
+            console.log('Track.render()');
+            var editable_name = new EditableNameV({
+                    model: this.model,
+                    className: 'track-name',
+                    hasColor: true
+                }),
+                track_display = new TrackDisplayV({
+                    model: this.model
+                }),
+                track_controls = new TrackControlsV({
+
+                });
+
+            $(this.el).empty()
+                .append(editable_name.el)
+                .append(track_controls.el)
+                .append(track_display.el);
+
+            new ClipsV({
+                collection: clips,
+                el: $('.track-display', this.el)
+            }).render();
+
             return this;
         },
 
-        // test debug only
-        test: function(options) {
-            alert('clicked');
-            console.log(options);
-        }
-
-
+        remove: function() {
+            $(this.el).remove();
+        }  
     });
-
-    return PlaybackControls;
 });

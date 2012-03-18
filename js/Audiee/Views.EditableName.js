@@ -24,7 +24,7 @@ define([
             'dblclick .name-content' : 'edit',
             'keyup .name-input'      : 'keyupHandler',
             'blur .name-input'       : 'close',
-            'contextmenu .display'         : 'colorChange'
+            'contextmenu .display'   : 'colorChange'
         },
 
         // listeners to a model's changes

@@ -8,13 +8,13 @@ define([
     'underscore',
     'backbone',
     'Audiee/Models.Track'
-], function(_, Backbone, Track) {
+], function(_, Backbone, TrackM) {
 	var TracksCollection = Backbone.Collection.extend({
         // model reference
-        model: Track
+        model: TrackM
 
         // other functions will be here ...
 	});
 
-	return new TracksCollection;
+	return TracksCollection;
 });

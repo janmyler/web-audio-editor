@@ -31,8 +31,8 @@ define([
 
 			// view border times (ms)
 			max_length: 3600000, 	// 1 hour (max length)
-			start_time: 0,
-			end_time: 0
+			start_time: 0,		// TODO: useful? track will be from 0 to max_length..
+			end_time: 0			// TODO: useful at all?
 		},
 
 		// initialization

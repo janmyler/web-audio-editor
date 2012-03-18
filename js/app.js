@@ -17,25 +17,43 @@ define([
 	'plugins/modal'*/
 	'Audiee/Views.Clips',
 	'Audiee/Collections.Clips',
+	'Audiee/Views.Tracks',
+	'Audiee/Collections.Tracks'
 //], function($, _, Backbone, PlaybackControls, Project, EditableName,
 //		Editor, Menu, AlertModal) {
-], function($, _, Backbone, ClipsV, ClipsC) {
+], function($, _, Backbone, ClipsV, ClipsC, TracksV, TracksC) {
+	// Player and Display components – into two modules (Helpers)
+	// instantia
+
+
 	var init = function() {
 		// TEST COLLECTION
 		clips = new ClipsC([
-			{name: 'First clip'},
-			{name: 'Second clip'},
-			{name: 'Third clip'},
-			{name: 'Fourth clip'},
-			{name: 'going on'},
-			{name: 'and oonnnnn'}
+			{name: 'First clip',  start_time: 10, end_time:  80, track_pos: 10},
+			{name: 'Second clip', start_time:  0, end_time: 120, track_pos: 150},
+			{name: 'Third clip',  start_time: 48, end_time: 149, track_pos: 300},
+			{name: 'Fourth clip', start_time: 10, end_time: 280, track_pos: 500},
+		]);
+		tracks = new TracksC([
+			{name: 'Track 1'},
+			{name: 'Track 2'},
+			{name: 'Track 3', max_length: 1200000},
+			{},
+			{},
+			{name: 'Track 5', max_length: 800000}
 		]);
 
-		// clips view
-		new ClipsV({
-			collection: clips,
+		// tracks view
+		new TracksV({
+			collection: tracks,
 			el: '#tracks'
 		}).render();
+
+		// clips view
+		/*new ClipsV({
+			collection: clips,
+			el: '#tracks'
+		}).render();*/
 	};
 	/*
 	var Audiee = Audiee || {};

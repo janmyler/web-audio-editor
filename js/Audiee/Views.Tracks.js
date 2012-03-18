@@ -1,15 +1,15 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * View for the collection of audio clips (each track has its own collection of clips).
+ * View for the collection of tracks.
  */
 
 define([
     'jquery',
     'underscore',
     'backbone',
-    'Audiee/Views.Clip'
-], function($, _, Backbone, ClipV) {
+    'Audiee/Views.Track'
+], function($, _, Backbone, TrackV) {
     
     return Backbone.View.extend({
         initialize: function() {
@@ -18,18 +18,21 @@ define([
         },
 
         render: function() {
+            console.log('Tracks.render()');
             this.addAll();
             return this;
         },
 
         addAll: function() {
+            console.log('Tracks.addAll()');
             this.collection.each(this.addOne);
         },
 
         addOne: function(model) {
-            var view = new ClipV({model: model});
-            $(this.el).append(view.render().el);
-            model.bind('remove', view.remove);  // TODO: ?? w00t?
+            console.log('Tracks.addOne()');
+            var track = new TrackV({model: model});
+            $(this.el).append(track.render().el);
+            model.bind('remove', track.remove);  // TODO: ?? w00t?
         }
     });
 });
