@@ -23,10 +23,19 @@ define([
 //		Editor, Menu, AlertModal) {
 ], function($, _, Backbone, PlaybackControlsV, ProjectM, EditableNameV, ClipsV, ClipsC, TracksV, TracksC) {
 	// Player and Display components – into two modules (Helpers)
-	// instantia
-
+	var Audiee = Audiee || {};
+	Audiee.Player = {};
+	Audiee.Display = {};
 
 	var init = function() {
+		// browser compatibility test
+		if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
+			alert('Your browser is not supported yet.');
+			return false;
+		}
+
+		window.Audiee = Audiee;
+		
 		// TEST COLLECTION
 		clips = new ClipsC([
 			{name: 'First clip',  start_time: 10, end_time:  80, track_pos: 10},
