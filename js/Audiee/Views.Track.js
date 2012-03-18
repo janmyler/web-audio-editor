@@ -35,7 +35,7 @@ define([
 
                 });
 
-            $(this.el).empty()
+            $(this.el).empty().width(this.model.get('max_length') / 1000)   // FIXME: prob not the best solution
                 .append(editable_name.el)
                 .append(track_controls.el)
                 .append(track_display.el);

@@ -93,6 +93,7 @@ body {
   overflow: scroll;
   margin-top: @editorOffset;
   background-color: @grayLighter;
+  height: 530px;   // FIXME: for debug purpose only
 
   .inner {
     padding: 0;
@@ -111,11 +112,8 @@ body {
   .track {
     height: @trackHeight;
     position: relative;
-    background-color: #99ACB9;
-    border-top: 1px solid #888;    
 
     .track-name, .track-controls {
-//      height: @infoHeight;
       width: @infoWidth;
       overflow: hidden;
       background-color: #ddd;
@@ -144,12 +142,14 @@ body {
       position: absolute;
       top: 20px;
       background-color: hsla(100, 150, 150, 0.7);
+      z-index: 300;
     }
 
     .track-display {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
+      background-color: #99ACB9;
 
       .clip {
         height: @trackHeight;
