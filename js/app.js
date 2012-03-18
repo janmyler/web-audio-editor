@@ -8,9 +8,9 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	/*'Audiee/Views.PlaybackControls',
+	'Audiee/Views.PlaybackControls',
 	'Audiee/Models.Project',
-	'Audiee/Views.EditableName',
+	'Audiee/Views.EditableName',/*
 	'Audiee/Views.Editor',
 	'Audiee/Views.Menu',
 	'text!templates/alert_modal.html',
@@ -21,7 +21,7 @@ define([
 	'Audiee/Collections.Tracks'
 //], function($, _, Backbone, PlaybackControls, Project, EditableName,
 //		Editor, Menu, AlertModal) {
-], function($, _, Backbone, ClipsV, ClipsC, TracksV, TracksC) {
+], function($, _, Backbone, PlaybackControlsV, ProjectM, EditableNameV, ClipsV, ClipsC, TracksV, TracksC) {
 	// Player and Display components – into two modules (Helpers)
 	// instantia
 
@@ -37,10 +37,10 @@ define([
 		tracks = new TracksC([
 			{name: 'Track 1'},
 			{name: 'Track 2'},
-			{name: 'Track 3', max_length: 1200000},
+			{name: 'Track 3'},
 			{},
 			{},
-			{name: 'Track 5', max_length: 800000}
+			{name: 'Track 5'}
 		]);
 
 		// tracks view
@@ -49,11 +49,9 @@ define([
 			el: '#tracks'
 		}).render();
 
-		// clips view
-		/*new ClipsV({
-			collection: clips,
-			el: '#tracks'
-		}).render();*/
+		var project = new ProjectM({name: 'New Project'});
+		new EditableNameV({model: project});
+		new PlaybackControlsV({model: project, hasColor: false});
 	};
 	/*
 	var Audiee = Audiee || {};

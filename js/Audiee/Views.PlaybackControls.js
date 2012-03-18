@@ -6,11 +6,9 @@
 
 define([
     'underscore',
-    'backbone',
+    'backbone'
 ], function(_, Backbone) {
-
-    var PlaybackControls = Backbone.View.extend({
-        // parent DOM element
+    return Backbone.View.extend({
         el: $('#playback-controls'),
 
         // DOM events listeners
@@ -23,7 +21,7 @@ define([
 
         // listeners to a model's changes
         initialize: function() {
-
+            this.render();
         },
 
         // render function
@@ -36,13 +34,8 @@ define([
         },
 
         // test debug only
-        test: function(options) {
-            alert('clicked');
-            console.log(options);
+        test: function(e) {
+            alert('clicked: ' + e.srcElement.id);
         }
-
-
     });
-
-    return PlaybackControls;
 });
