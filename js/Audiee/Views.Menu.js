@@ -7,35 +7,42 @@
 define([
     'underscore',
     'backbone',
-    'text!templates/newtrack_modal.html',
-    'plugins/modal'
-], function(_, Backbone, modalT) {
+    'text!templates/Menu.html',
+    'text!templates/NewtrackModal.html',
+    'plugins/modal',
+    'plugins/dropdown'
+], function(_, Backbone, MenuT, ModalT) {
 
-    var EditorMenu = Backbone.View.extend({
+    return Backbone.View.extend({
         // parent DOM element
-        el: $('#menu-view'),
+        el: $('#menu-view ul.nav'),
+
+        // cached template function
+        template: _.template(MenuT),
 
         // DOM events listeners
         events: {
-           'click #add-track'       : 'addTrack',
-           'click #delete-tracks'   : 'restartProject'
+            'click #m-addnew': 'addTrack',
         },
 
-        // listeners to a model's changes
         initialize: function() {
-        
+            this.render();
+        },
+
+        render: function() {
+            $(this.el).html(this.template());
         },
 
         // adds a new track
         addTrack: function() {
-            var tpl = (_.template(modalT))(),
+            var tpl = (_.template(ModalT))(),
                 $tpl = $(tpl);
 
             // register an event
             $tpl.on('change', '#file-name', this._fileSelected);  
             $tpl.modal();           // show the modal window
         },
-
+        
         // test
         _fileSelected: function(e) {
             var file = e.target.files[0],
@@ -65,14 +72,6 @@ define([
             };
             
             reader.readAsArrayBuffer(file);
-        },
-
-        // restarts project
-        restartProject: function() {
-
-        }        
-
+        }
     });
-
-    return EditorMenu;
 });

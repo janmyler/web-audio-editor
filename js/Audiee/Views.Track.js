@@ -23,22 +23,21 @@ define([
 
         render: function() {
             console.log('Track.render()');
-            var editable_name = new EditableNameV({
-                    model: this.model,
-                    className: 'track-name',
-                    hasColor: true
-                }),
-                track_display = new TrackDisplayV({
-                    model: this.model
-                }),
-                track_controls = new TrackControlsV({
-
-                });
+            this.editableName = new EditableNameV({
+                model: this.model,
+                className: 'track-name',
+                hasColor: true
+            }),
+            this.trackDisplay = new TrackDisplayV({
+                model: this.model
+            }),
+            this.trackControls = new TrackControlsV({
+            });
 
             $(this.el).empty().width(this.model.get('default_length') / 1000)   // FIXME: prob not the best solution
-                .append(editable_name.el)
-                .append(track_controls.el)
-                .append(track_display.el);
+                .append(this.editableName.el)
+                .append(this.trackControls.el)
+                .append(this.trackDisplay.el);
 
             new ClipsV({
                 collection: clips,

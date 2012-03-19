@@ -30,20 +30,20 @@ define([
         },
 
         render: function() {
-            var editable_name = new EditableNameV({
-                    model: this.model,
-                    className: 'clip-name',
-                    hasColor: true
-                }),
-                clip_display  = new ClipDisplayV({
-                    model: this.model
-                });
+            this.editableName = new EditableNameV({
+                model: this.model,
+                className: 'clip-name',
+                hasColor: true
+            }),
+            this.clipDisplay  = new ClipDisplayV({
+                model: this.model
+            });
 
             $(this.el).empty()
                 .css('left', this.model.get('track_pos') + 'px')                    // TODO: zoom ratio must be involved
                 .width(this.model.get('end_time') - this.model.get('start_time'))   // TODO: zoom ratio must be involved
-                .append(editable_name.el)
-                .append(clip_display.el);
+                .append(this.editableName.el)
+                .append(this.clipDisplay.el);
             
             return this;
         },

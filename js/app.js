@@ -18,24 +18,32 @@ define([
 	'Audiee/Views.Clips',
 	'Audiee/Collections.Clips',
 	'Audiee/Views.Tracks',
-	'Audiee/Collections.Tracks'
+	'Audiee/Collections.Tracks',
+	'Audiee/Views.Menu',
+	'text!templates/AlertModal.html',
+	'plugins/modal'
 //], function($, _, Backbone, PlaybackControls, Project, EditableName,
 //		Editor, Menu, AlertModal) {
-], function($, _, Backbone, PlaybackControlsV, ProjectM, EditableNameV, ClipsV, ClipsC, TracksV, TracksC) {
+], function($, _, Backbone, PlaybackControlsV, ProjectM, EditableNameV, ClipsV, ClipsC, TracksV, TracksC, MenuV, AlertT) {
 	// Player and Display components – into two modules (Helpers)
 	var Audiee = Audiee || {};
-	Audiee.Player = {};
+	Audiee.Player = (function() {
+
+
+	})();
 	Audiee.Display = {};
 
 	var init = function() {
 		// browser compatibility test
 		if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
-			alert('Your browser is not supported yet.');
+			var tpl = (_.template(AlertT))({message: 'Your browser is not supported yet.'});
+            $(tpl).modal();           // show the modal window
+			//alert('Your browser is not supported yet.');
 			return false;
 		}
 
 		window.Audiee = Audiee;
-		
+
 		// TEST COLLECTION
 		clips = new ClipsC([
 			{name: 'First clip',  start_time: 10, end_time:  80, track_pos: 10},
@@ -61,6 +69,7 @@ define([
 		var project = new ProjectM({name: 'New Project'});
 		new EditableNameV({model: project});
 		new PlaybackControlsV({model: project, hasColor: false});
+		new MenuV;
 	};
 	/*
 	var Audiee = Audiee || {};

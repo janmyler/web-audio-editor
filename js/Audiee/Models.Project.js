@@ -14,7 +14,8 @@ define([
             name: 'Untitled',
             created: Date.now(),
             user: 'Guest', 
-            curr_time: 0           
+            curr_time: 0,
+            changed: false
         },
 
         // initialization
