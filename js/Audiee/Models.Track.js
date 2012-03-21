@@ -8,22 +8,20 @@ define([
 	'underscore', 
 	'backbone',
 	'Audiee/Collections.Clips'
-], function(_, Backbone, Clips) {
+], function(_, Backbone, ClipsC) {
 	var Track = Backbone.Model.extend({
 		// default attributes
 		defaults: {
 			name: 'Untitled',
 			color: '#356871',
-			// allow +gain? (should be useful) like:
-			// volume_max: 1.4,
-			volume: 1,
+			gain: 1,
 			pan: 0.5,
 			muted: false,
 			solo: false,
-			order: 1, // won't be here, will be for purpose of sorting in view
+			// order: 1, // won't be here, will be for purpose of sorting in view
 			// allow minimalization (view purpose)
 			// minimalized: false,
-			
+
 			// if there is only one audio souce for one track
 			// and this source can be splitted into several clips,
 			// source may be here (not in defaults, but in track model)
@@ -37,12 +35,7 @@ define([
 
 		// initialization
 		initialize: function() {
-			this.clips = Clips;
-		},
-
-		// debug print
-		print: function() {
-			console.log(this);
+			this.clips = new ClipsC;
 		}
 	});
 		

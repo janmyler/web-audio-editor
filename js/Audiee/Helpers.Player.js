@@ -40,7 +40,8 @@ define([
         Player.prototype.disconnect = function(node) {
 
         };
-        Player.prototype.loadFile = function(file) {
+        
+        Player.prototype.loadFile = function(file, el) {
             var reader = new FileReader;
             
             if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
@@ -49,9 +50,8 @@ define([
             
             reader.onloadend = function(e) {
                 $('.progress').children().width('100%');
-                Audiee.Player.connectBuffer(e.target.result);
+                $(el).trigger('fileLoaded', e.target.result);
                 setTimeout(function() {
-                    //$('#newTrackModal').modal('hide').remove();
                     $('#newTrackModal').modal('hide');
                 }, 1000);   // wait a sec and remove the modal  
                 
@@ -59,10 +59,11 @@ define([
 
             reader.onprogress = function(e) {
                 if (e.lengthComputable) {
-                    $progress = $('.progress');
+                    $progress = $('.progress', '#newTrackModal');
                     if ($progress.hasClass('hide'))
                         $progress.fadeIn('fast');
                     
+                    // show loading progress
                     var loaded = Math.floor(e.loaded / e.total * 100);
                     $progress.children().width(loaded + '%');
                 }

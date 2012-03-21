@@ -10,9 +10,10 @@ define([
     'text!templates/Menu.html',
     'text!templates/NewtrackModal.html',
     'text!templates/AlertModal.html',
+    'Audiee/Models.Track',
     'plugins/modal',
     'plugins/dropdown'
-], function(_, Backbone, MenuT, ModalT, AlertT) {
+], function(_, Backbone, MenuT, ModalT, AlertT, TrackM) {
 
     return Backbone.View.extend({
         // parent DOM element
@@ -28,7 +29,8 @@ define([
 
         initialize: function() {
             this.render();
-            this.bind('Player:test', this.yahoo, this);
+            _.bindAll(this, 'render', '_fileSelected', '_fileLoaded');
+            this.el.bind('fileLoaded', this._fileLoaded);
         },
 
         render: function() {
@@ -49,7 +51,7 @@ define([
         _fileSelected: function(e) {
             try {
                 // try to load the selected audio file
-                Audiee.Player.loadFile(e.target.files[0]);
+                Audiee.Player.loadFile(e.target.files[0], this.el);
             } catch (e) {
                 // on error - show alert modal
                 var tpl = (_.template(AlertT))({message: e}),
@@ -63,9 +65,12 @@ define([
             }
         },
 
-        yahoo: function(data) {
-            console.log('Yahooooo', data);
-
+        _fileLoaded: function(e, data) {
+            e.stopPropagation();
+            
+            // create new Track model and add it to the Tracks collection
+            var track = new TrackM({buffer: data});
+            Audiee.Collections.Tracks.add(track);
         }
     });
 });

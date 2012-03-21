@@ -40,7 +40,7 @@ define([
                 .append(this.trackDisplay.el);
 
             new ClipsV({
-                collection: clips,
+                collection: this.model.clips,
                 el: $('.track-display', this.el)
             }).render();
 
