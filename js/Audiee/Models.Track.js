@@ -23,7 +23,7 @@ define([
 			order: 1, // won't be here, will be for purpose of sorting in view
 			// allow minimalization (view purpose)
 			// minimalized: false,
-
+			
 			// if there is only one audio souce for one track
 			// and this source can be splitted into several clips,
 			// source may be here (not in defaults, but in track model)

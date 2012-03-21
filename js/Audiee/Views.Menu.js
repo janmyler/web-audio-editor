@@ -9,9 +9,10 @@ define([
     'backbone',
     'text!templates/Menu.html',
     'text!templates/NewtrackModal.html',
+    'text!templates/AlertModal.html',
     'plugins/modal',
     'plugins/dropdown'
-], function(_, Backbone, MenuT, ModalT) {
+], function(_, Backbone, MenuT, ModalT, AlertT) {
 
     return Backbone.View.extend({
         // parent DOM element
@@ -27,6 +28,7 @@ define([
 
         initialize: function() {
             this.render();
+            this.bind('Player:test', this.yahoo, this);
         },
 
         render: function() {
@@ -38,40 +40,32 @@ define([
             var tpl = (_.template(ModalT))(),
                 $tpl = $(tpl);
 
-            // register an event
-            $tpl.on('change', '#file-name', this._fileSelected);  
-            $tpl.modal();           // show the modal window
+            // register events and show the modal
+            $tpl.on('change', '#file-name', this._fileSelected)
+                .on('hide', function() { $tpl.remove() })
+                .modal();                   // show the modal window
         },
         
-        // test
         _fileSelected: function(e) {
-            var file = e.target.files[0],
-                reader = new FileReader;
-            
-            if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
-                alert('unsupported file format!');
-                return false;
-            }
-            
-            reader.onloadend = function(e) {
-                $('.progress').children().width('100%');
-                setTimeout(function() {
-                    $('.modal').modal('hide').remove();
-                }, 1000);   // wait a sec and remove the modal                
-            };
+            try {
+                // try to load the selected audio file
+                Audiee.Player.loadFile(e.target.files[0]);
+            } catch (e) {
+                // on error - show alert modal
+                var tpl = (_.template(AlertT))({message: e}),
+                    $tpl = $(tpl);
 
-            reader.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    $progress = $('.progress');
-                    if ($progress.hasClass('hide'))
-                        $progress.fadeIn('fast');
-                    
-                    var loaded = Math.floor(e.loaded / e.total * 100);
-                    $progress.children().width(loaded + '%');
-                }
-            };
-            
-            reader.readAsArrayBuffer(file);
+                $tpl.on('hide', function() { $tpl.remove() })
+                    .modal();           // show the modal window
+
+                // hide the new track modal
+                $('#newTrackModal').modal('hide');
+            }
+        },
+
+        yahoo: function(data) {
+            console.log('Yahooooo', data);
+
         }
     });
 });

@@ -4,47 +4,68 @@
  * Application entry point.
  */
 
-define([
-	'jquery',
-	'underscore',
-	'backbone',
-	'Audiee/Views.PlaybackControls',
-	'Audiee/Models.Project',
-	'Audiee/Views.EditableName',/*
-	'Audiee/Views.Editor',
-	'Audiee/Views.Menu',
-	'text!templates/alert_modal.html',
-	'plugins/modal'*/
-	'Audiee/Views.Clips',
-	'Audiee/Collections.Clips',
-	'Audiee/Views.Tracks',
-	'Audiee/Collections.Tracks',
-	'Audiee/Views.Menu',
-	'text!templates/AlertModal.html',
-	'plugins/modal'
-//], function($, _, Backbone, PlaybackControls, Project, EditableName,
-//		Editor, Menu, AlertModal) {
-], function($, _, Backbone, PlaybackControlsV, ProjectM, EditableNameV, ClipsV, ClipsC, TracksV, TracksC, MenuV, AlertT) {
+define(function(require) {
+	// general
+	var $ = require('jquery'),
+		_ = require('underscore'),
+		Backbone = require('backbone'),
+
+	// helpers
+		PlayerH = require('Audiee/Helpers.Player'),
+
+	// models
+		ProjectM = require('Audiee/Models.Project'),
+
+	// collections
+		TracksC = require('Audiee/Collections.Tracks'),
+		//ClipsC = require('Audiee/Collections.Clips'),
+	// views
+		PlaybackControlsV = require('Audiee/Views.PlaybackControls'),
+		EditableNameV = require('Audiee/Views.EditableName'),
+		//ClipsV = require('Audiee/Views.Clips'),
+		TracksV = require('Audiee/Views.Tracks'),
+		MenuV = require('Audiee/Views.Menu'),
+
+	// templates
+		AlertT = require('text!templates/AlertModal.html');
+
+	// plugins without reference
+		require('plugins/modal');
+
+
 	// Player and Display components – into two modules (Helpers)
-	var Audiee = Audiee || {};
-	Audiee.Player = (function() {
+	var Audiee = {
+		Collections: {},
+		Models: {},
+		Views: {},
+	};
+	Audiee.Display = {};  // TODO: change for helper implementation
+	Audiee.Player = new PlayerH;
 
-
-	})();
-	Audiee.Display = {};
-
+	// application initialization
 	var init = function() {
 		// browser compatibility test
 		if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
 			var tpl = (_.template(AlertT))({message: 'Your browser is not supported yet.'});
             $(tpl).modal();           // show the modal window
+
 			//alert('Your browser is not supported yet.');
 			return false;
 		}
-
-		window.Audiee = Audiee;
-
-		// TEST COLLECTION
+		
+		window.Audiee = Audiee;						// global reference to object
+		Audiee.Collections.Tracks = new TracksC;	// tracks collection
+		Audiee.Models.Project = new ProjectM;		// default project model
+		Audiee.Views.Tracks = new TracksV({			// tracks collection view
+			collection: Audiee.Collections.Tracks,
+			el: '#tracks'
+		}).render();									
+		
+		new EditableNameV({model: Audiee.Models.Project, hasColor: false});
+		new PlaybackControlsV({model: Audiee.Models.Project});
+		new MenuV;
+	};
+		/*
 		clips = new ClipsC([
 			{name: 'First clip',  start_time: 10, end_time:  80, track_pos: 10},
 			{name: 'Second clip', start_time:  0, end_time: 120, track_pos: 150},
@@ -65,11 +86,6 @@ define([
 			collection: tracks,
 			el: '#tracks'
 		}).render();
-
-		var project = new ProjectM({name: 'New Project'});
-		new EditableNameV({model: project});
-		new PlaybackControlsV({model: project, hasColor: false});
-		new MenuV;
 	};
 	/*
 	var Audiee = Audiee || {};

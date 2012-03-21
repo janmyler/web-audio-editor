@@ -83,6 +83,7 @@
 
         escape.call(this)
 
+        // NOTE: removes modal element from the DOM instead of hiding it
         this.$element
           .trigger('hide')
           .removeClass('in')
