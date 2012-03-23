@@ -65,11 +65,14 @@ define([
             }
         },
 
-        _fileLoaded: function(e, data) {
+        _fileLoaded: function(e, audioBuffer, file) {
             e.stopPropagation();
+            // hide the new track modal if it's still shown
+            $('#newTrackModal').modal('hide');
             
             // create new Track model and add it to the Tracks collection
-            var track = new TrackM({buffer: data});
+            var node = Audiee.Player,
+                track = new TrackM({buffer: audioBuffer, file: file});
             Audiee.Collections.Tracks.add(track);
         }
     });

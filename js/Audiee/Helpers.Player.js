@@ -41,20 +41,35 @@ define([
 
         };
         
+        Player.prototype.createNode = function(buffer) {
+            var node = this.context.createBufferSource(),
+                onsuccess = function(audioBuffer) {
+                    node.buffer = audioBuffer;
+                    
+                };
+
+
+            node.buffer = buffer;
+        };
+
         Player.prototype.loadFile = function(file, el) {
-            var reader = new FileReader;
+            var reader = new FileReader,
+                that   = this;
             
             if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
                 throw('Unsupported file format!');
             }
             
             reader.onloadend = function(e) {
-                $('.progress').children().width('100%');
-                $(el).trigger('fileLoaded', e.target.result);
-                setTimeout(function() {
-                    $('#newTrackModal').modal('hide');
-                }, 1000);   // wait a sec and remove the modal  
-                
+                if (e.target.readyState == FileReader.DONE) { // DONE == 2
+                    $('.progress').children().width('100%');
+                    
+                    var onsuccess = function(audioBuffer) {
+                        $(el).trigger('fileLoaded', [audioBuffer, file]);    
+                    };
+
+                    that.context.decodeAudioData(e.target.result, onsuccess);
+                }
             };
 
             reader.onprogress = function(e) {

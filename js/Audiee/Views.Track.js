@@ -34,7 +34,7 @@ define([
             this.trackControls = new TrackControlsV({
             });
 
-            $(this.el).empty().width(this.model.get('default_length') / 1000)   // FIXME: prob not the best solution
+            $(this.el).empty().width(this.model.get('length'))   // FIXME: prob not the best solution
                 .append(this.editableName.el)
                 .append(this.trackControls.el)
                 .append(this.trackDisplay.el);

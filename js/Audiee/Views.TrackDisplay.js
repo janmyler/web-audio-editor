@@ -32,7 +32,7 @@ define([
         render: function() {
             console.log('Display.render()');
             // calculate width and height
-            var width = this.model.get('default_length') / 1000,    // TODO: change ratio? 1px == 1sec
+            var width = this.model.get('length'),    // TODO: change ratio? 1px == 1sec
                 height = 100;
 
             $(this.el).html(this.template({
