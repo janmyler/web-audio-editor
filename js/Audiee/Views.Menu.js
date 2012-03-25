@@ -7,72 +7,73 @@
 define([
     'underscore',
     'backbone',
-    'text!templates/newtrack_modal.html',
-    'plugins/modal'
-], function(_, Backbone, modalT) {
+    'text!templates/Menu.html',
+    'text!templates/NewtrackModal.html',
+    'text!templates/AlertModal.html',
+    'Audiee/Models.Track',
+    'plugins/modal',
+    'plugins/dropdown'
+], function(_, Backbone, MenuT, ModalT, AlertT, TrackM) {
 
-    var EditorMenu = Backbone.View.extend({
+    return Backbone.View.extend({
         // parent DOM element
-        el: $('#menu-view'),
+        el: $('#menu-view ul.nav'),
+
+        // cached template function
+        template: _.template(MenuT),
 
         // DOM events listeners
         events: {
-           'click #add-track'       : 'addTrack',
-           'click #delete-tracks'   : 'restartProject'
+            'click #m-addnew': 'addTrack',
         },
 
-        // listeners to a model's changes
         initialize: function() {
-        
+            _.bindAll(this, 'render', '_fileSelected', '_fileLoaded');
+            this.el.bind('Audiee:fileLoaded', this._fileLoaded);
+            this.render();
+        },
+
+        render: function() {
+            $(this.el).html(this.template());
         },
 
         // adds a new track
         addTrack: function() {
-            var tpl = (_.template(modalT))(),
+            var tpl = (_.template(ModalT))(),
                 $tpl = $(tpl);
 
-            // register an event
-            $tpl.on('change', '#file-name', this._fileSelected);  
-            $tpl.modal();           // show the modal window
+            // register events and show the modal
+            $tpl.on('change', '#file-name', this._fileSelected)
+                .on('hide', function() { $tpl.remove() })
+                .modal();                   // show the modal window
         },
-
-        // test
+        
         _fileSelected: function(e) {
-            var file = e.target.files[0],
-                reader = new FileReader;
-            
-            if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
-                alert('unsupported file format!');
-                return false;
-            }
-            
-            reader.onloadend = function(e) {
-                $('.progress').children().width('100%');
-                setTimeout(function() {
-                    $('.modal').modal('hide').remove();
-                }, 1000);   // wait a sec and remove the modal                
-            };
+            try {
+                // try to load the selected audio file
+                Audiee.Player.loadFile(e.target.files[0], this.el);
+            } catch (e) {
+                // on error - show alert modal
+                var tpl = (_.template(AlertT))({message: e}),
+                    $tpl = $(tpl);
 
-            reader.onprogress = function(e) {
-                if (e.lengthComputable) {
-                    $progress = $('.progress');
-                    if ($progress.hasClass('hide'))
-                        $progress.fadeIn('fast');
-                    
-                    var loaded = Math.floor(e.loaded / e.total * 100);
-                    $progress.children().width(loaded + '%');
-                }
-            };
-            
-            reader.readAsArrayBuffer(file);
+                $tpl.on('hide', function() { $tpl.remove() })
+                    .modal();           // show the modal window
+
+                // hide the new track modal
+                $('#newTrackModal').modal('hide');
+            }
         },
 
-        // restarts project
-        restartProject: function() {
-
-        }        
-
+        _fileLoaded: function(e, audioBuffer, file) {
+            e.stopPropagation();
+            // hide the new track modal if it's still shown
+            $('#newTrackModal').modal('hide');
+            
+            // create new Track model and add it to the Tracks collection
+            var node = Audiee.Player,
+                track = new TrackM({buffer: audioBuffer, file: file});
+            Audiee.Collections.Tracks.add(track);
+        }
     });
-
-    return EditorMenu;
 });

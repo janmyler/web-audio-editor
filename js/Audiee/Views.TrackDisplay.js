@@ -25,14 +25,15 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render');
+            _.bindAll(this, 'render', 'zoomChange');
+            this.model.bind('Audiee:zoomChange', this.zoomChange);
             this.render();
         },
 
         render: function() {
             console.log('Display.render()');
             // calculate width and height
-            var width = this.model.get('default_length') / 1000,    // TODO: change ratio? 1px == 1sec
+            var width = Audiee.Display.sec2px(this.model.get('length')),
                 height = 100;
 
             $(this.el).html(this.template({
@@ -40,6 +41,12 @@ define([
                 height: height
             })).width(width);
             return this;
+        },
+
+        zoomChange: function() {
+            var width = Audiee.Display.sec2px(this.model.get('length'));
+            $(this.el).width(width)
+                .find('canvas').attr('width', width); // FIXME: solution with template re-rendering?
         }
     });
 });

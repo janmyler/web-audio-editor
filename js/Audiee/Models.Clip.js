@@ -12,11 +12,12 @@ define([
 		// default attributes
 		defaults: {
 			name: 'untitled',
-			source: undefined,
+			//source: undefined,	// NOTE: it's one source for one track so far (source property moved to the track model)
 			color: '#3CA9B5',
-			track_pos: 0,
-			start_time: 0,
-			end_time: 0
+			trackPos: 0,
+			startTime: 0,
+			endTime: 0,
+			length: 0
 		},
 
 		// initialization

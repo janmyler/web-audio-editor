@@ -18,30 +18,33 @@ define([
         className: 'track',
 
         initialize: function () {
-            _.bindAll(this, 'render', 'remove');
+            _.bindAll(this, 'render', 'remove', 'zoomChange');
+            this.model.bind('destroy', this.remove);
+            this.model.bind('Audiee:zoomChange', this.zoomChange);
         },
 
         render: function() {
             console.log('Track.render()');
-            var editable_name = new EditableNameV({
-                    model: this.model,
-                    className: 'track-name',
-                    hasColor: true
-                }),
-                track_display = new TrackDisplayV({
-                    model: this.model
-                }),
-                track_controls = new TrackControlsV({
+            this.editableName = new EditableNameV({
+                model: this.model,
+                className: 'track-name',
+                hasColor: true
+            }),
+            this.trackDisplay = new TrackDisplayV({
+                model: this.model
+            }),
+            this.trackControls = new TrackControlsV({
+                // TODO: code...
+            });
 
-                });
-
-            $(this.el).empty().width(this.model.get('default_length') / 1000)   // FIXME: prob not the best solution
-                .append(editable_name.el)
-                .append(track_controls.el)
-                .append(track_display.el);
+            var width = Audiee.Display.sec2px(this.model.get('length'));
+            $(this.el).empty().width(width)   
+                .append(this.editableName.el)
+                .append(this.trackControls.el)
+                .append(this.trackDisplay.el);
 
             new ClipsV({
-                collection: clips,
+                collection: this.model.clips,
                 el: $('.track-display', this.el)
             }).render();
 
@@ -50,6 +53,11 @@ define([
 
         remove: function() {
             $(this.el).remove();
-        }  
+        },
+
+        zoomChange: function() {
+            var width = Audiee.Display.sec2px(this.model.get('length'));
+            $(this.el).width(width);
+        }
     });
 });

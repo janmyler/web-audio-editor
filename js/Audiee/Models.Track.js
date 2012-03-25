@@ -7,20 +7,19 @@
 define([
 	'underscore', 
 	'backbone',
-	'Audiee/Collections.Clips'
-], function(_, Backbone, Clips) {
+	'Audiee/Collections.Clips',
+	'Audiee/Models.Clip'
+], function(_, Backbone, ClipsC, ClipM) {
 	var Track = Backbone.Model.extend({
 		// default attributes
 		defaults: {
 			name: 'Untitled',
 			color: '#356871',
-			// allow +gain? (should be useful) like:
-			// volume_max: 1.4,
-			volume: 1,
+			gain: 1,
 			pan: 0.5,
 			muted: false,
 			solo: false,
-			order: 1, // won't be here, will be for purpose of sorting in view
+			// order: 1, // won't be here, will be for purpose of sorting in view
 			// allow minimalization (view purpose)
 			// minimalized: false,
 
@@ -29,21 +28,29 @@ define([
 			// source may be here (not in defaults, but in track model)
 			// ... but idk yet
 
-			// view border times (ms)
-			default_length: 3600000, 	// 1 hour (default length)
-			start_time: 0,		// FIXME: useful? track will be from 0 to max_length..
-			end_time: 0			// FIXME: useful at all?
+			// view border times (seconds)
+			length: 3600, 		// 1 hour (default length)
+			startTime: 0,		// FIXME: useful? track will be from 0 to max_length..
+			endTime: 0			// FIXME: useful at all?
 		},
 
 		// initialization
 		initialize: function() {
-			this.clips = Clips;
+			_.bindAll(this, 'initClip');
+			this.clips = new ClipsC;
+			this.initClip();
 		},
 
-		// debug print
-		print: function() {
-			console.log(this);
+		initClip: function() {
+			var clip = new ClipM({
+				name: this.get('file').name,
+				endTime: this.get('buffer').duration,
+				length: this.get('buffer').duration 
+			});
+			this.clips.add(clip);
 		}
+
+
 	});
 		
 	return Track;

@@ -5,11 +5,12 @@
  */
 
 define([
+    'jquery',
     'underscore',
-    'backbone',
-], function(_, Backbone) {
+    'backbone'
+], function($, _, Backbone) {
 
-    var EditorPanel = Backbone.View.extend({
+    return Backbone.View.extend({
         // parent DOM element
         el: $('#editor-view'),
 
@@ -20,20 +21,22 @@ define([
 
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'changeTitle');
-            $(window).on('resize', this.render);
+            _.bindAll(this, 'render', 'changeTitle', 'resizeView', 'scrollHandler');
             this.model.bind('change:name', this.changeTitle);
+            
+            // propagate the scroll event to tracks view
+            this.el.bind('scroll', this.scrollHandler);
 
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
+
+            // window resize listener
+            $(window).on('resize', this.resizeView);            
+            this.resizeView();
         },
 
         // render function
         render: function() {
-            // resize element height to 100%
-            var height = $(window).height() - this.el.position().top
-                            - parseInt(this.el.css('margin-top'));
-            this.el.height(height);
 
             return this;
         },
@@ -43,7 +46,18 @@ define([
             $('title').text(this.model.get('name') + ' :: Audiee');
         },
 
-    });
+        resizeView: function() {
+            var $editorView = $(this.el),
+                height = $(window).height() - $editorView.position().top
+                            - parseInt($editorView.css('margin-top'));
 
-    return EditorPanel;
+            $editorView.height(height);
+        },
+
+        scrollHandler: function() {
+            // trigger the custom event on tracks view
+            Audiee.Views.Tracks.trigger('Audiee:scroll', $(this.el).scrollLeft());  
+        }
+
+    });
 });
