@@ -93,7 +93,6 @@ body {
   overflow: scroll;
   margin-top: @editorOffset;
   background-color: @gray;
-  height: 530px;   // FIXME: for debug purpose only
 
   .inner {
     padding: 0;
@@ -142,7 +141,7 @@ body {
       position: absolute;
       top: 20px;
       background-color: hsla(41, 90%, 68%, 0.5);
-      z-index: 300;
+      z-index: 200;
     }
 
     .track-display {
@@ -159,10 +158,10 @@ body {
         
         .clip-name {
           .name-content {
-            height: 20px;
-            margin-bottom: 0;
-            padding: 1px 2px;
+            height: 18px;
             overflow: hidden;
+            margin-bottom: 0;
+            padding: 1px 2px;            
           }
 
           .name-input {

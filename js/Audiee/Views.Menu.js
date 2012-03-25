@@ -28,9 +28,9 @@ define([
         },
 
         initialize: function() {
-            this.render();
             _.bindAll(this, 'render', '_fileSelected', '_fileLoaded');
-            this.el.bind('fileLoaded', this._fileLoaded);
+            this.el.bind('Audiee:fileLoaded', this._fileLoaded);
+            this.render();
         },
 
         render: function() {

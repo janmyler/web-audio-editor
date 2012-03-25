@@ -14,7 +14,6 @@ define([
             name: 'Untitled',
             created: Date.now(),
             user: 'Guest', 
-            curr_time: 0,
             changed: false
         },
 
@@ -31,7 +30,6 @@ define([
             if (!regex.test(attribs.name))
                 return "Project name is invalid.";
         }
-
     });
 
     return Project;

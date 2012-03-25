@@ -12,6 +12,7 @@ define(function(require) {
 
 	// helpers
 		PlayerH = require('Audiee/Helpers.Player'),
+		DisplayH = require('Audiee/Helpers.Display'),
 
 	// models
 		ProjectM = require('Audiee/Models.Project'),
@@ -22,7 +23,7 @@ define(function(require) {
 	// views
 		PlaybackControlsV = require('Audiee/Views.PlaybackControls'),
 		EditableNameV = require('Audiee/Views.EditableName'),
-		//ClipsV = require('Audiee/Views.Clips'),
+		EditorV = require('Audiee/Views.Editor'),
 		TracksV = require('Audiee/Views.Tracks'),
 		MenuV = require('Audiee/Views.Menu'),
 
@@ -39,7 +40,7 @@ define(function(require) {
 		Models: {},
 		Views: {},
 	};
-	Audiee.Display = {};  // TODO: change for helper implementation
+	Audiee.Display = new DisplayH;
 	Audiee.Player = new PlayerH;
 
 	// application initialization
@@ -56,37 +57,37 @@ define(function(require) {
 		window.Audiee = Audiee;						// global reference to object
 		Audiee.Collections.Tracks = new TracksC;	// tracks collection
 		Audiee.Models.Project = new ProjectM;		// default project model
+		Audiee.Views.Editor = new EditorV({			// editor wrapper view
+			model: Audiee.Models.Project
+		});			
 		Audiee.Views.Tracks = new TracksV({			// tracks collection view
 			collection: Audiee.Collections.Tracks,
 			el: '#tracks'
-		}).render();									
-		
-		new EditableNameV({model: Audiee.Models.Project, hasColor: false});
+		}).render();											
+		new EditableNameV({							// editable project name view
+			model: Audiee.Models.Project,
+			el: '#project-name',
+			hasColor: false
+		});
 		new PlaybackControlsV({model: Audiee.Models.Project});
 		new MenuV;
-	};
-		/*
-		clips = new ClipsC([
-			{name: 'First clip',  start_time: 10, end_time:  80, track_pos: 10},
-			{name: 'Second clip', start_time:  0, end_time: 120, track_pos: 150},
-			{name: 'Third clip',  start_time: 48, end_time: 149, track_pos: 300},
-			{name: 'Fourth clip', start_time: 10, end_time: 280, track_pos: 500},
-		]);
-		tracks = new TracksC([
-			{name: 'Track 1'},
-			{name: 'Track 2'},
-			{name: 'Track 3'},
-			{},
-			{},
-			{name: 'Track 5'}
-		]);
 
-		// tracks view
-		new TracksV({
-			collection: tracks,
-			el: '#tracks'
-		}).render();
+		// just a test
+		/*console.log('TEEEST');
+		console.log(Audiee.Display.zoomLevel);
+		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
+		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');
+		Audiee.Display.zoomOut();
+		console.log(Audiee.Display.zoomLevel);
+		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
+		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');
+		Audiee.Display.zoomOut();
+		console.log(Audiee.Display.zoomLevel);
+		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
+		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');*/
+		
 	};
+	
 	/*
 	var Audiee = Audiee || {};
 

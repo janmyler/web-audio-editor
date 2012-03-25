@@ -26,7 +26,7 @@ define([
 
         // render function
         render: function() {
-            var time = this.model.get('curr_time'),
+            var time = this.model.get('currTime'),
                 min  = Math.floor(time / 60),
                 sec  = time % 60;
             this.el.children('#time-display').val(min + ' : ' + sec);

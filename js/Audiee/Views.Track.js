@@ -18,7 +18,9 @@ define([
         className: 'track',
 
         initialize: function () {
-            _.bindAll(this, 'render', 'remove');
+            _.bindAll(this, 'render', 'remove', 'zoomChange');
+            this.model.bind('destroy', this.remove);
+            this.model.bind('Audiee:zoomChange', this.zoomChange);
         },
 
         render: function() {
@@ -32,9 +34,11 @@ define([
                 model: this.model
             }),
             this.trackControls = new TrackControlsV({
+                // TODO: code...
             });
 
-            $(this.el).empty().width(this.model.get('length'))   // FIXME: prob not the best solution
+            var width = Audiee.Display.sec2px(this.model.get('length'));
+            $(this.el).empty().width(width)   
                 .append(this.editableName.el)
                 .append(this.trackControls.el)
                 .append(this.trackDisplay.el);
@@ -49,6 +53,11 @@ define([
 
         remove: function() {
             $(this.el).remove();
-        }  
+        },
+
+        zoomChange: function() {
+            var width = Audiee.Display.sec2px(this.model.get('length'));
+            $(this.el).width(width);
+        }
     });
 });

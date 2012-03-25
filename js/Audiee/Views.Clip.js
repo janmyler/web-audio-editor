@@ -23,13 +23,12 @@ define([
         initialize: function() {
             _.bindAll(this, 'render', 'remove');
             //this.model.bind('change', this.render); // TODO: prekresluje cely view, to je spatne!
-            this.model.bind('change:track_pos', this.render);
-            this.model.bind('change:start_time', this.render);
-            this.model.bind('change:end_time', this.render);
+            this.model.bind('change:trackPos', this.render);
+            this.model.bind('change:startTime', this.render);
+            this.model.bind('change:endTime', this.render);
             this.model.bind('destroy', this.remove);
-        },
+            this.model.collection.bind('Audiee:zoomChange', this.render);
 
-        render: function() {
             this.editableName = new EditableNameV({
                 model: this.model,
                 className: 'clip-name',
@@ -38,10 +37,17 @@ define([
             this.clipDisplay  = new ClipDisplayV({
                 model: this.model
             });
+        },
+
+        render: function() {
+            var left = Audiee.Display.sec2px(this.model.get('trackPos')),
+                width = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
+
+            console.log('Clip.render() ', left, width);
 
             $(this.el).empty()
-                .css('left', this.model.get('track_pos') + 'px')                    // TODO: zoom ratio must be involved
-                .width(this.model.get('end_time') - this.model.get('start_time'))   // TODO: zoom ratio must be involved
+                .css('left', left + 'px')                    
+                .width(width)  
                 .append(this.editableName.el)
                 .append(this.clipDisplay.el);
             

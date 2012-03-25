@@ -31,7 +31,7 @@ define([
 
         render: function() {
             // calculate width and height
-            var width = this.model.get('end_time') - this.model.get('start_time'), // TODO: zoom ratio must be involved
+            var width = this.model.get('endTime') - this.model.get('startTime'), // TODO: zoom ratio must be involved
                 height = 100;
 
             $(this.el).html(this.template({

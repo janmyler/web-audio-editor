@@ -29,9 +29,9 @@ define([
 			// ... but idk yet
 
 			// view border times (seconds)
-			length: 3600, 	// 1 hour (default length)
-			start_time: 0,		// FIXME: useful? track will be from 0 to max_length..
-			end_time: 0			// FIXME: useful at all?
+			length: 3600, 		// 1 hour (default length)
+			startTime: 0,		// FIXME: useful? track will be from 0 to max_length..
+			endTime: 0			// FIXME: useful at all?
 		},
 
 		// initialization
@@ -44,7 +44,8 @@ define([
 		initClip: function() {
 			var clip = new ClipM({
 				name: this.get('file').name,
-				end_time: this.get('buffer').duration
+				endTime: this.get('buffer').duration,
+				length: this.get('buffer').duration 
 			});
 			this.clips.add(clip);
 		}

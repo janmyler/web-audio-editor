@@ -65,10 +65,13 @@ define([
                     $('.progress').children().width('100%');
                     
                     var onsuccess = function(audioBuffer) {
-                        $(el).trigger('fileLoaded', [audioBuffer, file]);    
+                        $(el).trigger('Audiee:fileLoaded', [audioBuffer, file]);    
+                    },
+                    onerror = function() {
+                        console.log('Error while loading file ' + file.name);
                     };
 
-                    that.context.decodeAudioData(e.target.result, onsuccess);
+                    that.context.decodeAudioData(e.target.result, onsuccess, onerror);
                 }
             };
 
