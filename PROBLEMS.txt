@@ -1,0 +1,6 @@
+1)  Maximal <canvas> size: 8192x8192, width bigger than ~30000px (100px height)
+    is not rendered. Bigger causes page to crash (Aw Snap...).
+    
+    Solution: Split clip display to more canvases (e.g. 5000x100).
+
+2)  Big audio files in memory... 

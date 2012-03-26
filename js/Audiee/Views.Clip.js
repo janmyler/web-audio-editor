@@ -21,11 +21,10 @@ define([
         className: 'clip',
 
         initialize: function() {
-            _.bindAll(this, 'render', 'remove');
-            //this.model.bind('change', this.render); // TODO: prekresluje cely view, to je spatne!
-            this.model.bind('change:trackPos', this.render);
-            this.model.bind('change:startTime', this.render);
-            this.model.bind('change:endTime', this.render);
+            _.bindAll(this, 'render', 'remove', 'soundwaveRender');
+            this.model.bind('change:trackPos', this.render);  // FIXME: tu asi nebude, pac se bude posouvat rovnou eventem...
+            this.model.bind('change:startTime', this.soundwaveRender);  
+            this.model.bind('change:endTime', this.soundwaveRender);
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
 
@@ -49,13 +48,17 @@ define([
                 .css('left', left + 'px')                    
                 .width(width)  
                 .append(this.editableName.el)
-                .append(this.clipDisplay.el);
-            
+                .append(this.clipDisplay.render().el);
+
             return this;
         },
 
         remove: function() {
             $(this.el).remove();
+        },
+
+        soundwaveRender: function() {
+            this.clipDisplay.render();   // FIXME: is this working?
         }
     });
 });

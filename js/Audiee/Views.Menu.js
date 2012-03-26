@@ -71,8 +71,7 @@ define([
             $('#newTrackModal').modal('hide');
             
             // create new Track model and add it to the Tracks collection
-            var node = Audiee.Player,
-                track = new TrackM({buffer: audioBuffer, file: file});
+            var track = new TrackM({buffer: audioBuffer, file: file});
             Audiee.Collections.Tracks.add(track);
         }
     });

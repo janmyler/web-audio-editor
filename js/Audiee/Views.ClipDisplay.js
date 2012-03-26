@@ -25,20 +25,30 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render');
-            this.render();
+            _.bindAll(this, 'render', 'getCanvasElem');
         },
 
         render: function() {
             // calculate width and height
-            var width = this.model.get('endTime') - this.model.get('startTime'), // TODO: zoom ratio must be involved
+            var width = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
                 height = 100;
 
             $(this.el).html(this.template({
                 width: width,
                 height: height
             }));
+
+            Audiee.Display.drawSound(
+                this.getCanvasElem(), 
+                this.model.get('buffer')
+            );
+
             return this;
+        },
+
+        getCanvasElem: function() {
+            return $(this.el).find('canvas')[0];
         }
+
     });
 });
