@@ -42,7 +42,7 @@ define([
             var left = Audiee.Display.sec2px(this.model.get('trackPos')),
                 width = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
 
-            console.log('Clip.render() ', left, width);
+            // console.log('Clip.render() ', left, width);
 
             $(this.el).empty()
                 .css('left', left + 'px')                    
