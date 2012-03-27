@@ -25,29 +25,48 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render', 'getCanvasElem');
+            _.bindAll(this, 'render', 'getLastCanvas');
         },
 
         render: function() {
             // calculate width and height
-            var width = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
-                height = 100;
+            var totalWidth = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
+                clipWidth = totalWidth,
+                maxWidth = 25000,
+                width = 0,
+                height = 100,
+                offset = 0,
+                $el = $(this.el);
 
-            $(this.el).html(this.template({
-                width: width,
-                height: height
-            }));
+            $el.empty();
 
-            Audiee.Display.drawSound(
-                this.getCanvasElem(), 
-                this.model.get('buffer')
-            );
+            do {                
+                if (clipWidth > maxWidth) 
+                    width = maxWidth;
+                else 
+                    width = clipWidth;
+
+                $el.append(this.template({
+                    width: width,
+                    height: height
+                }));
+
+                Audiee.Display.drawSound(
+                    this.getLastCanvas(), 
+                    this.model.get('buffer'),
+                    totalWidth,
+                    offset
+                );
+
+                clipWidth -= maxWidth;
+                offset += maxWidth;
+            } while (clipWidth > 0);
 
             return this;
         },
 
-        getCanvasElem: function() {
-            return $(this.el).find('canvas')[0];
+        getLastCanvas: function() {
+            return $(this.el).find('canvas').last()[0];
         }
 
     });

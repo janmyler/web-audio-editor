@@ -22,12 +22,12 @@ define([
         }
 
         Display.prototype.zoomOut = function() {
-            this.zoomLevel *= 2;
+            this.zoomLevel *= 1.5;
             Audiee.Views.Tracks.trigger('Audiee:zoomChange');
         };
 
         Display.prototype.zoomIn = function() {
-            this.zoomLevel /= 2;
+            this.zoomLevel /= 1.5;
             Audiee.Views.Tracks.trigger('Audiee:zoomChange');
         };
 
@@ -39,16 +39,16 @@ define([
             return sec / this.zoomLevel * 20;
         };
 
-        Display.prototype.drawSound = function(canvas, audioBuffer) {
+        Display.prototype.drawSound = function(canvas, audioBuffer, totalWidth, offset) {
             var ctx   = canvas.getContext('2d'),
-                frame = Math.floor(audioBuffer.length / canvas.width),
-                frame5 = Math.floor(audioBuffer.length / canvas.width / 5),
+                frame = Math.floor(audioBuffer.length / totalWidth),
+                frame5 = Math.floor(audioBuffer.length / totalWidth / 5),
                 ch1   = audioBuffer.getChannelData(0),
                 ch2   = undefined,
                 mid   = canvas.height / 2;  // maximum amplitude height
                 val   = 0,
                 posX  = 0,
-                i     = 0;
+                i     = offset * frame5 * 5;
 
             console.log('Display.drawSound()', frame, frame5);
 
