@@ -25,6 +25,7 @@ body {
 @menubarHeight:   36px;
 @editorOffset:    100px;
 
+
 // styles for the top navbar
 .navbar {
   height: 40px;
@@ -167,6 +168,28 @@ body {
           .name-input {
             margin-bottom: 0;
           }
+        }
+
+        .ui-resizable-handle {
+          width: 5px;
+          height: 20px;
+          position: absolute;
+          top: 0;
+          z-index: 500;
+        }
+
+        .ui-resizable-handle:hover {
+          background: rgba(255, 255, 255, 0.6);
+        }
+
+        .ui-resizable-w {
+          left: 0;
+          cursor: w-resize;
+        }
+
+        .ui-resizable-e {
+          right: 0;
+          cursor: e-resize;
         }
 
         .clip-display canvas {

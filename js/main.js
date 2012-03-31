@@ -8,6 +8,7 @@ require.config({
 	paths: {
 		// libs
 		jquery    	: 'libs/jquery/jquery',
+		drag_resize	: 'libs/jquery/jquery-ui.custom.min',
 		underscore 	: 'libs/underscore/underscore-min',
 		backbone  	: 'libs/backbone/backbone',
 		modernizr 	: 'libs/modernizr-2.5.3-respond-1.1.0.min',	 // TODO delete?

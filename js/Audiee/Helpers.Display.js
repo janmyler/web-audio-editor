@@ -41,6 +41,18 @@ define([
             return sec / this.zoomLevel * this.scale;
         };
 
+        Display.prototype.frameRMS = function(buffer, index, frame) {
+            var rms = 0;
+            for (var i = 0; i < frame; ++i) {
+                rms += buffer[index + i] * buffer[index + i];
+            }
+            return Math.sqrt(rms / frame);
+        };
+
+        Display.prototype.frameMax = function(buffer, index, frame) {
+
+        };
+
         Display.prototype.drawSound = function(canvas, audioBuffer, totalWidth, offset) {
             var ctx   = canvas.getContext('2d'),
                 // frame = Math.floor(audioBuffer.length / totalWidth / this.subpixels),
@@ -63,18 +75,13 @@ define([
             // draws the samples
             while(posX <= canvas.width) {
                 val = ch1[Math.floor(i)];
+                // val = this.frameRMS(ch1, Math.floor(i), frame);
                 
-                if (ch2)
-                    val = (val + ch2[Math.floor(i)]) / 2;
-                
-                /*var max = -1;
-                for (var j = frame5 - 1; j; j--) {
-                    if (max < ch1[i + j])
-                        max = ch1[i + j];
-                }*/
+                /*if (ch2)
+                    val = (val + ch2[Math.floor(i)]) / 2;*/
 
                 i += frame;
-                ctx.lineTo(posX, (val * mid) + mid);
+                ctx.lineTo(posX, (val * mid) + mid); // FIXME: plus and minus signs must be switched [+v,-^] to [+^,-v]
                 posX += 1 / this.subpixels;
             }
 

@@ -28,14 +28,15 @@ define([
             _.bindAll(this, 'render', 'getLastCanvas');
         },
 
-        render: function() {
+        render: function() {    // TODO: rewrite rendering algorithm 
             // calculate width and height
             var totalWidth = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
                 clipWidth = totalWidth,
                 maxWidth = 25000,
                 width = 0,
                 height = 100,
-                offset = 0,
+                // offset = 0,
+                offset = Audiee.Display.sec2px(this.model.get('startTime'));
                 $el = $(this.el);
 
             $el.empty();
