@@ -79,11 +79,14 @@ define([
                     containment: 'parent',  // TODO: remove this? (track resizing with clip...)
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
+                        var length  = that.model.get('length'),
+                            loop, loopRemainder;
+                        
                         // resize from left or right border?
                         if (ui.originalPosition.left === ui.position.left) { // from right NOTE: should be ok now
                             // FIXME: overflows right track border...
                             var endTime = Audiee.Display.px2sec(ui.size.width) + that.model.get('startTime');
-                            that.model.set('endTime', endTime);
+                            that.model.set('endTime', endTime % length);
                         } else {  // from left
                             var newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos'),
                                 newTrackPos;
@@ -95,7 +98,6 @@ define([
                                     newStartTime += that.model.get('startTime');
                                     newTrackPos = Audiee.Display.px2sec(ui.position.left);
                                 } else {  // resize <-- direction to the left NOTE: should be ok now
-                                    console.log('nope');
                                     newStartTime = that.model.get('startTime');
                                     newTrackPos = 0;
                                 }
@@ -103,11 +105,28 @@ define([
                                 newStartTime += that.model.get('startTime');
                                 newTrackPos = Audiee.Display.px2sec(ui.position.left);
                             }
-                            that.model.set('startTime', newStartTime);
+
+                            newStartTime %= length;
+                            that.model.set('startTime', (newStartTime % length < 0) ? length - newStartTime : newStartTime);
                             that.model.set('trackPos', newTrackPos);
                         }
 
-                        console.log('startTime: ' + that.model.get('startTime'), 'endTime: ' + that.model.get('endTime'), 'length: ' + that.model.get('length'));
+                        loop = Math.floor(Audiee.Display.px2sec(ui.size.width) / length);
+                        loopRemainder = Audiee.Display.px2sec(ui.size.width) % length;
+
+                        console.log('loop: ' + loop, 'loopRemainder: '+ loopRemainder);
+                        
+                        if((loopRemainder - that.model.get('endTime')) > 0) // FIXME: not always accurate
+                            loop += 1;
+
+                        that.model.set('loop', loop);
+
+                        console.log(
+                            'startTime: ' + that.model.get('startTime'), 
+                            'endTime: ' + that.model.get('endTime'),
+                            'length: ' + that.model.get('length'),
+                            'loop: ' + that.model.get('loop')
+                        );//*/
                     },
                     // end: function(e) {console.log(e);} // usefull here?
                 });
