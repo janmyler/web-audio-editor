@@ -58,7 +58,12 @@ define([
 
         render: function() {
             var left = Audiee.Display.sec2px(this.model.get('trackPos')),
-                width = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime')),
+                width = Audiee.Display.sec2px(
+                            this.model.get('endTime') 
+                          - this.model.get('startTime') 
+                          + this.model.get('loop')
+                          * this.model.get('buffer').duration
+                        ),
                 that = this;
 
             // console.log('Clip.render() ', left, width);
@@ -77,6 +82,7 @@ define([
                         e: '.ui-resizable-e'
                     },
                     containment: 'parent',  // TODO: remove this? (track resizing with clip...)
+                    // grid: 2,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
                         var length  = that.model.get('length'),
@@ -145,7 +151,6 @@ define([
         updatePosition: function(e) {
             var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
             this.model.set('trackPos', offsetLeft);
-            console.log(this.model.get('trackPos'));
         }
     });
 });

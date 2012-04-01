@@ -30,7 +30,8 @@ define([
 
         render: function() {    // TODO: rewrite rendering algorithm 
             // calculate width and height
-            var totalWidth = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
+            // var totalWidth = Audiee.Display.sec2px(this.model.get('endTime') - this.model.get('startTime'));
+            var totalWidth = $(this.el).parent('.clip').width();
                 clipWidth = totalWidth,
                 maxWidth = 25000,
                 width = 0,
@@ -38,6 +39,8 @@ define([
                 // offset = 0,
                 offset = Audiee.Display.sec2px(this.model.get('startTime'));
                 $el = $(this.el);
+
+                console.log(totalWidth);
 
             $el.empty();
 

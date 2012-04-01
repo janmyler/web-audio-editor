@@ -56,13 +56,14 @@ define([
         Display.prototype.drawSound = function(canvas, audioBuffer, totalWidth, offset) {
             var ctx   = canvas.getContext('2d'),
                 // frame = Math.floor(audioBuffer.length / totalWidth / this.subpixels),
-                frame = audioBuffer.length / totalWidth / this.subpixels,
+                // duration = (totalWidth > this.sec2px(audioBuffer.duration)) ? this.sec2px(audioBuffer.duration) : totalWidth;
+                frame = audioBuffer.length / this.sec2px(audioBuffer.duration) / this.subpixels,
                 ch1   = audioBuffer.getChannelData(0),
                 ch2   = undefined,
                 mid   = canvas.height / 2;  // maximum amplitude height
                 val   = 0,
                 posX  = 0,
-                i     = offset * frame * this.subpixels;
+                i     = (offset * frame * this.subpixels) % audioBuffer.length;
 
             // console.log('Display.drawSound()');
             // console.log('frame[',frame, '], start:i[', i, ']');
@@ -80,7 +81,7 @@ define([
                 /*if (ch2)
                     val = (val + ch2[Math.floor(i)]) / 2;*/
 
-                i += frame;
+                i = (i + frame) % audioBuffer.length;
                 ctx.lineTo(posX, (val * mid) + mid); // FIXME: plus and minus signs must be switched [+v,-^] to [+^,-v]
                 posX += 1 / this.subpixels;
             }
