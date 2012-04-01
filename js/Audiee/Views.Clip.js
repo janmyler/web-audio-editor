@@ -75,7 +75,7 @@ define([
                 .append(this.editableName.el)
                 .append('<div class="ui-resizable-handle ui-resizable-w">')
                 .append('<div class="ui-resizable-handle ui-resizable-e">')
-                .append(this.clipDisplay.render().el)
+                .append(this.clipDisplay.render(width).el)
                 .resizable({
                     handles: {
                         w: '.ui-resizable-w',
@@ -145,7 +145,13 @@ define([
         },
 
         soundwaveRender: function() {
-            this.clipDisplay.render();  
+            var width = Audiee.Display.sec2px(
+                            this.model.get('endTime') 
+                          - this.model.get('startTime') 
+                          + this.model.get('loop')
+                          * this.model.get('buffer').duration
+                        );
+            this.clipDisplay.render(width);  
         },
 
         updatePosition: function(e) {
