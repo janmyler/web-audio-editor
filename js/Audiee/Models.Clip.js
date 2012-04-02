@@ -17,7 +17,6 @@ define([
 			trackPos: 0,
 			startTime: 0,
 			endTime: 0,
-			length: 0,
 			loop: 0
 		},
 

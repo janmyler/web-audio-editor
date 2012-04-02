@@ -25,8 +25,15 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render', 'zoomChange');
+            _.bindAll(this, 'render', 'zoomChange', 'cursor', 'selection');
             this.model.bind('Audiee:zoomChange', this.zoomChange);
+
+            // register mouse events
+            $(this.el)
+                .on('mousedown', 'canvas', this.cursor)
+                //.on('mousedown', 'canvas', this.startSelection)
+                .on('mouseup', 'canvas', this.selection);
+            
             this.render();
         },
 
@@ -47,6 +54,40 @@ define([
             var width = Audiee.Display.sec2px(this.model.get('length'));
             $(this.el).width(width)
                 .find('canvas').attr('width', width); // FIXME: solution with template re-rendering?
+        },
+
+        cursor: function(e) {
+            this.selectionFrom = Audiee.Display.px2sec(e.offsetX);
+
+            // set active class to the selected track
+            $(this.el).parent('.track').addClass('active').siblings().removeClass('active');
+
+            // clear track-display canvas (all the tracks)
+            $('.track-display').children('canvas').each(function() {
+                Audiee.Display.clearDisplay(this);
+            });
+
+            Audiee.Display.drawCursor($(this.el).children('canvas')[0], e.offsetX);
+        },
+
+        /*startSelection: function(e) {
+            console.log(e.offsetX);
+            this.selectionFrom = Audiee.Display.px2sec(e.offsetX);
+        },*/
+
+        selection: function(e) {
+            console.log(e.offsetX);
+            this.selectionTo = Audiee.Display.px2sec(e.offsetX);
+
+            if (this.selectionFrom !== this.selectionTo) {
+                // clear track-display canvas (all the tracks)
+                $('.track-display').children('canvas').each(function() {
+                    Audiee.Display.clearDisplay(this);
+            });
+                Audiee.Display.drawSelection($(this.el).children('canvas')[0], this.selectionFrom, this.selectionTo);
+            }
+
         }
+        
     });
 });

@@ -94,6 +94,7 @@ body {
   overflow: scroll;
   margin-top: @editorOffset;
   background-color: @gray;
+  .noTextSelection;
 
   .inner {
     padding: 0;
@@ -141,21 +142,21 @@ body {
     .track-display > canvas {
       position: absolute;
       top: 20px;
-      background-color: hsla(41, 90%, 68%, 0.4);
-      z-index: 200;
+      background-color: hsla(0, 100%, 100%, 0.3);
+      // z-index: 200;
     }
 
     .track-display {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
-      background-color: #99ACB9;
+      background-color: #ccc;
 
       .clip {
         height: @trackHeight;
         position: absolute;
         overflow: hidden;
-        background-color: white;
+
         
         .clip-name {
           .name-content {
@@ -197,6 +198,10 @@ body {
         }
       }
     }
+  }
+  
+  .active .track-display {
+    background-color: #E0C6A0;
   }
 }
 

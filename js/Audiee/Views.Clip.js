@@ -85,7 +85,7 @@ define([
                     // grid: 2,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
-                        var length  = that.model.get('length'),
+                        var length  = that.model.get('buffer').duration,
                             loop, loopRemainder;
                         
                         // resize from left or right border?
@@ -134,7 +134,10 @@ define([
                             'loop: ' + that.model.get('loop')
                         );//*/
                     },
-                    // end: function(e) {console.log(e);} // usefull here?
+                    stop: function() {
+                        console.log('message');
+                        that.soundwaveRender();
+                    } // usefull here?
                 });
 
             return this;
