@@ -31,7 +31,6 @@ define([
             // register mouse events
             $(this.el)
                 .on('mousedown', 'canvas', this.cursor)
-                //.on('mousedown', 'canvas', this.startSelection)
                 .on('mouseup', 'canvas', this.selection);
             
             this.render();
