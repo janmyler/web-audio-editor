@@ -1,6 +1,11 @@
 1)  Maximal <canvas> size: 8192x8192, width bigger than ~30000px (100px height)
     is not rendered. Bigger causes page to crash (Aw Snap...).
     
-    Solution: Split clip display to more canvases (e.g. 5000x100).
+    Solution: Split clip display to more canvases (e.g. 5000x100) -- [solved]
+        ad 1) it's not accurate (end of clip is out of canvas -- with bigger zoom is bigger the crop)...
 
-2)  Big audio files in memory... 
+2)  Big audio files in memory causes the tab to crash (Aw Snap...). [unsolved]
+
+3) Resizing clip to the left (at left track border) causes 'negative overflow' of the startTime. [unsolved]
+
+4) Resizing clip to the left causes rendering problems near to the right clip border. [unsolved]

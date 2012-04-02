@@ -44,7 +44,6 @@ define([
 			var clip = new ClipM({
 				name: this.get('file').name,
 				endTime: this.get('buffer').duration,
-				length: this.get('buffer').duration,
 				buffer: this.get('buffer')
 			});
 			this.clips.add(clip);

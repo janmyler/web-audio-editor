@@ -70,42 +70,10 @@ define(function(require) {
 			hasColor: false
 		});
 		new PlaybackControlsV({model: Audiee.Models.Project});
-		new MenuV;
-
-		// just a test
-		/*console.log('TEEEST');
-		console.log(Audiee.Display.zoomLevel);
-		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
-		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');
-		Audiee.Display.zoomOut();
-		console.log(Audiee.Display.zoomLevel);
-		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
-		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');
-		Audiee.Display.zoomOut();
-		console.log(Audiee.Display.zoomLevel);
-		console.log('10px = '+Audiee.Display.px2sec(10)+'sec');
-		console.log('10sec = ' + Audiee.Display.sec2px(10)+'px');*/
-		
+		new MenuV;		
 	};
 	
-	/*
-	var Audiee = Audiee || {};
-
-	var init = function() {
-		// browser compatibility test
-		if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
-			alert('Your browser is not supported yet.');
-			return false;
-		}
-
-		// init the app
-		var project = new Project({name: 'New Project'});
-		(new EditableName({model: project})).render();
-		(new Editor({model: project})).render();
-		(new PlaybackControls({model: project})).render();
-		(new Menu);
-
-	};*/
+	
 	/*
 	(new PlaybackControls).render();
 	var proj = new Project,

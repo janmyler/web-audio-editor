@@ -25,6 +25,7 @@ body {
 @menubarHeight:   36px;
 @editorOffset:    100px;
 
+
 // styles for the top navbar
 .navbar {
   height: 40px;
@@ -93,6 +94,7 @@ body {
   overflow: scroll;
   margin-top: @editorOffset;
   background-color: @gray;
+  .noTextSelection;
 
   .inner {
     padding: 0;
@@ -140,7 +142,7 @@ body {
     .track-display > canvas {
       position: absolute;
       top: 20px;
-      background-color: hsla(41, 90%, 68%, 0.4);
+      background-color: hsla(0, 100%, 100%, 0.3);
       z-index: 200;
     }
 
@@ -148,13 +150,13 @@ body {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
-      background-color: #99ACB9;
+      background-color: #ccc;
 
       .clip {
         height: @trackHeight;
         position: absolute;
         overflow: hidden;
-        background-color: white;
+
         
         .clip-name {
           .name-content {
@@ -168,8 +170,38 @@ body {
             margin-bottom: 0;
           }
         }
+
+        .ui-resizable-handle {
+          width: 5px;
+          height: 20px;
+          position: absolute;
+          top: 0;
+          z-index: 500;
+        }
+
+        .ui-resizable-handle:hover {
+          background: rgba(255, 255, 255, 0.6);
+        }
+
+        .ui-resizable-w {
+          left: 0;
+          cursor: w-resize;
+        }
+
+        .ui-resizable-e {
+          right: 0;
+          cursor: e-resize;
+        }
+
+        .clip-display canvas {
+          float: left;
+        }
       }
     }
+  }
+  
+  .active .track-display {
+    background-color: #E0C6A0;
   }
 }
 

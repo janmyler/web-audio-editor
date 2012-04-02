@@ -1,4 +1,5 @@
 # List of TODOs
 + Jaka je maximalni velikost souboru, kterou muze nahrat FileReader? Aby nespadlo nahraveni?
-+ Helper pro urcovani offsetu (napr. zacatek clipu v tracku). (Helper.GetPositon(position, zoom-ratio));)
 + Pomocne ikonove menu do #editor-view (napr. lupa, vyber, atd.) – kde ukladat vybrany nastroj?
++ Prehravani, sestaveni Audio stromu a pusteni playbacku
++ Kursor
