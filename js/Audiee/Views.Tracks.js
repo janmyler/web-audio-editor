@@ -13,31 +13,31 @@ define([
     
     return Backbone.View.extend({
         initialize: function() {
-            _.bindAll(this, 'render', 'addAll', 'addOne', 'zoomChange');
+            _.bindAll(this, 'render', 'addAll', 'addOne', 'zoomChange', 'scrollChange');
             this.collection.bind('add', this.addOne);
-            this.bind('Audiee:scroll', this.alignTrackControls);
+            this.bind('Audiee:scroll', this.scrollChange);
             this.bind('Audiee:zoomChange', this.zoomChange);
         },
 
         render: function() {
-            console.log('Tracks.render()');
             this.addAll();
             return this;
         },
 
         addAll: function() {
-            console.log('Tracks.addAll()');
             this.collection.each(this.addOne);
         },
 
         addOne: function(model) {
-            console.log('Tracks.addOne()');
             var track = new TrackV({model: model});
             $(this.el).append(track.render().el);
         },
 
-        alignTrackControls: function(scrollLeft) {
+        scrollChange: function(scrollLeft) {
             $('div.track-name, div.track-controls').css('left', scrollLeft + 'px');
+            this.collection.each(function(model) {
+                model.clips.trigger('Audiee:scroll', scrollLeft);
+            });
         },
 
         zoomChange: function() {

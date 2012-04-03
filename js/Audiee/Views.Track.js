@@ -24,7 +24,9 @@ define([
         },
 
         render: function() {
-            console.log('Track.render()');
+            var offsetLeft = Audiee.Views.Editor.scrollOffset(),
+                width = Audiee.Display.sec2px(this.model.get('length'));
+
             this.editableName = new EditableNameV({
                 model: this.model,
                 className: 'track-name',
@@ -37,11 +39,14 @@ define([
                 // TODO: code...
             });
 
-            var width = Audiee.Display.sec2px(this.model.get('length'));
             $(this.el).empty().width(width)   
                 .append(this.editableName.el)
                 .append(this.trackControls.el)
                 .append(this.trackDisplay.el);
+
+            // handle left scroll offset if any
+            $(this.editableName.el).css('left', offsetLeft + 'px');
+            $(this.trackControls.el).css('left', offsetLeft + 'px');
 
             new ClipsV({
                 collection: this.model.clips,

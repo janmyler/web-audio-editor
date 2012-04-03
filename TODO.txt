@@ -2,4 +2,4 @@
 + Jaka je maximalni velikost souboru, kterou muze nahrat FileReader? Aby nespadlo nahraveni?
 + Pomocne ikonove menu do #editor-view (napr. lupa, vyber, atd.) – kde ukladat vybrany nastroj?
 + Prehravani, sestaveni Audio stromu a pusteni playbacku
-+ Kursor
++ Kursor, selekce

@@ -32,7 +32,7 @@ define([
             $(this.el)
                 .on('mousedown', 'canvas', this.cursor)
                 .on('mouseup', 'canvas', this.selection);
-            
+
             this.render();
         },
 
@@ -61,7 +61,8 @@ define([
             // set active class to the selected track
             $(this.el).parent('.track').addClass('active').siblings().removeClass('active');
 
-            // clear track-display canvas (all the tracks)
+            // clear track-display canvas (all the tracks) 
+            // NOTE: this is not gonna be here when the shift keypress function is done (editing selection)
             $('.track-display').children('canvas').each(function() {
                 Audiee.Display.clearDisplay(this);
             });

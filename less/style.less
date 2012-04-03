@@ -142,7 +142,7 @@ body {
     .track-display > canvas {
       position: absolute;
       top: 20px;
-      background-color: hsla(0, 100%, 100%, 0.3);
+      background-color: hsla(0, 100%, 100%, 0.2);
       z-index: 200;
     }
 
@@ -150,7 +150,7 @@ body {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
-      background-color: #ccc;
+      background-color: #d6d6d6;
 
       .clip {
         height: @trackHeight;
@@ -163,7 +163,9 @@ body {
             height: 18px;
             overflow: hidden;
             margin-bottom: 0;
-            padding: 1px 2px;            
+            padding: 1px 2px; 
+            white-space: nowrap;  
+            cursor: inherit;         
           }
 
           .name-input {
@@ -270,16 +272,41 @@ body {
 
 // styles for the editable name views
 .editing .display, .edit {
-    display: none;
+  display: none;
 }
 .editing .edit {
-    display: block;
+  display: block;
 }
 
 
 #app-frame { margin-top: 30px; padding-left: 0; padding-right: 0; }
 .row-fluid .inner { padding: 10px; }
-#file-browser { background-color: #ddd; .box-shadow(); display: none; margin-right: 32px; }
+/* Let's get this party started */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px @grayDarker; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: @grayLight; 
+  -webkit-box-shadow: inset 0 0 6px @grayLighter; 
+}
+
+::-webkit-scrollbar-corner {
+  background: @gray;
+}
+
+
+
+
 
 
 

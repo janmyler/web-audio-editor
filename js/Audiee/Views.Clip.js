@@ -21,16 +21,13 @@ define([
         tagName: 'div',
         className: 'clip',
 
-        events: {
-            
-        },
-
         initialize: function() {
-            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition');
+            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition', 'scrollChange', '_clipWidth');
             this.model.bind('change:startTime', this.soundwaveRender);  
             this.model.bind('change:endTime', this.soundwaveRender);
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
+            this.model.collection.bind('Audiee:scroll', this.scrollChange);
             
             this.editableName = new EditableNameV({
                 model: this.model,
@@ -52,23 +49,17 @@ define([
                 stop: this.updatePosition,
                 // scroll?
             }).css('position', 'absolute');
-
               
         },
 
         render: function() {
             var left = Audiee.Display.sec2px(this.model.get('trackPos')),
-                width = Audiee.Display.sec2px(
-                            this.model.get('endTime') 
-                          - this.model.get('startTime') 
-                          + this.model.get('loop')
-                          * this.model.get('buffer').duration
-                        ),
+                width = this._clipWidth(),
                 that = this;
 
             // console.log('Clip.render() ', left, width);
 
-            $(this.el).empty()
+            $(this.el).children().detach().end()  // empty an element, but save the event handlers etc.
                 .css('left', left + 'px')                    
                 .width(width)  
                 .resizable('destroy')
@@ -139,6 +130,9 @@ define([
                         that.soundwaveRender();
                     } // usefull here?
                 });
+            
+            // change clip name left offset if needed
+            this.scrollChange(Audiee.Views.Editor.scrollOffset());
 
             return this;
         },
@@ -148,18 +142,36 @@ define([
         },
 
         soundwaveRender: function() {
-            var width = Audiee.Display.sec2px(
-                            this.model.get('endTime') 
-                          - this.model.get('startTime') 
-                          + this.model.get('loop')
-                          * this.model.get('buffer').duration
-                        );
-            this.clipDisplay.render(width);  
+            this.clipDisplay.render(this._clipWidth());  
         },
 
         updatePosition: function(e) {
             var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
             this.model.set('trackPos', offsetLeft);
+        },
+
+        scrollChange: function(scrollLeft) {
+            var left = Audiee.Display.px2sec(scrollLeft),
+                trackPos = this.model.get('trackPos'),
+                width = this._clipWidth(),
+                offset = left - trackPos;
+            
+            if (left > trackPos && left < (trackPos + width)) {
+                $(this.editableName.el).css('padding-left', Audiee.Display.sec2px(offset))
+                    .find('.name-content').text('...' + this.model.get('name'));
+            } else {
+                $(this.editableName.el).css('padding-left', 0)
+                    .find('.name-content').text(this.model.get('name'));
+            }
+        },
+
+        _clipWidth: function() {
+            return Audiee.Display.sec2px(
+                this.model.get('endTime') 
+              - this.model.get('startTime') 
+              + this.model.get('loop')
+              * this.model.get('buffer').duration
+            );
         }
     });
 });

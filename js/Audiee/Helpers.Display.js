@@ -74,11 +74,9 @@ define([
             // console.log('frame[',frame, '], start:i[', i, ']');
             if (audioBuffer.numberOfChannels > 1)
                 ch2 = audioBuffer.getChannelData(1);
-
-            
-            ctx.fillStyle = '#bbb';
             
             // draws just a channel 1 data (dummy version)
+            ctx.fillStyle = 'red';
             ctx.beginPath();
             ctx.moveTo(posX, mid);
             // draws the samples
@@ -96,7 +94,8 @@ define([
                 // draw splitting lines (start and end of the clip)
                 if (i >= 0 && i <= frame) {
                     ctx.globalCompositeOperation = 'destination-over';
-                    ctx.fillRect(posX, 0, 1, canvas.height);
+                    ctx.fillRect(posX, 0, 1, 10);
+                    ctx.fillRect(posX, canvas.height - 10, 1, 10);
                     ctx.globalCompositeOperation = 'source-over';
                 }
 
@@ -109,6 +108,7 @@ define([
         };
 
         Display.prototype.drawCursor = function(canvas, position) {
+            console.log('drawing cursor at ', position);
             var ctx = canvas.getContext('2d');
             position += 0.5;
             ctx.strokeStyle = '#ff8000';
@@ -123,7 +123,8 @@ define([
                 start = Audiee.Display.sec2px(from),
                 end = Audiee.Display.sec2px(to) - start;
 
-            ctx.fillStyle = 'rgba(255, 128, 0, 0.4)';
+            // ctx.fillStyle = 'rgba(255, 128, 0, 0.2)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(start, 0, end, canvas.height);
         };    
 

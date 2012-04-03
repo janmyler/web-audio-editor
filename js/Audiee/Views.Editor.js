@@ -16,7 +16,8 @@ define([
 
         // DOM events listeners
         events: {
-           
+           'mousewheel' : 'zoomHandler',
+           'scroll' : 'scrollHandler'
         },
 
         // listeners to a model's changes
@@ -25,7 +26,7 @@ define([
             this.model.bind('change:name', this.changeTitle);
             
             // propagate the scroll event to tracks view
-            this.el.bind('scroll', this.scrollHandler);
+            // this.el.bind('scroll', this.scrollHandler);
 
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
@@ -37,7 +38,6 @@ define([
 
         // render function
         render: function() {
-
             return this;
         },
 
@@ -57,6 +57,18 @@ define([
         scrollHandler: function() {
             // trigger the custom event on tracks view
             Audiee.Views.Tracks.trigger('Audiee:scroll', $(this.el).scrollLeft());  
+        },
+
+        scrollOffset: function() {
+            return $(this.el).scrollLeft();
+        },
+
+        zoomHandler: function(e) {
+            if (e.altKey) {
+                e.preventDefault();     // don't scroll the view
+                (e.originalEvent.wheelDelta < 0) ? Audiee.Display.zoomOut() : Audiee.Display.zoomIn();
+                return false;
+            }
         }
 
     });

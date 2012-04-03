@@ -19,19 +19,19 @@ define([
         // cached template function
         template: _.template(EditableNameT),
 
-        // DOM events listeners
-        events: {
-            'dblclick .name-content' : 'edit',
-            'keyup .name-input'      : 'keyupHandler',
-            'blur .name-input'       : 'close',
-            'contextmenu .display'   : 'colorChange'
-        },
-
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'close');
+            _.bindAll(this, 'render', 'close', 'edit', 'colorChange', 'keyupHandler');
             this.model.bind('change:name', this.render);
             this.model.bind('change:color', this.render);
+
+            // register mouse events
+            $(this.el)
+                .on('dblclick', '.name-content', this.edit)
+                .on('keyup', '.name-input', this.keyupHandler)
+                .on('blur', '.name-input', this.close)
+                .on('contextmenu', '.display', this.colorChange);
+
             this.render();
         },
 
