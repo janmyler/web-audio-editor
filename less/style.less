@@ -114,13 +114,18 @@ body {
     height: @trackHeight;
     position: relative;
 
-    .track-name, .track-controls {
+    .track-info {
       width: @infoWidth;
       overflow: hidden;
       background-color: #ddd;
       position: relative;
-      z-index: 300;
       float: left;
+      z-index: 300;
+    }
+
+    .track-name, .track-controls {
+      width: @infoWidth;
+      overflow: hidden;
     }
 
     .track-name {
@@ -136,7 +141,6 @@ body {
 
     .track-controls {
       height: 90px;
-      clear: left;
     }  
 
     .track-display > canvas {

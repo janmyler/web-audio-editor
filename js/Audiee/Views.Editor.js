@@ -25,9 +25,6 @@ define([
             _.bindAll(this, 'render', 'changeTitle', 'resizeView', 'scrollHandler');
             this.model.bind('change:name', this.changeTitle);
             
-            // propagate the scroll event to tracks view
-            // this.el.bind('scroll', this.scrollHandler);
-
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
 
@@ -56,11 +53,15 @@ define([
 
         scrollHandler: function() {
             // trigger the custom event on tracks view
-            Audiee.Views.Tracks.trigger('Audiee:scroll', $(this.el).scrollLeft());  
+            Audiee.Views.Tracks.trigger('Audiee:scroll');  
         },
 
-        scrollOffset: function() {
+        scrollLeftOffset: function() {
             return $(this.el).scrollLeft();
+        },
+
+        scrollTopOffset: function() {
+            return $(this.el).scrollTop();
         },
 
         zoomHandler: function(e) {

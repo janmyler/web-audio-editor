@@ -24,8 +24,9 @@ define([
         },
 
         render: function() {
-            var offsetLeft = Audiee.Views.Editor.scrollOffset(),
-                width = Audiee.Display.sec2px(this.model.get('length'));
+            var offsetLeft = Audiee.Views.Editor.scrollLeftOffset(),  
+                width = Audiee.Display.sec2px(this.model.get('length')),
+                $infoV = $('<div class="track-info">');
 
             this.editableName = new EditableNameV({
                 model: this.model,
@@ -39,15 +40,18 @@ define([
                 // TODO: code...
             });
 
-            $(this.el).empty().width(width)   
-                .append(this.editableName.el)
-                .append(this.trackControls.el)
+            // track-info element completion
+            $infoV.append(this.editableName.el).append(this.trackControls.el);
+
+            // track view completion
+            $(this.el).empty().width(width)
+                .append($infoV)
                 .append(this.trackDisplay.el);
 
+            
             // handle left scroll offset if any
-            $(this.editableName.el).css('left', offsetLeft + 'px');
-            $(this.trackControls.el).css('left', offsetLeft + 'px');
-
+            $infoV.css('left', offsetLeft + 'px');
+            
             new ClipsV({
                 collection: this.model.clips,
                 el: $('.track-display', this.el)

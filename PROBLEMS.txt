@@ -16,3 +16,5 @@
     
     Possible solution: position fixed at left=0 and vertical offset counted by 
     javascript + topOffset when scrolling vertically.
+
+        ad 1) Fixed position for track-info wrapper elements doesn't work because of top and bottom overflow over the editor-view element.

@@ -45,7 +45,7 @@ define([
                 handle: 'div.clip-name',
                 cursor: 'move',
                 // start: function?,
-                // drag: function?,
+                drag: this.scrollChange,
                 stop: this.updatePosition,
                 // scroll?
             }).css('position', 'absolute');
@@ -132,7 +132,7 @@ define([
                 });
             
             // change clip name left offset if needed
-            this.scrollChange(Audiee.Views.Editor.scrollOffset());
+            this.scrollChange();
 
             return this;
         },
@@ -150,12 +150,13 @@ define([
             this.model.set('trackPos', offsetLeft);
         },
 
-        scrollChange: function(scrollLeft) {
-            var left = Audiee.Display.px2sec(scrollLeft),
-                trackPos = this.model.get('trackPos'),
+        scrollChange: function(e, ui) {
+            var scrollLeft = Audiee.Views.Editor.scrollLeftOffset(),
+                left = Audiee.Display.px2sec(scrollLeft),
+                trackPos = (typeof ui !== 'undefined') ? Audiee.Display.px2sec(ui.position.left) : this.model.get('trackPos'),
                 width = this._clipWidth(),
                 offset = left - trackPos;
-            
+
             if (left > trackPos && left < (trackPos + width)) {
                 $(this.editableName.el).css('padding-left', Audiee.Display.sec2px(offset))
                     .find('.name-content').text('...' + this.model.get('name'));

@@ -26,7 +26,7 @@ define([
 
         initialize: function() {
             _.bindAll(this, 'render', 'zoomChange', 'cursor', 'selection');
-            this.model.bind('Audiee:zoomChange', this.zoomChange);
+            this.model.bind('Audiee:zoomChange', this.zoomChange);  
 
             // register mouse events
             $(this.el)
@@ -37,11 +37,16 @@ define([
         },
 
         render: function() {
-            console.log('Display.render()');
+            console.log('TrackDisplay.render()');
             // calculate width and height
             var width = Audiee.Display.sec2px(this.model.get('length')),
-                height = 100;
+                maxWidth = 20000
+                height = 100,
+                $wrapperV = $('<div class="display">');
 
+            
+
+            // TODO: ehm, div.container>canvas*pocet do delky
             $(this.el).html(this.template({
                 width: width,
                 height: height
