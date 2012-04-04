@@ -108,7 +108,7 @@ define([
         };
 
         Display.prototype.drawCursor = function(canvas, position) {
-            console.log('drawing cursor at ', position);
+            console.log('drawing cursor at ', canvas, position);
             var ctx = canvas.getContext('2d');
             position += 0.5;
             ctx.strokeStyle = '#ff8000';

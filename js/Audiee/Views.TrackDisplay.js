@@ -17,6 +17,9 @@ define([
     return Backbone.View.extend({
         tagName: 'div',
         className: 'track-display',
+        wrapperName: 'display-wrapper',
+        wrapperClass: '.display-wrapper',
+        maxWidth: 20000,        // maximum canvas width
 
         template: _.template(
             '<canvas width="{{ width }}" height="{{ height }}">' +
@@ -25,55 +28,81 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render', 'zoomChange', 'cursor', 'selection');
-            this.model.bind('Audiee:zoomChange', this.zoomChange);  
+            _.bindAll(this, 'render', 'renderDisplay', 'cursor', 'selection');
+            this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
             // register mouse events
             $(this.el)
-                .on('mousedown', 'canvas', this.cursor)
-                .on('mouseup', 'canvas', this.selection);
+                .on('mousedown', this.wrapperClass, this.cursor)
+                .on('mouseup', this.wrapperClass, this.selection);
 
             this.render();
         },
 
         render: function() {
-            console.log('TrackDisplay.render()');
             // calculate width and height
-            var width = Audiee.Display.sec2px(this.model.get('length')),
-                maxWidth = 20000
-                height = 100,
-                $wrapperV = $('<div class="display">');
+            var $wrapperV = $('<div class="' + this.wrapperName + '">'),
+                $el = $(this.el);
 
-            
+            $el.append($wrapperV);
+            this.renderDisplay();          
 
-            // TODO: ehm, div.container>canvas*pocet do delky
-            $(this.el).html(this.template({
-                width: width,
-                height: height
-            })).width(width);
             return this;
         },
 
-        zoomChange: function() {
-            var width = Audiee.Display.sec2px(this.model.get('length'));
-            $(this.el).width(width)
-                .find('canvas').attr('width', width); // FIXME: solution with template re-rendering?
+        renderDisplay: function() {
+            var width = Audiee.Display.sec2px(this.model.get('length')),
+                maxWidth = this.maxWidth,
+                height = 100,   
+                $el = $(this.el),
+                $wrapperV = $el.find(this.wrapperClass);
+
+            // remove canvas elements without removing the event listeners
+            $el.width(width);
+            $wrapperV.children().detach();
+
+            do {
+                $wrapperV.append(this.template({
+                    width: (width > maxWidth) ? maxWidth : width,
+                    height: height
+                }));
+
+                width -= maxWidth;
+            } while (width > 0);
         },
 
         cursor: function(e) {
-            this.selectionFrom = Audiee.Display.px2sec(e.offsetX);
-
             // set active class to the selected track
             $(this.el).parent('.track').addClass('active').siblings().removeClass('active');
+            Audiee.Views.Editor.setActiveTrack(this);
 
-            // clear track-display canvas (all the tracks) 
-            // NOTE: this is not gonna be here when the shift keypress function is done (editing selection)
-            $('.track-display').children('canvas').each(function() {
-                Audiee.Display.clearDisplay(this);
-            });
+            var $canvasArray = $(this.wrapperClass, this.el).children('canvas');
 
-            Audiee.Display.drawCursor($(this.el).children('canvas')[0], e.offsetX);
+            // clear track-display (all tracks) 
+            if (!e.shiftKey) {
+                var index = $canvasArray.index($(e.target)),
+                    offset = e.offsetX + index * this.maxWidth,
+                    position = offset % this.maxWidth;
+                
+                console.log('offsetttt:', offset);
+
+                Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
+                $(this.wrapperClass).children('canvas').each(function() {
+                    Audiee.Display.clearDisplay(this);
+                });
+
+                // console.log(offset, '/', this.maxWidth, '=', offset/this.maxWidth);
+                // canvas index 
+                
+                // console.log(index, $(this.wrapperClass, this.el).children('canvas').eq(index));
+
+                Audiee.Display.drawCursor($canvasArray.eq(index)[0], position);
+            }
+            
+
+            // Audiee.Display.drawCursor($(this.el).children('canvas')[0], e.offsetX);
         },
+
 
         /*startSelection: function(e) {
             console.log(e.offsetX);
@@ -81,16 +110,17 @@ define([
         },*/
 
         selection: function(e) {
+            console.log(e);
             console.log(e.offsetX);
-            this.selectionTo = Audiee.Display.px2sec(e.offsetX);
+            // this.selectionTo = Audiee.Display.px2sec(e.offsetX);
 
-            if (this.selectionFrom !== this.selectionTo) {
-                // clear track-display canvas (all the tracks)
-                $('.track-display').children('canvas').each(function() {
-                    Audiee.Display.clearDisplay(this);
-            });
-                Audiee.Display.drawSelection($(this.el).children('canvas')[0], this.selectionFrom, this.selectionTo);
-            }
+            // if (this.selectionFrom !== this.selectionTo) {
+            //     // clear track-display canvas (all the tracks)
+            //     $('.track-display').children('canvas').each(function() {
+            //         Audiee.Display.clearDisplay(this);
+            // });
+            //     Audiee.Display.drawSelection($(this.el).children('canvas')[0], this.selectionFrom, this.selectionTo);
+            // }
 
         }
         

@@ -45,7 +45,7 @@ define([
                 else 
                     width = clipWidth;  
 
-                console.log('width: ' + width);
+                // console.log('width: ' + width);
 
                 $el.append(this.template({
                     width: width,

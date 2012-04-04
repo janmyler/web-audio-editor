@@ -22,7 +22,16 @@ define([
 
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'changeTitle', 'resizeView', 'scrollHandler');
+            _.bindAll(this, 
+                'render', 
+                'changeTitle', 
+                'resizeView', 
+                'scrollHandler', 
+                'setActiveTrack', 
+                'unsetActiveTrack', 
+                'getCursor',
+                'setSelectionFrom'
+            );
             this.model.bind('change:name', this.changeTitle);
             
             // rewrite title tag with proper project name value
@@ -70,6 +79,22 @@ define([
                 (e.originalEvent.wheelDelta < 0) ? Audiee.Display.zoomOut() : Audiee.Display.zoomIn();
                 return false;
             }
+        },
+
+        setActiveTrack: function(track) {
+            this.activeTrack = track;
+        },
+
+        unsetActiveTrack: function() {
+            this.activeTrack = undefined;
+        },
+
+        setSelectionFrom: function(position) {
+            this.selectionFrom = position;
+        },
+
+        getCursor: function() {
+            return this.selectionFrom;
         }
 
     });

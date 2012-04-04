@@ -59,7 +59,7 @@ define([
 
             // console.log('Clip.render() ', left, width);
 
-            $(this.el).children().detach().end()  // empty an element, but save the event handlers etc.
+            $(this.el).children().detach().end()  // empty an element, but save the event listeners etc.
                 .css('left', left + 'px')                    
                 .width(width)  
                 .resizable('destroy')

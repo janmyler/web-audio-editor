@@ -18,3 +18,5 @@
     javascript + topOffset when scrolling vertically.
 
         ad 1) Fixed position for track-info wrapper elements doesn't work because of top and bottom overflow over the editor-view element.
+
+    Another possible solution: separate wrapper element for track controls (out of the editor-view) with height same as editor-view, scrolling with the editor-view.

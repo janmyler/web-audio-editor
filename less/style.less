@@ -143,18 +143,23 @@ body {
       height: 90px;
     }  
 
-    .track-display > canvas {
-      position: absolute;
-      top: 20px;
-      background-color: hsla(0, 100%, 100%, 0.2);
-      z-index: 200;
-    }
-
     .track-display {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
       background-color: #d6d6d6;
+
+      .display-wrapper {
+        height: @trackHeight - 20;
+        position: absolute;
+        top: 20px;
+        background-color: hsla(0, 100%, 100%, 0.2);
+        z-index: 200;
+
+        canvas {
+          float: left;
+        }
+      }
 
       .clip {
         height: @trackHeight;
