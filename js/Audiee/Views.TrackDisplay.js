@@ -76,6 +76,9 @@ define([
 
                 width -= maxWidth;
             } while (width > 0);
+
+            this.renderCursor();
+            this.renderSelection();
         },
 
         cursor: function(e) {
@@ -90,7 +93,9 @@ define([
                 
                 Audiee.Views.Editor.setActiveTrack($track);
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
-                this.renderCursor();
+                Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(offset));
+                Audiee.Views.Editor.unsetMultiSelection();
+                this.renderCursor();                
             }
         },
 
