@@ -19,7 +19,7 @@ define([
         className: 'track-display',
         wrapperName: 'display-wrapper',
         wrapperClass: '.display-wrapper',
-        maxWidth: 20000,        // maximum canvas width
+        maxWidth: 500, //20000,        // maximum canvas width
 
         template: _.template(
             '<canvas width="{{ width }}" height="{{ height }}">' +
@@ -84,35 +84,77 @@ define([
                     offset = e.offsetX + index * this.maxWidth,
                     position = offset % this.maxWidth;
                 
-                console.log('offsetttt:', offset);
-
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
                 $(this.wrapperClass).children('canvas').each(function() {
                     Audiee.Display.clearDisplay(this);
                 });
 
                 // console.log(offset, '/', this.maxWidth, '=', offset/this.maxWidth);
-                // canvas index 
-                
                 // console.log(index, $(this.wrapperClass, this.el).children('canvas').eq(index));
 
                 Audiee.Display.drawCursor($canvasArray.eq(index)[0], position);
+            } else { // shift key pressed – make an selection or edit the existing one
+                // TODO: code here...
+
             }
-            
-
-            // Audiee.Display.drawCursor($(this.el).children('canvas')[0], e.offsetX);
-        },
-
-
-        /*startSelection: function(e) {
-            console.log(e.offsetX);
-            this.selectionFrom = Audiee.Display.px2sec(e.offsetX);
-        },*/
+        },        
 
         selection: function(e) {
-            console.log(e);
-            console.log(e.offsetX);
-            // this.selectionTo = Audiee.Display.px2sec(e.offsetX);
+            var $canvasArray = $(this.wrapperClass, this.el).children('canvas'),   // canvas array within a track display
+                $track = $(e.target).parents('.track'),
+                selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth,   // total offset in the track display
+                selectionFrom, indexFrom, indexTo;
+
+            // store the selectionTo value in the editor view 
+            Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));
+                
+            // selectionFrom and selectionTo could have been swapped
+            selectionFrom = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor());
+            selectionTo = Audiee.Display.sec2px(Audiee.Views.Editor.getSelectionTo());
+            indexFrom = Math.floor(selectionFrom / this.maxWidth);
+            indexTo = Math.floor(selectionTo / this.maxWidth);
+
+            // if there is a selection (from != to), clear all TrackDisplays and render the selection
+            if (selectionFrom !== selectionTo) {
+                $(this.wrapperClass).children('canvas').each(function() {
+                    Audiee.Display.clearDisplay(this);
+                });
+                
+                selectionTo %= this.maxWidth;
+
+                var from = selectionFrom % this.maxWidth,
+                    len = (indexFrom !== indexTo) ? (this.maxWidth - from) : (selectionTo - from);
+                    console.log('Selection is allowed initially from ', from, 'len ', len, 'on ', $canvasArray.eq(indexFrom)[0]);
+                for (; indexFrom <= indexTo; ++indexFrom) {
+                    console.log('ifrom:',indexFrom, 'ito:',indexTo);
+                    Audiee.Display.drawSelection($canvasArray.eq(indexFrom)[0], from, len);
+                    from = 0;
+                    len = (indexFrom != indexTo - 1) ? this.maxWidth : selectionTo;
+                    console.log('STO:', selectionTo, 'MAX:', this.maxWidth);
+
+                    console.log(from, len, $canvasArray.eq(indexFrom+1)[0]);
+                }
+            }
+
+            // console.log('selection to: ', $track, index, selectionFrom, selectionTo);
+
+            // handle selection somehow ... think about the multiple canvases within TrackDisplay view
+            
+            /*do {
+
+                if (length > this.maxWidth)
+                    selectionTo = this.maxWidth - selectionFrom % this.maxWidth;
+                else
+                    selectionTo = length;
+
+
+
+                Audiee.Display.drawSelection($canvasArray.eq(index)[0], );
+
+
+                
+
+            } while (length > 0);*/
 
             // if (this.selectionFrom !== this.selectionTo) {
             //     // clear track-display canvas (all the tracks)

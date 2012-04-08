@@ -73,7 +73,7 @@ define([
                         e: '.ui-resizable-e'
                     },
                     containment: 'parent',  // TODO: remove this? (track resizing with clip...)
-                    // grid: 2,
+                    // grid: 5,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
                         var length  = that.model.get('buffer').duration,

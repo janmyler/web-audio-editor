@@ -108,7 +108,6 @@ define([
         };
 
         Display.prototype.drawCursor = function(canvas, position) {
-            console.log('drawing cursor at ', canvas, position);
             var ctx = canvas.getContext('2d');
             position += 0.5;
             ctx.strokeStyle = '#ff8000';
@@ -118,14 +117,12 @@ define([
             ctx.stroke();
         };
 
-        Display.prototype.drawSelection = function(canvas, from, to) {
-            var ctx = canvas.getContext('2d'),
-                start = Audiee.Display.sec2px(from),
-                end = Audiee.Display.sec2px(to) - start;
-
+        Display.prototype.drawSelection = function(canvas, from, length) {
+            var ctx = canvas.getContext('2d');
+            console.log('D:', canvas, from, length);
             // ctx.fillStyle = 'rgba(255, 128, 0, 0.2)';
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fillRect(start, 0, end, canvas.height);
+            ctx.fillRect(from, 0, length, canvas.height);
         };    
 
         return Display;

@@ -30,7 +30,9 @@ define([
                 'setActiveTrack', 
                 'unsetActiveTrack', 
                 'getCursor',
-                'setSelectionFrom'
+                'setSelectionFrom',
+                'setSelectionTo',
+                'getSelectionTo'
             );
             this.model.bind('change:name', this.changeTitle);
             
@@ -74,9 +76,18 @@ define([
         },
 
         zoomHandler: function(e) {
+            // TODO: scrolling when zooming needs to be fixed...
             if (e.altKey) {
                 e.preventDefault();     // don't scroll the view
+                var originalOffset = Audiee.Display.px2sec(e.originalEvent.offsetX);
                 (e.originalEvent.wheelDelta < 0) ? Audiee.Display.zoomOut() : Audiee.Display.zoomIn();
+                var newOffset = Audiee.Display.sec2px(originalOffset),
+                    scrollChange = this.scrollLeftOffset() + newOffset - e.originalEvent.offsetX;
+                $(this.el).scrollLeft(scrollChange);
+                
+                // console.log(Audiee.Display.zoomLevel);
+                // console.log('scrolling: ', scrollChange);
+                                
                 return false;
             }
         },
@@ -93,9 +104,25 @@ define([
             this.selectionFrom = position;
         },
 
+        setSelectionTo: function(position) {
+            if (position < this.selectionFrom) {
+                var tmp = this.selectionFrom;
+                this.selectionFrom = position;
+                this.selectionTo = tmp;
+            } else {
+                this.selectionTo = position;
+            } 
+        },
+
         getCursor: function() {
             return this.selectionFrom;
+        },
+
+        getSelectionTo: function() {
+            return this.selectionTo;
         }
+
+        // TODO: get selection or something... (return this.selectionTo? or an array [from, to]? or even w/tracks?)
 
     });
 });

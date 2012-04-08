@@ -161,6 +161,11 @@ body {
         }
       }
 
+      // changes the cursor when the clip is moving
+      .ui-draggable-dragging .name-content {
+        cursor: move !important;
+      }
+
       .clip {
         height: @trackHeight;
         position: absolute;
@@ -174,7 +179,7 @@ body {
             margin-bottom: 0;
             padding: 1px 2px; 
             white-space: nowrap;  
-            cursor: inherit;         
+            cursor: auto;         
           }
 
           .name-input {
