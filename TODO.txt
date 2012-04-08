@@ -5,8 +5,7 @@
 + Kursor, selekce
 
 + ad kurzor a vybery:
-    – v ramci radku (.track-display), na ktery radek se klikne, ten je aktivni... to znamena, mohou se na nej uplatnovat nektere funkce (delete/remove track atd.)
-    – pri kliknuti se ulozi pocatecni pozice kliku (v ramci tracku nebo v ramci editor-view?), od te se pocita pozice mouseup (prohodi se mensi a vetsi hodnota a vykresli se vyber), pote mozna (mozna) editace vyberu (klavesa shift + klik..)
+    – pri kliknuti se ulozi pocatecni pozice kliku (v ramci tracku nebo v ramci editor-view?), od te se pocita pozice mouseup (prohodi se mensi a vetsi hodnota a vykresli se vyber), pote mozna (mozna) editace vyberu (klavesa shift + klik..) [skoro hotovo]
     – u jednoradkoveho vyberu problem detekovani pouze mouseup (zaprve se muze stat, ze bude na uplne jinem radku nez predtim, to same kdyz tahnu klip a 'pustim tazeni' nad track-display), TOTO MOZNA VYRESI, kdyz se budou vybery a kliknuti pamatovat na urovni editor-view, protoze kliknuti bude vzdy na danem tracku (active track), ale [from, to] hranice vyberu se budou pamatovat globalne pro cely editor view, z cehoz se budou kreslit na active track.. v pripade multiline vyberu by se muselo nejak pamatovat nad kterymi tracky jsem se pohyboval, popr kde to pustil
     – vykreslovani vyberu i se zoomem... ???
     – pridavani tridy selected pri vybirani vyberu a pote zpracovani '.selected' tracku?

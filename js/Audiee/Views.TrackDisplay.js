@@ -28,7 +28,14 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render', 'renderDisplay', 'cursor', 'selection');
+            _.bindAll(this, 
+                'render', 
+                'renderDisplay', 
+                'renderCursor',
+                'renderSelection',
+                'cursor',
+                'selection'
+            );
             this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
             // register mouse events
@@ -73,42 +80,100 @@ define([
 
         cursor: function(e) {
             // set active class to the selected track
-            $(this.el).parent('.track').addClass('active').siblings().removeClass('active');
-            Audiee.Views.Editor.setActiveTrack(this);
+            var $track = $(this.el).parent('.track'),
+                $canvasArray = $(this.wrapperClass, this.el).children('canvas');
+            
+            Audiee.Views.Editor.setActiveTrack($track);
 
-            var $canvasArray = $(this.wrapperClass, this.el).children('canvas');
-
-            // clear track-display (all tracks) 
             if (!e.shiftKey) {
                 var index = $canvasArray.index($(e.target)),
                     offset = e.offsetX + index * this.maxWidth,
                     position = offset % this.maxWidth;
                 
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
-                $(this.wrapperClass).children('canvas').each(function() {
-                    Audiee.Display.clearDisplay(this);
-                });
-
-                // console.log(offset, '/', this.maxWidth, '=', offset/this.maxWidth);
-                // console.log(index, $(this.wrapperClass, this.el).children('canvas').eq(index));
-
-                Audiee.Display.drawCursor($canvasArray.eq(index)[0], position);
+                this.renderCursor();
             } else { // shift key pressed – make an selection or edit the existing one
                 // TODO: code here...
 
             }
-        },        
+        },
+
+        renderCursor: function() {
+            if (!Audiee.Views.Editor.isActiveTrack()) 
+                return;
+
+            var $track = Audiee.Views.Editor.getActiveTrack(),
+                $canvasArray = $(this.wrapperClass, $track).children('canvas'),
+                position = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor()),
+                index = Math.floor(position / this.maxWidth);
+
+            // clear track-display (all tracks) 
+            $(this.wrapperClass).children('canvas').each(function() {
+                Audiee.Display.clearDisplay(this);
+            });
+
+            // draw the cursor
+            Audiee.Display.drawCursor($canvasArray.eq(index)[0], position % this.maxWidth);
+        },
+
+        renderSelection: function() {
+            var selectionFrom = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor()),
+                selectionTo = Audiee.Display.sec2px(Audiee.Views.Editor.getSelectionTo()),
+                indexFrom = Math.floor(selectionFrom / this.maxWidth),
+                indexTo = Math.floor(selectionTo / this.maxWidth),
+                $tracks = $('.track'),
+                that = this,
+                from, len, tmp, $canvasArray;
+
+            // if there is a selection (from != to), clear all TrackDisplays and render the selection
+            if (selectionFrom !== selectionTo) {
+                $(this.wrapperClass).children('canvas').each(function() {
+                    Audiee.Display.clearDisplay(this);
+                });
+
+                var index1 = $tracks.index(Audiee.Views.Editor.getActiveTrack()),
+                    index2 = index1;
+                
+                if (Audiee.Views.Editor.isMultiSelection()) {
+                    index2 = $tracks.index(Audiee.Views.Editor.getMultiSelection());
+                    if (index1 > index2) {  // swap indexes if needed
+                        tmp = index1;
+                        index1 = index2;
+                        index2 = tmp;
+                    }
+                } 
+
+                selectionTo %= this.maxWidth;   
+                $tracks.slice(index1, ++index2).each(function() {
+                    $canvasArray = $(this).find(that.wrapperClass).children('canvas');
+                    from = selectionFrom % that.maxWidth;
+                    len = (indexFrom !== indexTo) ? (that.maxWidth - from) : (selectionTo - from);
+                    
+                    for (var index = indexFrom; index <= indexTo; ++index) {
+                        Audiee.Display.drawSelection($canvasArray.eq(index)[0], from, len);
+                        from = 0;
+                        len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
+                    } 
+                });                
+            }
+        },    
 
         selection: function(e) {
             var $canvasArray = $(this.wrapperClass, this.el).children('canvas'),   // canvas array within a track display
                 $track = $(e.target).parents('.track'),
-                selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth,   // total offset in the track display
-                selectionFrom, indexFrom, indexTo;
+                selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth;   // total offset in the track display
+                // selectionFrom, indexFrom, indexTo;
 
             // store the selectionTo value in the editor view 
             Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));
+
+            if (Audiee.Views.Editor.getActiveTrack() !== $track) {
+                Audiee.Views.Editor.setMultiSelection($track);
+            }
+
+            this.renderSelection();
                 
-            // selectionFrom and selectionTo could have been swapped
+           /* // selectionFrom and selectionTo could have been swapped
             selectionFrom = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor());
             selectionTo = Audiee.Display.sec2px(Audiee.Views.Editor.getSelectionTo());
             indexFrom = Math.floor(selectionFrom / this.maxWidth);
@@ -124,46 +189,13 @@ define([
 
                 var from = selectionFrom % this.maxWidth,
                     len = (indexFrom !== indexTo) ? (this.maxWidth - from) : (selectionTo - from);
-                    console.log('Selection is allowed initially from ', from, 'len ', len, 'on ', $canvasArray.eq(indexFrom)[0]);
                 for (; indexFrom <= indexTo; ++indexFrom) {
-                    console.log('ifrom:',indexFrom, 'ito:',indexTo);
                     Audiee.Display.drawSelection($canvasArray.eq(indexFrom)[0], from, len);
                     from = 0;
                     len = (indexFrom != indexTo - 1) ? this.maxWidth : selectionTo;
-                    console.log('STO:', selectionTo, 'MAX:', this.maxWidth);
-
-                    console.log(from, len, $canvasArray.eq(indexFrom+1)[0]);
                 }
-            }
-
-            // console.log('selection to: ', $track, index, selectionFrom, selectionTo);
-
-            // handle selection somehow ... think about the multiple canvases within TrackDisplay view
-            
-            /*do {
-
-                if (length > this.maxWidth)
-                    selectionTo = this.maxWidth - selectionFrom % this.maxWidth;
-                else
-                    selectionTo = length;
-
-
-
-                Audiee.Display.drawSelection($canvasArray.eq(index)[0], );
-
-
-                
-
-            } while (length > 0);*/
-
-            // if (this.selectionFrom !== this.selectionTo) {
-            //     // clear track-display canvas (all the tracks)
-            //     $('.track-display').children('canvas').each(function() {
-            //         Audiee.Display.clearDisplay(this);
-            // });
-            //     Audiee.Display.drawSelection($(this.el).children('canvas')[0], this.selectionFrom, this.selectionTo);
-            // }
-
+            }*/
+            // multiline vyber - od tracku do tracku, jak je to na papirech, proste dle indexu kde byl na zacatku, a kde se pustil, to se nastavi a ulozi, aby to tam bylo...
         }
         
     });

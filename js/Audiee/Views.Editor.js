@@ -27,12 +27,15 @@ define([
                 'changeTitle', 
                 'resizeView', 
                 'scrollHandler', 
+                'zoomHandler'
+                /*'getActiveTrack',
+                'isActiveTrack',
                 'setActiveTrack', 
                 'unsetActiveTrack', 
                 'getCursor',
                 'setSelectionFrom',
                 'setSelectionTo',
-                'getSelectionTo'
+                'getSelectionTo'*/
             );
             this.model.bind('change:name', this.changeTitle);
             
@@ -92,11 +95,21 @@ define([
             }
         },
 
-        setActiveTrack: function(track) {
-            this.activeTrack = track;
+        setActiveTrack: function($track) {
+            this.activeTrack = $track;
+            $track.addClass('active').siblings().removeClass('active');
+        },
+
+        getActiveTrack: function() {
+            return this.activeTrack;
+        },
+
+        isActiveTrack: function() {
+            return typeof this.activeTrack !== 'undefined';
         },
 
         unsetActiveTrack: function() {
+            this.activeTrack.removeClass('active').siblings().removeClass('active');
             this.activeTrack = undefined;
         },
 
@@ -112,6 +125,22 @@ define([
             } else {
                 this.selectionTo = position;
             } 
+        },
+
+        setMultiSelection: function($track) {
+            this.multilineTo = $track;
+        },
+
+        getMultiSelection: function() {
+            return this.multilineTo;
+        },
+
+        unsetMultiSelection: function() {
+            this.multilineTo = undefined;
+        },
+
+        isMultiSelection: function() {
+            return typeof this.multilineTo !== 'undefined';
         },
 
         getCursor: function() {
