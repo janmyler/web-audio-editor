@@ -34,7 +34,8 @@ define([
                 'renderCursor',
                 'renderSelection',
                 'cursor',
-                'selection'
+                'selection',
+                'moving'
             );
             this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
@@ -42,6 +43,7 @@ define([
             $(this.el)
                 .on('mousedown', this.wrapperClass, this.cursor)
                 .on('mouseup', this.wrapperClass, this.selection);
+                // .on('mousemove', this.wrapperClass, this.moving);
 
             this.render();
         },
@@ -92,6 +94,7 @@ define([
                     position = offset % this.maxWidth;
                 
                 Audiee.Views.Editor.setActiveTrack($track);
+                Audiee.Views.Editor.selectionOn();
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.unsetMultiSelection();
@@ -135,6 +138,7 @@ define([
                 }
             } else {
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
+                Audiee.Views.Editor.selectionOff();
             }            
 
             if (Audiee.Views.Editor.getActiveTrack() !== $track) {
@@ -183,6 +187,12 @@ define([
                         len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
                     } 
                 });                
+            }
+        },
+
+        moving: function(e) {
+            if (Audiee.Views.Editor.selectionActive()) {
+                // this.selection(e);
             }
         }
     });

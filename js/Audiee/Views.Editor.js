@@ -95,6 +95,18 @@ define([
             }
         },
 
+        selectionOn: function() {
+            this.selecting = true;
+        },
+
+        selectionOff: function() {
+            this.selecting = false;
+        },
+
+        selectionActive: function() {
+            return this.selecting;
+        },
+
         setActiveTrack: function($track) {
             this.activeTrack = $track;
             $track.addClass('active').siblings().removeClass('active');
