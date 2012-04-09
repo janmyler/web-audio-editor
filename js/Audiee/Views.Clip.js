@@ -21,16 +21,13 @@ define([
         tagName: 'div',
         className: 'clip',
 
-        events: {
-            
-        },
-
         initialize: function() {
-            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition');
+            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition', 'scrollChange', '_clipWidth');
             this.model.bind('change:startTime', this.soundwaveRender);  
             this.model.bind('change:endTime', this.soundwaveRender);
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
+            this.model.collection.bind('Audiee:scroll', this.scrollChange);
             
             this.editableName = new EditableNameV({
                 model: this.model,
@@ -48,27 +45,21 @@ define([
                 handle: 'div.clip-name',
                 cursor: 'move',
                 // start: function?,
-                // drag: function?,
+                drag: this.scrollChange,
                 stop: this.updatePosition,
                 // scroll?
             }).css('position', 'absolute');
-
               
         },
 
         render: function() {
             var left = Audiee.Display.sec2px(this.model.get('trackPos')),
-                width = Audiee.Display.sec2px(
-                            this.model.get('endTime') 
-                          - this.model.get('startTime') 
-                          + this.model.get('loop')
-                          * this.model.get('buffer').duration
-                        ),
+                width = this._clipWidth(),
                 that = this;
 
             // console.log('Clip.render() ', left, width);
 
-            $(this.el).empty()
+            $(this.el).children().detach().end()  // empty an element, but save the event listeners etc.
                 .css('left', left + 'px')                    
                 .width(width)  
                 .resizable('destroy')
@@ -82,7 +73,7 @@ define([
                         e: '.ui-resizable-e'
                     },
                     containment: 'parent',  // TODO: remove this? (track resizing with clip...)
-                    // grid: 2,
+                    // grid: 5,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
                         var length  = that.model.get('buffer').duration,
@@ -139,6 +130,9 @@ define([
                         that.soundwaveRender();
                     } // usefull here?
                 });
+            
+            // change clip name left offset if needed
+            this.scrollChange();
 
             return this;
         },
@@ -148,18 +142,37 @@ define([
         },
 
         soundwaveRender: function() {
-            var width = Audiee.Display.sec2px(
-                            this.model.get('endTime') 
-                          - this.model.get('startTime') 
-                          + this.model.get('loop')
-                          * this.model.get('buffer').duration
-                        );
-            this.clipDisplay.render(width);  
+            this.clipDisplay.render(this._clipWidth());  
         },
 
         updatePosition: function(e) {
             var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
             this.model.set('trackPos', offsetLeft);
+        },
+
+        scrollChange: function(e, ui) {
+            var scrollLeft = Audiee.Views.Editor.scrollLeftOffset(),
+                left = Audiee.Display.px2sec(scrollLeft),
+                trackPos = (typeof ui !== 'undefined') ? Audiee.Display.px2sec(ui.position.left) : this.model.get('trackPos'),
+                width = this._clipWidth(),
+                offset = left - trackPos;
+
+            if (left > trackPos && left < (trackPos + width)) {
+                $(this.editableName.el).css('padding-left', Audiee.Display.sec2px(offset))
+                    .find('.name-content').text('...' + this.model.get('name'));
+            } else {
+                $(this.editableName.el).css('padding-left', 0)
+                    .find('.name-content').text(this.model.get('name'));
+            }
+        },
+
+        _clipWidth: function() {
+            return Audiee.Display.sec2px(
+                this.model.get('endTime') 
+              - this.model.get('startTime') 
+              + this.model.get('loop')
+              * this.model.get('buffer').duration
+            );
         }
     });
 });

@@ -16,17 +16,29 @@ define([
 
         // DOM events listeners
         events: {
-           
+           'mousewheel' : 'zoomHandler',
+           'scroll' : 'scrollHandler'
         },
 
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'changeTitle', 'resizeView', 'scrollHandler');
+            _.bindAll(this, 
+                'render', 
+                'changeTitle', 
+                'resizeView', 
+                'scrollHandler', 
+                'zoomHandler'
+                /*'getActiveTrack',
+                'isActiveTrack',
+                'setActiveTrack', 
+                'unsetActiveTrack', 
+                'getCursor',
+                'setSelectionFrom',
+                'setSelectionTo',
+                'getSelectionTo'*/
+            );
             this.model.bind('change:name', this.changeTitle);
             
-            // propagate the scroll event to tracks view
-            this.el.bind('scroll', this.scrollHandler);
-
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
 
@@ -37,7 +49,6 @@ define([
 
         // render function
         render: function() {
-
             return this;
         },
 
@@ -56,8 +67,103 @@ define([
 
         scrollHandler: function() {
             // trigger the custom event on tracks view
-            Audiee.Views.Tracks.trigger('Audiee:scroll', $(this.el).scrollLeft());  
+            Audiee.Views.Tracks.trigger('Audiee:scroll');  
+        },
+
+        scrollLeftOffset: function() {
+            return $(this.el).scrollLeft();
+        },
+
+        scrollTopOffset: function() {
+            return $(this.el).scrollTop();
+        },
+
+        zoomHandler: function(e) {
+            // TODO: scrolling when zooming needs to be fixed...
+            if (e.altKey) {
+                e.preventDefault();     // don't scroll the view
+                var originalOffset = Audiee.Display.px2sec(e.originalEvent.offsetX);
+                (e.originalEvent.wheelDelta < 0) ? Audiee.Display.zoomOut() : Audiee.Display.zoomIn();
+                var newOffset = Audiee.Display.sec2px(originalOffset),
+                    scrollChange = this.scrollLeftOffset() + newOffset - e.originalEvent.offsetX;
+                $(this.el).scrollLeft(scrollChange);
+                
+                // console.log(Audiee.Display.zoomLevel);
+                // console.log('scrolling: ', scrollChange);
+                                
+                return false;
+            }
+        },
+
+        selectionOn: function() {
+            this.selecting = true;
+        },
+
+        selectionOff: function() {
+            this.selecting = false;
+        },
+
+        selectionActive: function() {
+            return this.selecting;
+        },
+
+        setActiveTrack: function($track) {
+            this.activeTrack = $track;
+            $track.addClass('active').siblings().removeClass('active');
+        },
+
+        getActiveTrack: function() {
+            return this.activeTrack;
+        },
+
+        isActiveTrack: function() {
+            return typeof this.activeTrack !== 'undefined';
+        },
+
+        unsetActiveTrack: function() {
+            this.activeTrack.removeClass('active').siblings().removeClass('active');
+            this.activeTrack = undefined;
+        },
+
+        setSelectionFrom: function(position) {
+            this.selectionFrom = position;
+        },
+
+        setSelectionTo: function(position) {
+            if (position < this.selectionFrom) {
+                var tmp = this.selectionFrom;
+                this.selectionFrom = position;
+                this.selectionTo = tmp;
+            } else {
+                this.selectionTo = position;
+            } 
+        },
+
+        setMultiSelection: function($track) {
+            this.multilineTo = $track;
+        },
+
+        getMultiSelection: function() {
+            return this.multilineTo;
+        },
+
+        unsetMultiSelection: function() {
+            this.multilineTo = undefined;
+        },
+
+        isMultiSelection: function() {
+            return typeof this.multilineTo !== 'undefined';
+        },
+
+        getCursor: function() {
+            return this.selectionFrom;
+        },
+
+        getSelectionTo: function() {
+            return this.selectionTo;
         }
+
+        // TODO: get selection or something... (return this.selectionTo? or an array [from, to]? or even w/tracks?)
 
     });
 });

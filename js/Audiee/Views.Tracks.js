@@ -13,31 +13,37 @@ define([
     
     return Backbone.View.extend({
         initialize: function() {
-            _.bindAll(this, 'render', 'addAll', 'addOne', 'zoomChange');
+            _.bindAll(this, 'render', 'addAll', 'addOne', 'zoomChange', 'scrollChange');
             this.collection.bind('add', this.addOne);
-            this.bind('Audiee:scroll', this.alignTrackControls);
+            this.bind('Audiee:scroll', this.scrollChange);
             this.bind('Audiee:zoomChange', this.zoomChange);
         },
 
         render: function() {
-            console.log('Tracks.render()');
             this.addAll();
             return this;
         },
 
         addAll: function() {
-            console.log('Tracks.addAll()');
             this.collection.each(this.addOne);
         },
 
         addOne: function(model) {
-            console.log('Tracks.addOne()');
             var track = new TrackV({model: model});
             $(this.el).append(track.render().el);
         },
 
-        alignTrackControls: function(scrollLeft) {
-            $('div.track-name, div.track-controls').css('left', scrollLeft + 'px');
+        scrollChange: function() {
+            // NOTE: This solution is not working good!
+            // FIXME: rewrite for top scroll... for track-info
+            // var scrollTop = Audiee.Views.Editor.scrollTopOffset();
+            // $('div.track-info').css('margin-top', -scrollTop + 'px');     
+
+            var scrollLeft = Audiee.Views.Editor.scrollLeftOffset();
+            $('div.track-info').css('left', scrollLeft + 'px');
+            this.collection.each(function(model) {
+                model.clips.trigger('Audiee:scroll');
+            });
         },
 
         zoomChange: function() {
