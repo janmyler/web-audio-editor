@@ -25,12 +25,10 @@ define([
 
         Display.prototype.zoomOut = function() {
             this.zoomLevel *= 1.5;
-            Audiee.Views.Tracks.trigger('Audiee:zoomChange');
         };
 
         Display.prototype.zoomIn = function() {
             this.zoomLevel /= 1.5;
-            Audiee.Views.Tracks.trigger('Audiee:zoomChange');
         };
 
         Display.prototype.px2sec = function(px) {

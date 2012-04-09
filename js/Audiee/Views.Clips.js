@@ -18,18 +18,15 @@ define([
         },
 
         render: function() {
-            console.log('Clips.render()');
             this.addAll();
             return this;
         },
 
         addAll: function() {
-            console.log('Clips.addAll()');
             this.collection.each(this.addOne);
         },
 
         addOne: function(model) {
-            console.log('Clips.addOne()');
             var view = new ClipV({model: model});
             $(this.el).append(view.render().el);
             model.bind('remove', view.remove);  // TODO: ?? w00t?

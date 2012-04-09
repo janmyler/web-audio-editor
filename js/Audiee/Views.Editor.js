@@ -68,6 +68,7 @@ define([
         scrollHandler: function() {
             // trigger the custom event on tracks view
             Audiee.Views.Tracks.trigger('Audiee:scroll');  
+            Audiee.Views.Timeline.trigger('Audiee:scroll');
         },
 
         scrollLeftOffset: function() {
@@ -88,9 +89,9 @@ define([
                     scrollChange = this.scrollLeftOffset() + newOffset - e.originalEvent.offsetX;
                 $(this.el).scrollLeft(scrollChange);
                 
-                // console.log(Audiee.Display.zoomLevel);
-                // console.log('scrolling: ', scrollChange);
-                                
+                Audiee.Views.Tracks.trigger('Audiee:zoomChange');
+                Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+
                 return false;
             }
         },

@@ -29,7 +29,6 @@ define([
         },
 
         render: function() {
-            console.log('Controls.render()');
             $(this.el).html(this.template());
             return this;
         }
