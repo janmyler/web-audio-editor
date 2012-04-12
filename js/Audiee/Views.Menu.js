@@ -24,17 +24,44 @@ define([
 
         // DOM events listeners
         events: {
-            'click #m-addnew': 'addTrack',
+            'click #m-addnew' : 'addTrack',
+            'click #m-remove' : 'removeTrack',
+            'click #m-zoomin' : 'zoomIn',
+            'click #m-zoomout' : 'zoomOut',
+            'click #m-zoomzero' : 'zoomZero'
+            
         },
 
         initialize: function() {
             _.bindAll(this, 'render', '_fileSelected', '_fileLoaded');
+            $(document).on('keyup', this.handleKey);
             this.el.bind('Audiee:fileLoaded', this._fileLoaded);
             this.render();
         },
 
         render: function() {
             $(this.el).html(this.template());
+        },
+
+        handleKey: function(e) {
+            switch(e.which) {
+                case 46:   // delete key
+                    $('#m-remove').trigger('click');
+                    break;
+                case 78:   // n key (alt + n combination)
+                    if (e.altKey) $('#m-addnew').trigger('click');
+                    break;
+                case 107:  // + key (alt + + combination)
+                    if (e.altKey) $('#m-zoomin').trigger('click');
+                    break;
+                case 109:  // - key (alt + - combination)
+                    if (e.altKey) $('#m-zoomout').trigger('click');
+                    break;
+                case 48:   // 0 key (alt + 0 combination)
+                case 96:
+                    if (e.altKey) $('#m-zoomzero').trigger('click');
+                    break;
+            }
         },
 
         // adds a new track
@@ -46,6 +73,12 @@ define([
             $tpl.on('change', '#file-name', this._fileSelected)
                 .on('hide', function() { $tpl.remove() })
                 .modal();                   // show the modal window
+        },
+
+        removeTrack: function() {
+            var $track = Audiee.Views.Editor.getActiveTrack();
+            if (typeof $track !== 'undefined')
+                Audiee.Collections.Tracks.remove($track.data('cid'));
         },
         
         _fileSelected: function(e) {
@@ -73,6 +106,24 @@ define([
             // create new Track model and add it to the Tracks collection
             var track = new TrackM({buffer: audioBuffer, file: file});
             Audiee.Collections.Tracks.add(track);
+        },
+
+        zoomIn: function() {
+            Audiee.Display.zoomIn();
+            Audiee.Views.Tracks.trigger('Audiee:zoomChange');
+            Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+        },
+
+        zoomOut: function() {
+            Audiee.Display.zoomOut();
+            Audiee.Views.Tracks.trigger('Audiee:zoomChange');
+            Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+        },
+
+        zoomZero: function() {
+            Audiee.Display.zoomZero();
+            Audiee.Views.Tracks.trigger('Audiee:zoomChange');
+            Audiee.Views.Timeline.trigger('Audiee:zoomChange');
         }
     });
 });

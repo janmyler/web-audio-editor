@@ -35,7 +35,8 @@ define([
 
 		// initialization
 		initialize: function() {
-			_.bindAll(this, 'initClip');
+			_.bindAll(this, 'initClip', 'remove');
+			this.bind('remove', this.remove);
 			this.clips = new ClipsC;
 			this.initClip();
 		},
@@ -47,6 +48,10 @@ define([
 				buffer: this.get('buffer')
 			});
 			this.clips.add(clip);
+		},
+
+		remove: function() {
+			this.destroy();
 		}
 
 

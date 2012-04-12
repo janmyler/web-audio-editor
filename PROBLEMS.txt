@@ -2,9 +2,9 @@
     is not rendered. Bigger causes page to crash (Aw Snap...).
     
     Solution: Split clip display to more canvases (e.g. 5000x100) -- [solved]
-        ad 1) it's not accurate (end of clip is out of canvas -- with bigger zoom is bigger the crop)... ]needs testing!!![
+        ad 1) it's not accurate (end of clip is out of canvas -- with bigger zoom is bigger the crop)... [solved]
 
-    Pending: Split track display to more canvases.
+    Split track display to more canvases. [solved]
 
 2)  Big audio files in memory causes the tab to crash (Aw Snap...). [unsolved]
 

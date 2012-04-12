@@ -44,7 +44,7 @@ define([
                 containment: 'parent',
                 handle: 'div.clip-name',
                 cursor: 'move',
-                // start: function?,
+                start: this.startMoving,
                 drag: this.scrollChange,
                 stop: this.updatePosition,
                 // scroll?
@@ -145,9 +145,15 @@ define([
             this.clipDisplay.render(this._clipWidth());  
         },
 
+        startMoving: function() {
+            Audiee.Views.Editor.movingOn();
+        },
+
         updatePosition: function(e) {
             var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
             this.model.set('trackPos', offsetLeft);
+            Audiee.Views.Editor.movingOff();
+
         },
 
         scrollChange: function(e, ui) {

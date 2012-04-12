@@ -31,6 +31,10 @@ define([
             this.zoomLevel /= 1.5;
         };
 
+        Display.prototype.zoomZero = function() {
+            this.zoomLevel = 1;
+        };
+
         Display.prototype.px2sec = function(px) {
             return px * this.zoomLevel / this.scale;
         };

@@ -33,6 +33,7 @@ define([
             // FIXME: proper functions
             this.bind('Audiee:scroll', this.drawScale);
             this.bind('Audiee:zoomChange', this.drawScale);
+            $(window).on('resize', this.render);
             this.render();
         },
 
@@ -53,15 +54,30 @@ define([
                 width = $el.width(),
                 height = $el.height(),
                 offsetLeft = Audiee.Views.Editor.scrollLeftOffset(),
+                minFrame = 50,      // min size of pixels
                 frame = Audiee.Display.sec2px(1),
-                i = offsetLeft % frame;
+                i = offsetLeft % frame,
+                sec = Audiee.Display.px2sec(offsetLeft),
+                t = '';
 
+
+            ctx.fillStyle = '#444';
+            ctx.font="0.8em sans-serif";
             ctx.clearRect(0, 0, width, height);
             for (; i < width; i += frame) {
-                if (Math.floor(Audiee.Display.px2sec(i) % 5) === 0)
-                    ctx.fillRect(i, 0, 1, height);
-                else 
-                   ctx.fillRect(i, 0, 1, height / 2);
+                if (sec % 60 < 10) {
+                    t = '' + Math.floor(sec / 60) + ':' + '0' + Math.floor(sec % 60);
+                } else {
+                    t = '' + Math.floor(sec / 60) + ':' + Math.floor(sec % 60);
+                }
+
+                if (Math.floor(Audiee.Display.px2sec(i) % 5) === 0) {
+                    ctx.fillRect(i, height, 1, -14);
+                    ctx.fillText(t, i, 12);
+                } else {
+                   ctx.fillRect(i, height, 1, -6);
+                }
+                sec++;
             }
         }
     });
