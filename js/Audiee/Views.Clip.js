@@ -44,7 +44,7 @@ define([
                 containment: 'parent',
                 handle: 'div.clip-name',
                 cursor: 'move',
-                // start: function?,
+                start: this.startMoving,
                 drag: this.scrollChange,
                 stop: this.updatePosition,
                 // scroll?
@@ -88,7 +88,7 @@ define([
                             var newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos'),
                                 newTrackPos;
                             
-                            console.log('left: ' + ui.position.left, 'trackPos: ' + that.model.get('trackPos'), 'newStartTime: ' +  newStartTime);
+                            // console.log('left: ' + ui.position.left, 'trackPos: ' + that.model.get('trackPos'), 'newStartTime: ' +  newStartTime);
                             
                             if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track 
                                 if (newStartTime > 0) { // resize --> direction to the right NOTE: should be ok now
@@ -111,22 +111,22 @@ define([
                         loop = Math.floor(Audiee.Display.px2sec(ui.size.width) / length);
                         loopRemainder = Audiee.Display.px2sec(ui.size.width) % length;
 
-                        console.log('loop: ' + loop, 'loopRemainder: '+ loopRemainder);
+                        // console.log('loop: ' + loop, 'loopRemainder: '+ loopRemainder);
                         
                         if((loopRemainder - that.model.get('endTime')) > 0) // FIXME: not always accurate
                             loop += 1;
 
                         that.model.set('loop', loop);
 
-                        console.log(
+                        /*console.log(
                             'startTime: ' + that.model.get('startTime'), 
                             'endTime: ' + that.model.get('endTime'),
                             'length: ' + that.model.get('length'),
                             'loop: ' + that.model.get('loop')
-                        );//*/
+                        );*/
                     },
                     stop: function() {
-                        console.log('message');
+                        // console.log('message');
                         that.soundwaveRender();
                     } // usefull here?
                 });
@@ -145,9 +145,15 @@ define([
             this.clipDisplay.render(this._clipWidth());  
         },
 
+        startMoving: function() {
+            Audiee.Views.Editor.movingOn();
+        },
+
         updatePosition: function(e) {
             var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
             this.model.set('trackPos', offsetLeft);
+            Audiee.Views.Editor.movingOff();
+
         },
 
         scrollChange: function(e, ui) {

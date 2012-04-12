@@ -34,8 +34,7 @@ define([
                 'renderCursor',
                 'renderSelection',
                 'cursor',
-                'selection',
-                'moving'
+                'selection'
             );
             this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
@@ -43,7 +42,6 @@ define([
             $(this.el)
                 .on('mousedown', this.wrapperClass, this.cursor)
                 .on('mouseup', this.wrapperClass, this.selection);
-                // .on('mousemove', this.wrapperClass, this.moving);
 
             this.render();
         },
@@ -84,6 +82,8 @@ define([
         },
 
         cursor: function(e) {
+            e.preventDefault();  // context menu preparation
+
             // set active class to the selected track
             var $track = $(this.el).parent('.track'),
                 $canvasArray = $(this.wrapperClass, this.el).children('canvas');
@@ -94,12 +94,13 @@ define([
                     position = offset % this.maxWidth;
                 
                 Audiee.Views.Editor.setActiveTrack($track);
-                Audiee.Views.Editor.selectionOn();
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.unsetMultiSelection();
                 this.renderCursor();                
             }
+
+            return false;
         },
 
         renderCursor: function() {
@@ -121,6 +122,9 @@ define([
         },
 
         selection: function(e) {
+            if (Audiee.Views.Editor.isMoving())
+                return;
+
             var $canvasArray = $(this.wrapperClass, this.el).children('canvas'),   // canvas array within a track display
                 $track = $(e.target).parents('.track'),
                 selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth;   // total offset in the track display
@@ -130,7 +134,6 @@ define([
                 var from = Audiee.Views.Editor.getCursor(),
                     to = Audiee.Views.Editor.getSelectionTo(),
                     middle = Audiee.Display.sec2px(from + (to - from) / 2);
-                console.log('middle: ', middle, 'selectionTo: ', selectionTo);
                 if (selectionTo >= middle) {
                     Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
                 } else {
@@ -138,8 +141,7 @@ define([
                 }
             } else {
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
-                Audiee.Views.Editor.selectionOff();
-            }            
+            }
 
             if (Audiee.Views.Editor.getActiveTrack() !== $track) {
                 Audiee.Views.Editor.setMultiSelection($track);
@@ -187,12 +189,6 @@ define([
                         len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
                     } 
                 });                
-            }
-        },
-
-        moving: function(e) {
-            if (Audiee.Views.Editor.selectionActive()) {
-                // this.selection(e);
             }
         }
     });

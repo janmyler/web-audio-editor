@@ -38,6 +38,7 @@ define([
                 'getSelectionTo'*/
             );
             this.model.bind('change:name', this.changeTitle);
+            this.moving = false;
             
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
@@ -68,6 +69,7 @@ define([
         scrollHandler: function() {
             // trigger the custom event on tracks view
             Audiee.Views.Tracks.trigger('Audiee:scroll');  
+            Audiee.Views.Timeline.trigger('Audiee:scroll');
         },
 
         scrollLeftOffset: function() {
@@ -88,23 +90,23 @@ define([
                     scrollChange = this.scrollLeftOffset() + newOffset - e.originalEvent.offsetX;
                 $(this.el).scrollLeft(scrollChange);
                 
-                // console.log(Audiee.Display.zoomLevel);
-                // console.log('scrolling: ', scrollChange);
-                                
+                Audiee.Views.Tracks.trigger('Audiee:zoomChange');
+                Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+
                 return false;
             }
         },
 
-        selectionOn: function() {
-            this.selecting = true;
+        movingOn: function() {
+            this.moving = true;
         },
 
-        selectionOff: function() {
-            this.selecting = false;
+        movingOff: function() {
+            this.moving = false;
         },
 
-        selectionActive: function() {
-            return this.selecting;
+        isMoving: function() {
+            return this.moving;        
         },
 
         setActiveTrack: function($track) {
@@ -161,9 +163,18 @@ define([
 
         getSelectionTo: function() {
             return this.selectionTo;
+        },
+
+        setClipboard: function() {
+            
+        },
+
+        getClipboard: function() {
+
+        },
+
+        eraseClipboard: function() {
+
         }
-
-        // TODO: get selection or something... (return this.selectionTo? or an array [from, to]? or even w/tracks?)
-
     });
 });

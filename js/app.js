@@ -26,6 +26,7 @@ define(function(require) {
 		EditorV = require('Audiee/Views.Editor'),
 		TracksV = require('Audiee/Views.Tracks'),
 		MenuV = require('Audiee/Views.Menu'),
+		TimelineV = require('Audiee/Views.Timeline'),
 
 	// templates
 		AlertT = require('text!templates/AlertModal.html');
@@ -59,7 +60,8 @@ define(function(require) {
 		Audiee.Models.Project = new ProjectM;		// default project model
 		Audiee.Views.Editor = new EditorV({			// editor wrapper view
 			model: Audiee.Models.Project
-		});			
+		});	
+		Audiee.Views.Timeline = new TimelineV;		// editor time line view
 		Audiee.Views.Tracks = new TracksV({			// tracks collection view
 			collection: Audiee.Collections.Tracks,
 			el: '#tracks'

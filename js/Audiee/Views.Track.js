@@ -16,7 +16,7 @@ define([
     return Backbone.View.extend({
         tagName: 'div',
         className: 'track',
-
+        
         initialize: function () {
             _.bindAll(this, 'render', 'remove', 'zoomChange');
             this.model.bind('destroy', this.remove);
@@ -45,6 +45,7 @@ define([
 
             // track view completion
             $(this.el).empty().width(width)
+                .attr('data-cid', this.model.cid)
                 .append($infoV)
                 .append(this.trackDisplay.el);
 
