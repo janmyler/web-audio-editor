@@ -22,8 +22,15 @@ define([
 
 		// initialization
 		initialize: function() {
-			console.log('clip ' + this.get('name') + ' has been initialized');
-		}
+			// console.log('clip ' + this.get('name') + ' has been initialized');
+		},
+
+		clipLength: function() {
+            return this.get('endTime') 
+              - this.get('startTime') 
+              + this.get('loop')
+              * this.get('buffer').duration;
+        }
 	});
 
 	return Clip;

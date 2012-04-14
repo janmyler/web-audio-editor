@@ -9,12 +9,16 @@ define([
     'backbone',
     'Audiee/Models.Track'
 ], function(_, Backbone, TrackM) {
-	var TracksCollection = Backbone.Collection.extend({
+	return Backbone.Collection.extend({
         // model reference
-        model: TrackM
+        model: TrackM,
 
-        // other functions will be here ...
+        getSnapshot: function(from, to, cid) {
+            return this.getByCid(cid).getSnapshot(from, to);
+        },
+
+        deleteSelection: function(from, to, cid) {
+            this.getByCid(cid).deleteSelection(from, to);
+        }
 	});
-
-	return TracksCollection;
 });

@@ -14,3 +14,5 @@
 
 + editacni operace (kopirovani, vyjmuti, vlozeni)
 + prehravani
+
++ kopirovani – snapshot vsech klipu v selekci, editace oblasti po kopirovani (neovlivni clipboard)

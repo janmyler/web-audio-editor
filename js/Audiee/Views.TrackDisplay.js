@@ -160,7 +160,7 @@ define([
                 from, len, tmp, $canvasArray;
 
             // if there is a selection (from != to), clear all TrackDisplays and render the selection
-            if (selectionFrom !== selectionTo) {
+            if (!isNaN(selectionFrom) && selectionFrom !== selectionTo) {
                 $(this.wrapperClass).children('canvas').each(function() {
                     Audiee.Display.clearDisplay(this);
                 });

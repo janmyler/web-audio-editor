@@ -24,11 +24,14 @@ define([
 
         // DOM events listeners
         events: {
-            'click #m-addnew' : 'addTrack',
-            'click #m-remove' : 'removeTrack',
-            'click #m-zoomin' : 'zoomIn',
-            'click #m-zoomout' : 'zoomOut',
-            'click #m-zoomzero' : 'zoomZero'
+            'click #m-addnew'   : 'addTrack',
+            'click #m-remove'   : 'removeTrack',
+            'click #m-zoomin'   : 'zoomIn',
+            'click #m-zoomout'  : 'zoomOut',
+            'click #m-zoomzero' : 'zoomZero',
+            'click #m-copy'     : 'copy',
+            'click #m-cut'      : 'cut',
+            'click #m-paste'    : 'paste'
             
         },
 
@@ -60,6 +63,15 @@ define([
                 case 48:   // 0 key (alt + 0 combination)
                 case 96:
                     if (e.altKey) $('#m-zoomzero').trigger('click');
+                    break;
+                case 67:   // c key (alt + c combination)
+                    if (e.altKey) $('#m-copy').trigger('click');
+                    break;
+                case 88:   // x key (alt + x combination)
+                    if (e.altKey) $('#m-cut').trigger('click');
+                    break;
+                case 86:   // v key (alt + v combination)
+                    if (e.altKey) $('#m-paste').trigger('click');
                     break;
             }
         },
@@ -124,6 +136,21 @@ define([
             Audiee.Display.zoomZero();
             Audiee.Views.Tracks.trigger('Audiee:zoomChange');
             Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+        },
+
+        copy: function() {
+            console.log('copy');
+            Audiee.Views.Editor.setClipboard();
+        },
+
+        cut: function() {
+            console.log('cut');
+            Audiee.Views.Editor.setClipboard();
+            Audiee.Views.Editor.deleteSelection();
+        },
+
+        paste: function() {
+            console.log('paste');
         }
     });
 });

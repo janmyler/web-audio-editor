@@ -22,9 +22,18 @@ define([
         className: 'clip',
 
         initialize: function() {
-            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition', 'scrollChange', '_clipWidth');
-            this.model.bind('change:startTime', this.soundwaveRender);  
+            _.bindAll(this, 
+                'render', 
+                'remove', 
+                'soundwaveRender',
+                'positionRender',
+                'updatePosition', 
+                'scrollChange', 
+                '_clipWidth'
+            );
+            this.model.bind('change:startTime', this.soundwaveRender);
             this.model.bind('change:endTime', this.soundwaveRender);
+            this.model.bind('change:trackPos', this.positionRender);
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
             this.model.collection.bind('Audiee:scroll', this.scrollChange);
@@ -79,6 +88,8 @@ define([
                         var length  = that.model.get('buffer').duration,
                             loop, loopRemainder;
                         
+                        Audiee.Views.Editor.movingOn();  // blocks the selection while resizing
+
                         // resize from left or right border?
                         if (ui.originalPosition.left === ui.position.left) { // from right NOTE: should be ok now
                             // FIXME: overflows right track border...
@@ -127,6 +138,7 @@ define([
                     },
                     stop: function() {
                         // console.log('message');
+                        Audiee.Views.Editor.movingOff();
                         that.soundwaveRender();
                     } // usefull here?
                 });
@@ -142,7 +154,13 @@ define([
         },
 
         soundwaveRender: function() {
+            $(this.el).width(this._clipWidth());
             this.clipDisplay.render(this._clipWidth());  
+        },
+
+        positionRender: function() {
+            var left = Audiee.Display.sec2px(this.model.get('trackPos'));
+            $(this.el).css('left', left + 'px');
         },
 
         startMoving: function() {
@@ -173,12 +191,9 @@ define([
         },
 
         _clipWidth: function() {
-            return Audiee.Display.sec2px(
-                this.model.get('endTime') 
-              - this.model.get('startTime') 
-              + this.model.get('loop')
-              * this.model.get('buffer').duration
-            );
-        }
+            return Audiee.Display.sec2px(this.model.clipLength());
+        },
+
+        
     });
 });
