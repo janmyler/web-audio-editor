@@ -29,7 +29,6 @@ define([
 
             // register mouse events
             $(this.el)
-                .on('dblclick', '.name-content', this.edit)
                 .on('keyup', '.name-input', this.keyupHandler)
                 .on('blur', '.name-input', this.close)
                 .on('contextmenu', '.display', this.contextMenu);

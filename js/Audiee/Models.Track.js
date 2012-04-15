@@ -58,16 +58,26 @@ define([
 
 		pasteSelection: function(position, clipboard) {
 			for (var i = 0, len = clipboard.length; i < len; ++i) {
-				var clip = new ClipM({
-					startTime: 	clipboard[i].startTime,
-					endTime: 	clipboard[i].endTime,
-					trackPos: 	clipboard[i].offset + position,
-					loop: 		clipboard[i].loop,
-					name: 		clipboard[i].name,
-					color: 		clipboard[i].color,
-					buffer: 	clipboard[i].buffer
-				});
+				var cursorBackup = Audiee.Views.Editor.getCursor(),
+					activeBackup = Audiee.Views.Editor.getActiveTrack(),
+					clip = new ClipM({
+						startTime: 	clipboard[i].startTime,
+						endTime: 	clipboard[i].endTime,
+						trackPos: 	clipboard[i].offset + position,
+						loop: 		clipboard[i].loop,
+						name: 		clipboard[i].name,
+						color: 		clipboard[i].color,
+						buffer: 	clipboard[i].buffer
+					});
 
+				// delete space before pasting the new clip
+				Audiee.Views.Editor.setSelectionFrom(clip.get('trackPos'));
+				Audiee.Views.Editor.setSelectionTo(clip.get('trackPos') + clip.clipLength());
+				Audiee.Views.Editor.setActiveTrack($('.track[data-cid=' + this.cid + ']'));
+				Audiee.Views.Editor.deleteSelection();
+				Audiee.Views.Editor.setSelectionFrom(cursorBackup);
+				Audiee.Views.Editor.setSelectionTo(cursorBackup);
+				Audiee.Views.Editor.setActiveTrack(activeBackup);
 				this.clips.add(clip);
             }
 		}

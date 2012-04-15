@@ -69,7 +69,6 @@ define([
                     if (e.altKey) $('#m-zoomzero').trigger('click');
                     break;
                 case 67:   // c key (alt + c combination)
-                    console.log(e);
                     if (e.altKey) $('#m-copy').trigger('click');
                     break;
                 case 88:   // x key (alt + x combination)
