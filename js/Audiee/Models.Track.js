@@ -54,6 +54,22 @@ define([
 
 		deleteSelection: function(from, to) {
 			this.clips.deleteSelection(from, to);
+		},
+
+		pasteSelection: function(position, clipboard) {
+			for (var i = 0, len = clipboard.length; i < len; ++i) {
+				var clip = new ClipM({
+					startTime: 	clipboard[i].startTime,
+					endTime: 	clipboard[i].endTime,
+					trackPos: 	clipboard[i].offset + position,
+					loop: 		clipboard[i].loop,
+					name: 		clipboard[i].name,
+					color: 		clipboard[i].color,
+					buffer: 	clipboard[i].buffer
+				});
+
+				this.clips.add(clip);
+            }
 		}
 	});
 		

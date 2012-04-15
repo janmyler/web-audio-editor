@@ -41,10 +41,13 @@ define([
                     }
 
                     snapshot.push({
-                        offset: offset,
-                        startTime: startTime,
-                        endTime: endTime,
-                        loop: loop
+                        offset:     offset,
+                        startTime:  startTime,
+                        endTime:    endTime,
+                        loop:       loop,
+                        name:       model.get('name'),
+                        color:      model.get('color'),
+                        buffer:     model.get('buffer')
                     });
                 }
             });

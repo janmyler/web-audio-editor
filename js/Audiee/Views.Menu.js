@@ -24,14 +24,15 @@ define([
 
         // DOM events listeners
         events: {
-            'click #m-addnew'   : 'addTrack',
-            'click #m-remove'   : 'removeTrack',
+            'click #m-addtrack'     : 'addTrack',
+            'click #m-removetrack'  : 'removeTrack',
             'click #m-zoomin'   : 'zoomIn',
             'click #m-zoomout'  : 'zoomOut',
             'click #m-zoomzero' : 'zoomZero',
             'click #m-copy'     : 'copy',
             'click #m-cut'      : 'cut',
-            'click #m-paste'    : 'paste'
+            'click #m-paste'    : 'paste',
+            'click #m-delete'   : 'delete'
             
         },
 
@@ -48,11 +49,14 @@ define([
 
         handleKey: function(e) {
             switch(e.which) {
-                case 46:   // delete key
-                    $('#m-remove').trigger('click');
+                case 46:   // delete key, alt + delete
+                    if (e.altKey)
+                        $('#m-removetrack').trigger('click');
+                    else
+                        $('#m-delete').trigger('click');
                     break;
                 case 78:   // n key (alt + n combination)
-                    if (e.altKey) $('#m-addnew').trigger('click');
+                    if (e.altKey) $('#m-addtrack').trigger('click');
                     break;
                 case 107:  // + key (alt + + combination)
                     if (e.altKey) $('#m-zoomin').trigger('click');
@@ -146,11 +150,17 @@ define([
         cut: function() {
             console.log('cut');
             Audiee.Views.Editor.setClipboard();
-            Audiee.Views.Editor.deleteSelection();
+            this.delete();
         },
 
         paste: function() {
             console.log('paste');
+            Audiee.Views.Editor.pasteClipboard();
+        },
+
+        delete: function() {
+            console.log('delete');
+            Audiee.Views.Editor.deleteSelection();
         }
     });
 });

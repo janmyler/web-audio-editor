@@ -40,7 +40,6 @@ define([
             );
             this.model.bind('change:name', this.changeTitle);
             this.moving = false;
-            this.clipboard = {};
             
             // rewrite title tag with proper project name value
             $('title').text(this.model.get('name') + ' :: Audiee');
@@ -205,7 +204,28 @@ define([
         },
 
         eraseClipboard: function() {
-            this.clipboard = {}; 
+            this.clipboard = undefined; 
+        },
+
+        pasteClipboard: function() {
+            var cursor = this.getCursor(),
+                clipboard = this.getClipboard();
+            
+            if (typeof clipboard === 'undefined') // clipboard is empty
+                return;
+            
+            for (var cid in clipboard.tracks) {
+                Audiee.Collections.Tracks.pasteSelection(cid, cursor, clipboard.tracks[cid]);
+
+               
+
+                // vlozit do odpovidajiciho tracku vsechny klipy na dany offset
+
+
+
+                console.log(cid, clipboard.tracks[cid]);
+            }
+            
         },
 
         deleteSelection: function() {

@@ -19,6 +19,10 @@ define([
 
         deleteSelection: function(from, to, cid) {
             this.getByCid(cid).deleteSelection(from, to);
+        },
+
+        pasteSelection: function(cid, position, clipboard) {
+            this.getByCid(cid).pasteSelection(position, clipboard);
         }
 	});
 });
