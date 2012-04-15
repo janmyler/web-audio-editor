@@ -147,17 +147,17 @@ body {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
-      background-color: #d6d6d6;
+      background-color: #e5e5e5;
 
       .display-wrapper {
         height: @trackHeight - 20;
         position: absolute;
         top: 20px;
-        background-color: hsla(0, 100%, 100%, 0.2);
+        background-color: hsla(0, 0%, 78%, 0.2);
         z-index: 200;
 
         canvas {
-          float: left;
+          float: left;          
         }
       }
 
@@ -217,7 +217,7 @@ body {
   }
   
   .active .track-display {
-    background-color: #E0C6A0;
+    background-color: #fff;
   }
 }
 
@@ -256,17 +256,11 @@ body {
   .nav > .active > a:hover .caret {
    	border-top-color: #777;
   }
-  .nav > li:first-child > a,
-  .nav > li:first-child > a:hover {
-  	border-left: 0;
-  	padding-left: 12px;
-  	-webkit-border-radius: 4px 0 0 4px;
-       -moz-border-radius: 4px 0 0 4px;
-            border-radius: 4px 0 0 4px;
-  }
+
   .nav > li:last-child > a {
   	border-right: 0;
   }
+
   .dropdown-menu {
   	-webkit-border-radius: 0 0 4px 4px;
        -moz-border-radius: 0 0 4px 4px;
@@ -275,8 +269,7 @@ body {
   .shortcut {
     float: right;
     font-size: 0.85em;
-  }
-
+  }  
 }
 //@media (min-width: 980px) {
 @media (min-width: 480px) {
@@ -297,6 +290,28 @@ body {
   display: block;
 }
 
+
+// styles for context menu
+.context-menu {
+  z-index: @zindexDropdown;
+  min-width: 0;
+  width: 150px;
+  display: block;
+
+  span.cm-color {
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    padding: 0;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  span.cm-color:hover {
+
+  }
+}
 
 #app-frame { margin-top: 30px; padding-left: 0; padding-right: 0; }
 .row-fluid .inner { padding: 10px; }

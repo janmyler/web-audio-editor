@@ -13,7 +13,7 @@ define([
 		defaults: {
 			name: 'untitled',
 			//source: undefined,	// NOTE: it's one source for one track so far (source property moved to the track model)
-			color: '#3CA9B5',
+			color: '#4ecdc4',
 			trackPos: 0,
 			startTime: 0,
 			endTime: 0,

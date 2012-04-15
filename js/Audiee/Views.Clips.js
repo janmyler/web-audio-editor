@@ -29,7 +29,7 @@ define([
         addOne: function(model) {
             var view = new ClipV({model: model});
             $(this.el).append(view.render().el);
-            model.bind('remove', view.remove);  // TODO: ?? w00t?
+            model.bind('remove', view.remove);
         }
     });
 });

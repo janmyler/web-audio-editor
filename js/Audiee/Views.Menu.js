@@ -69,6 +69,7 @@ define([
                     if (e.altKey) $('#m-zoomzero').trigger('click');
                     break;
                 case 67:   // c key (alt + c combination)
+                    console.log(e);
                     if (e.altKey) $('#m-copy').trigger('click');
                     break;
                 case 88:   // x key (alt + x combination)
@@ -120,7 +121,8 @@ define([
             $('#newTrackModal').modal('hide');
             
             // create new Track model and add it to the Tracks collection
-            var track = new TrackM({buffer: audioBuffer, file: file});
+            var name = 'Track ' + (Audiee.Collections.Tracks.length + 1),
+                track = new TrackM({buffer: audioBuffer, file: file, name: name});
             Audiee.Collections.Tracks.add(track);
         },
 

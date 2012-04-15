@@ -8,8 +8,9 @@
 define([
     'underscore',
     'backbone',
-    'text!templates/EditableName.html'
-], function(_, Backbone, EditableNameT) {
+    'text!templates/EditableName.html',
+    'text!templates/ContextMenu.html'
+], function(_, Backbone, EditableNameT, ContextMenuT) {
     // sets the Mustache format delimiter: {{ variable }}
     _.templateSettings = {
         interpolate: /\{\{(.+?)\}\}/g
@@ -18,10 +19,11 @@ define([
     return Backbone.View.extend({
         // cached template function
         template: _.template(EditableNameT),
+        menu: _.template(ContextMenuT),
 
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'close', 'edit', 'colorChange', 'keyupHandler');
+            _.bindAll(this, 'render', 'close', 'edit', 'contextMenu', 'keyupHandler');
             this.model.bind('change:name', this.render);
             this.model.bind('change:color', this.render);
 
@@ -30,7 +32,7 @@ define([
                 .on('dblclick', '.name-content', this.edit)
                 .on('keyup', '.name-input', this.keyupHandler)
                 .on('blur', '.name-input', this.close)
-                .on('contextmenu', '.display', this.colorChange);
+                .on('contextmenu', '.display', this.contextMenu);
 
             this.render();
         },
@@ -69,12 +71,40 @@ define([
             $(this.el).removeClass('editing');
         },
 
-        // shows color change dialog when 'RMB' is clicked
-        colorChange: function(e) {
+        // shows context menu change dialog when 'RMB' is clicked
+        contextMenu: function(e) {
             e.preventDefault();     // don't show the context menu
             if (this.options.hasColor && e.which == 3) {
-                var newColor = prompt('New color hex code?');
-                this.model.set({color: newColor});
+                $('body').append(this.menu);
+                var $cm = $('ul.context-menu'),
+                    that = this;
+
+                $cm.find('span.cm-color').each(function() {
+                    $(this).css('background', $(this).data('color'));
+                });
+
+                $cm.css({
+                    top: e.clientY + 'px',
+                    left: e.clientX + 'px'
+                });
+                
+                $(document).on('click', function(e) {
+                    $cm.remove();
+                });
+
+                $cm.on('click', '#cm-rename', function() {
+                    that.edit();
+                });
+
+                $cm.on('click', '#cm-remove', function() {
+                    that.model.destroy();
+                });
+
+                $cm.on('click', '.cm-color', function(e) {
+                    console.log(that.model);
+                    that.model.set('color', e.target.dataset.color);
+                });
+
             }
             return false;
         }
