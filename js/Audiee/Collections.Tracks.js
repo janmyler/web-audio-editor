@@ -23,8 +23,8 @@ define([
             return this.getByCid(cid).getSnapshot(from, to);
         },
 
-        deleteSelection: function(from, to, cid) {
-            this.getByCid(cid).deleteSelection(from, to);
+        deleteSelection: function(from, to, cid, except) {
+            this.getByCid(cid).deleteSelection(from, to, except);
         },
 
         pasteSelection: function(cid, position, clipboard) {

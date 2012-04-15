@@ -34,12 +34,14 @@ define([
                 'renderCursor',
                 'renderSelection',
                 'cursor',
-                'selection'
+                'selection',
+                'contextMenu'
             );
             this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
             // register mouse events
             $(this.el)
+                .on('contextmenu', this.wrapperClass, this.contextMenu)
                 .on('mousedown', this.wrapperClass, this.cursor)
                 .on('mouseup', this.wrapperClass, this.selection);
 
@@ -82,8 +84,6 @@ define([
         },
 
         cursor: function(e) {
-            e.preventDefault();  // context menu preparation
-
             // set active class to the selected track
             var $track = $(this.el).parent('.track'),
                 $canvasArray = $(this.wrapperClass, this.el).children('canvas');
@@ -99,8 +99,6 @@ define([
                 Audiee.Views.Editor.unsetMultiSelection();
                 this.renderCursor();                
             }
-
-            return false;
         },
 
         renderCursor: function() {
@@ -147,7 +145,7 @@ define([
                 Audiee.Views.Editor.setMultiSelection($track);
             }
 
-            this.renderSelection();               
+            this.renderSelection();   
         },
 
         renderSelection: function() {
@@ -190,6 +188,10 @@ define([
                     } 
                 });                
             }
+        },
+
+        contextMenu: function(e) {
+            e.preventDefault();
         }
     });
 });

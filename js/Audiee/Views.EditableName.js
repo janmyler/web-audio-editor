@@ -56,10 +56,10 @@ define([
 
         // goes to the close function when 'enter' is pressed
         keyupHandler: function(e) {
-            if (e.which == 13) {
+            if (e.which == 13) {  // enter key
                 this.model.set({name: this.input.val()});
                 $(this.el).removeClass('editing');     
-            } else if (e.which == 27) {
+            } else if (e.which == 27) {  // escape key
                 this.close();
             }               
         },
@@ -95,6 +95,8 @@ define([
                 });
 
                 $(document).on('click', function(e) {
+                    $contextMenu.remove();
+                }).on('mousedown', '.clip-name', function(e) {
                     $contextMenu.remove();
                 });
             }

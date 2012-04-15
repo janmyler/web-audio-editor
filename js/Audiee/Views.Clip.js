@@ -137,10 +137,13 @@ define([
                         );*/
                     },
                     stop: function() {
-                        // console.log('message');
+                        var from = that.model.get('trackPos'),
+                            to = from + that.model.clipLength(),
+                            trackCid = $(that.el).parents('.track').data('cid');
+
                         Audiee.Views.Editor.movingOff();
-                        that.soundwaveRender();
-                    } // usefull here?
+                        Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, that.model.cid);                        
+                    }
                 });
             
             // change clip name left offset if needed
@@ -168,10 +171,14 @@ define([
         },
 
         updatePosition: function(e) {
-            var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
-            this.model.set('trackPos', offsetLeft);
-            Audiee.Views.Editor.movingOff();
+            var from = Audiee.Display.px2sec(e.target.offsetLeft),
+                to = from + this.model.clipLength(),
+                trackCid = $(this.el).parents('.track').data('cid');
 
+            // delete space before movin clip into the new position
+            Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, this.model.cid);
+            this.model.set('trackPos', from);
+            Audiee.Views.Editor.movingOff();
         },
 
         scrollChange: function(e, ui) {

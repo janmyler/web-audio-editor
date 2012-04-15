@@ -52,15 +52,13 @@ define([
 			return this.clips.getSnapshot(from, to);
 		},
 
-		deleteSelection: function(from, to) {
-			this.clips.deleteSelection(from, to);
+		deleteSelection: function(from, to, except) {
+			this.clips.deleteSelection(from, to, except);
 		},
 
 		pasteSelection: function(position, clipboard) {
 			for (var i = 0, len = clipboard.length; i < len; ++i) {
-				var cursorBackup = Audiee.Views.Editor.getCursor(),
-					activeBackup = Audiee.Views.Editor.getActiveTrack(),
-					clip = new ClipM({
+				var clip = new ClipM({
 						startTime: 	clipboard[i].startTime,
 						endTime: 	clipboard[i].endTime,
 						trackPos: 	clipboard[i].offset + position,
@@ -68,16 +66,12 @@ define([
 						name: 		clipboard[i].name,
 						color: 		clipboard[i].color,
 						buffer: 	clipboard[i].buffer
-					});
+					}),
+					from = clip.get('trackPos'),
+					to = from + clip.clipLength();
 
 				// delete space before pasting the new clip
-				Audiee.Views.Editor.setSelectionFrom(clip.get('trackPos'));
-				Audiee.Views.Editor.setSelectionTo(clip.get('trackPos') + clip.clipLength());
-				Audiee.Views.Editor.setActiveTrack($('.track[data-cid=' + this.cid + ']'));
-				Audiee.Views.Editor.deleteSelection();
-				Audiee.Views.Editor.setSelectionFrom(cursorBackup);
-				Audiee.Views.Editor.setSelectionTo(cursorBackup);
-				Audiee.Views.Editor.setActiveTrack(activeBackup);
+				Audiee.Collections.Tracks.deleteSelection(from, to, this.cid);
 				this.clips.add(clip);
             }
 		}

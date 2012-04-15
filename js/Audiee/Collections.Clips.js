@@ -55,58 +55,60 @@ define([
             return snapshot;
         },
 
-        deleteSelection: function(from, to) {
+        deleteSelection: function(from, to, except) {
             var that = this,
                 trackPos, end, startTime, endTime, loop, duration, newLoop, newEndTime, newStartTime;
 
             this.each(function(model) {
-                trackPos = model.get('trackPos');
-                end = trackPos + model.clipLength();
-                
-                if (trackPos < to && end > from) {  // clip within the range of selection
-                    loop = model.get('loop');
-                    duration = model.get('buffer').duration;
-                    startTime = model.get('startTime');
-                    endTime = model.get('endTime');
+                if (model.cid !== except) {
+                    trackPos = model.get('trackPos');
+                    end = trackPos + model.clipLength();
+                    
+                    if (trackPos < to && end > from) {  // clip within the range of selection
+                        loop = model.get('loop');
+                        duration = model.get('buffer').duration;
+                        startTime = model.get('startTime');
+                        endTime = model.get('endTime');
 
-                    if (trackPos < from && end > to) {
-                        // clip begins before the selection and ends after the selection (splits the clip)
-                        // for the first clip
-                        newEndTime = (startTime + from - trackPos) % duration;              
-                        newLoop = loop + Math.floor((endTime + from - end) / duration);    
-                        model.set('loop', newLoop);
-                        model.set('endTime', newEndTime);
+                        if (trackPos < from && end > to) {
+                            // clip begins before the selection and ends after the selection (splits the clip)
+                            // for the first clip
+                            newEndTime = (startTime + from - trackPos) % duration;              
+                            newLoop = loop + Math.floor((endTime + from - end) / duration);    
+                            model.set('loop', newLoop);
+                            model.set('endTime', newEndTime);
 
-                        // for the second clip
-                        newStartTime = (startTime + to - trackPos) % duration;              
-                        newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
+                            // for the second clip
+                            newStartTime = (startTime + to - trackPos) % duration;              
+                            newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
 
-                        var clip = new ClipM({
-                            name: model.get('name'),
-                            color: model.get('color'),
-                            trackPos: to,
-                            startTime: newStartTime,
-                            loop: newLoop,
-                            endTime: endTime,
-                            buffer: model.get('buffer')
-                        });
-                        that.add(clip);   
-                    } else if (trackPos >= from && end <= to) {
-                        // clip begins and ends within the selection (removes the clip)
-                        that.remove(model);
-                    } else if (trackPos < from && end <= to) {  
-                        // clip begins before the selection and ends within the selection (edits the endTime)
-                        newEndTime = (startTime + from - trackPos) % duration;          
-                        newLoop = loop + Math.floor((endTime + from - end) / duration); 
-                        model.set('loop', newLoop);
-                        model.set('endTime', newEndTime);
-                    } else if (trackPos >= from && end > to) {
-                        // clip begins within the selection and ends after the selection (edits the startTime)
-                        newStartTime = (startTime + to - trackPos) % duration;          
-                        newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
-                        model.set('loop', newLoop);
-                        model.set('trackPos', to);
-                        model.set('startTime', newStartTime);
+                            var clip = new ClipM({
+                                name: model.get('name'),
+                                color: model.get('color'),
+                                trackPos: to,
+                                startTime: newStartTime,
+                                loop: newLoop,
+                                endTime: endTime,
+                                buffer: model.get('buffer')
+                            });
+                            that.add(clip);   
+                        } else if (trackPos >= from && end <= to) {
+                            // clip begins and ends within the selection (removes the clip)
+                            that.remove(model);
+                        } else if (trackPos < from && end <= to) {  
+                            // clip begins before the selection and ends within the selection (edits the endTime)
+                            newEndTime = (startTime + from - trackPos) % duration;          
+                            newLoop = loop + Math.floor((endTime + from - end) / duration); 
+                            model.set('loop', newLoop);
+                            model.set('endTime', newEndTime);
+                        } else if (trackPos >= from && end > to) {
+                            // clip begins within the selection and ends after the selection (edits the startTime)
+                            newStartTime = (startTime + to - trackPos) % duration;          
+                            newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
+                            model.set('loop', newLoop);
+                            model.set('trackPos', to);
+                            model.set('startTime', newStartTime);
+                        }
                     }
                 }
             });
