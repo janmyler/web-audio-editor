@@ -76,35 +76,28 @@ define([
             e.preventDefault();     // don't show the context menu
             if (this.options.hasColor && e.which == 3) {
                 $('body').append(this.menu);
-                var $cm = $('ul.context-menu'),
+                var $contextMenu = $('ul.context-menu'),
                     that = this;
 
-                $cm.find('span.cm-color').each(function() {
+                $contextMenu.find('span.cm-color').each(function() {
                     $(this).css('background', $(this).data('color'));
                 });
-
-                $cm.css({
+                $contextMenu.css({
                     top: e.clientY + 'px',
                     left: e.clientX + 'px'
-                });
-                
-                $(document).on('click', function(e) {
-                    $cm.remove();
-                });
-
-                $cm.on('click', '#cm-rename', function() {
+                }).on('click', '#cm-rename', function() {
                     that.edit();
-                });
-
-                $cm.on('click', '#cm-remove', function() {
+                }).on('click', '#cm-duplicate', function() {
+                    that.duplicate();  // klip to vlozi za klip, track to vlozi pod track
+                }).on('click', '#cm-remove', function() {
                     that.model.destroy();
-                });
-
-                $cm.on('click', '.cm-color', function(e) {
-                    console.log(that.model);
+                }).on('click', '.cm-color', function(e) {
                     that.model.set('color', e.target.dataset.color);
                 });
 
+                $(document).on('click', function(e) {
+                    $contextMenu.remove();
+                });
             }
             return false;
         }

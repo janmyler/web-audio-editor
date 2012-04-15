@@ -121,7 +121,7 @@ define([
             $('#newTrackModal').modal('hide');
             
             // create new Track model and add it to the Tracks collection
-            var name = 'Track ' + (Audiee.Collections.Tracks.length + 1),
+            var name = 'Track ' + Audiee.Collections.Tracks.getIndexCount();
                 track = new TrackM({buffer: audioBuffer, file: file, name: name});
             Audiee.Collections.Tracks.add(track);
         },
@@ -145,23 +145,19 @@ define([
         },
 
         copy: function() {
-            console.log('copy');
             Audiee.Views.Editor.setClipboard();
         },
 
         cut: function() {
-            console.log('cut');
             Audiee.Views.Editor.setClipboard();
             this.delete();
         },
 
         paste: function() {
-            console.log('paste');
             Audiee.Views.Editor.pasteClipboard();
         },
 
         delete: function() {
-            console.log('delete');
             Audiee.Views.Editor.deleteSelection();
         }
     });
