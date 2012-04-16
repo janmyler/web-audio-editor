@@ -10,7 +10,8 @@
 
 3) Resizing clip to the left (at left track border) causes 'negative overflow' of the startTime. [unsolved]
 
-4) Resizing clip to the left causes rendering problems near to the right clip border. [unsolved]
+4) Resizing clip to the left causes rendering problems near to the right clip border. [unsolved] 
+    Cause: Soundwave rendering before the loop is updated!
 
 5) Track controls + name -- left offset change is not smooth during the horizontal scrolling (#editor-view). [unsolved]
     

@@ -99,8 +99,6 @@ define([
                             var newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos'),
                                 newTrackPos;
                             
-                            // console.log('left: ' + ui.position.left, 'trackPos: ' + that.model.get('trackPos'), 'newStartTime: ' +  newStartTime);
-                            
                             if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track 
                                 if (newStartTime > 0) { // resize --> direction to the right NOTE: should be ok now
                                     newStartTime += that.model.get('startTime');
@@ -122,12 +120,11 @@ define([
                         loop = Math.floor(Audiee.Display.px2sec(ui.size.width) / length);
                         loopRemainder = Audiee.Display.px2sec(ui.size.width) % length;
 
-                        // console.log('loop: ' + loop, 'loopRemainder: '+ loopRemainder);
-                        
                         if((loopRemainder - that.model.get('endTime')) > 0) // FIXME: not always accurate
                             loop += 1;
 
                         that.model.set('loop', loop);
+                        // that.soundwaveRender();
 
                         /*console.log(
                             'startTime: ' + that.model.get('startTime'), 
@@ -143,6 +140,7 @@ define([
 
                         Audiee.Views.Editor.movingOff();
                         Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, that.model.cid);                        
+                        that.soundwaveRender();
                     }
                 });
             

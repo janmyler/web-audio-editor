@@ -92,6 +92,17 @@ define([
                     that.model.destroy();
                 }).on('click', '.cm-color', function(e) {
                     that.model.set('color', e.target.dataset.color);
+                }).on('click', '#cm-info', function() {
+                    console.log(
+                        'Info [sT:',
+                        that.model.get('startTime'),
+                        ', eT:',
+                        that.model.get('endTime'),
+                        ', l:',
+                        that.model.get('loop'),
+                        ', tP:',
+                        that.model.get('trackPos'),
+                        ']');
                 });
 
                 $(document).on('click', function(e) {
