@@ -24,13 +24,14 @@ define([
 
 			// view border times (seconds)
 			// length: 3600, 		// 1 hour (default length)
-			length: 900 		// 0.25 hour (default length)
+			length: 900		// 0.25 hour (default length)
 		},
 
 		// initialization
 		initialize: function() {
-			_.bindAll(this, 'initClip', 'remove');
+			_.bindAll(this, 'initClip', 'remove', 'resetDuplicates');
 			this.bind('remove', this.remove);
+			this.bind('change:name', this.resetDuplicates);
 			this.clips = new ClipsC;
 			this.initClip();
 		},
@@ -74,6 +75,35 @@ define([
 				Audiee.Collections.Tracks.deleteSelection(from, to, this.cid);
 				this.clips.add(clip);
             }
+		},
+
+		resetDuplicates: function() {
+			this.duplicates = undefined;
+		},
+
+		duplicate: function() {
+			var newTrack = this.clone(),
+				newName = newTrack.get('name'),
+				match = newName.match(/\(\d+\)$/),
+				index;
+
+			if (this.duplicates) {	// was duplicated before?
+				this.duplicates.count += 1;	// yes, increment the counter
+			} else {
+				this.duplicates = { count: 2};	// no, create the counter object
+			}			
+			index = this.duplicates.count;
+
+			if (match) {
+				newName = newName.replace(/\(\d+\)$/, ' (' + index + ')');
+			} else {
+				newName += ' (' + index + ')';
+			}
+
+			newTrack.set('name', newName);
+			newTrack.duplicates = this.duplicates;
+			this.collection.add(newTrack);
+			this.collection.decIndexCount();
 		}
 	});
 		

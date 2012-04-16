@@ -35,6 +35,10 @@ define([
             this.indexCount += 1;
         },
 
+        decIndexCount: function() {
+            this.indexCount -= 1;
+        },
+
         getIndexCount: function() {
             return this.indexCount;
         }

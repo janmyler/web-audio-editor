@@ -87,7 +87,7 @@ define([
                 }).on('click', '#cm-rename', function() {
                     that.edit();
                 }).on('click', '#cm-duplicate', function() {
-                    that.duplicate();  // klip to vlozi za klip, track to vlozi pod track
+                    that.model.duplicate();
                 }).on('click', '#cm-remove', function() {
                     that.model.destroy();
                 }).on('click', '.cm-color', function(e) {

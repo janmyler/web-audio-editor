@@ -30,6 +30,13 @@ define([
               - this.get('startTime') 
               + this.get('loop')
               * this.get('buffer').duration;
+        },
+
+        duplicate: function() {
+        	var newClip = this.clone(),
+        		newTrackPos = newClip.get('trackPos') + this.clipLength();
+        	newClip.set('trackPos', newTrackPos);
+        	this.collection.addDuplicate(newClip);
         }
 	});
 

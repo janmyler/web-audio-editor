@@ -112,6 +112,13 @@ define([
                     }
                 }
             });
+        },
+
+        addDuplicate: function(clip) {
+            var from = clip.get('trackPos'),
+                to = from + clip.clipLength();
+            this.deleteSelection(from, to);
+            this.add(clip);
         }
 	});
 });
