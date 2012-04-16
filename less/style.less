@@ -120,7 +120,7 @@ body {
       background-color: #ddd;
       position: relative;
       float: left;
-      z-index: @zindexFixedNavbar;
+      z-index: 550;
     }
 
     .track-name, .track-controls {
@@ -163,7 +163,7 @@ body {
 
       // changes the cursor when the clip is moving
       .ui-draggable-dragging, .ui-resizable-resizing {
-        z-index: @zindexPopover;
+        z-index: 500;
         .clip-display {
           background: hsla(0, 0%, 60%, 0.6);
         }        

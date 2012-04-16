@@ -87,6 +87,8 @@ define([
 				match = newName.match(/\(\d+\)$/),
 				index;
 
+			newTrack.clips.reset(this.clips.toJSON());
+
 			if (this.duplicates) {	// was duplicated before?
 				this.duplicates.count += 1;	// yes, increment the counter
 			} else {
