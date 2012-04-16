@@ -6,11 +6,11 @@
 
     Split track display to more canvases. [solved]
 
-2)  Big audio files in memory causes the tab to crash (Aw Snap...). [unsolved]
+2) Big audio files in memory causes the tab to crash (Aw Snap...). [unsolved]
 
-3) Resizing clip to the left (at left track border) causes 'negative overflow' of the startTime. [unsolved]
+3) Resizing clip to the left (at left track border) causes 'negative overflow' of the startTime. [unsolved] (but can live with hahah)
 
-4) Resizing clip to the left causes rendering problems near to the right clip border. [unsolved]
+4) Resizing clip to the left causes rendering problems near to the right clip border. [solved] 
 
 5) Track controls + name -- left offset change is not smooth during the horizontal scrolling (#editor-view). [unsolved]
     

@@ -24,11 +24,15 @@ define([
 
         // DOM events listeners
         events: {
-            'click #m-addnew' : 'addTrack',
-            'click #m-remove' : 'removeTrack',
-            'click #m-zoomin' : 'zoomIn',
-            'click #m-zoomout' : 'zoomOut',
-            'click #m-zoomzero' : 'zoomZero'
+            'click #m-addtrack'     : 'addTrack',
+            'click #m-removetrack'  : 'removeTrack',
+            'click #m-zoomin'   : 'zoomIn',
+            'click #m-zoomout'  : 'zoomOut',
+            'click #m-zoomzero' : 'zoomZero',
+            'click #m-copy'     : 'copy',
+            'click #m-cut'      : 'cut',
+            'click #m-paste'    : 'paste',
+            'click #m-delete'   : 'delete'
             
         },
 
@@ -45,11 +49,14 @@ define([
 
         handleKey: function(e) {
             switch(e.which) {
-                case 46:   // delete key
-                    $('#m-remove').trigger('click');
+                case 46:   // delete key, alt + delete
+                    if (e.altKey)
+                        $('#m-removetrack').trigger('click');
+                    else
+                        $('#m-delete').trigger('click');
                     break;
                 case 78:   // n key (alt + n combination)
-                    if (e.altKey) $('#m-addnew').trigger('click');
+                    if (e.altKey) $('#m-addtrack').trigger('click');
                     break;
                 case 107:  // + key (alt + + combination)
                     if (e.altKey) $('#m-zoomin').trigger('click');
@@ -60,6 +67,15 @@ define([
                 case 48:   // 0 key (alt + 0 combination)
                 case 96:
                     if (e.altKey) $('#m-zoomzero').trigger('click');
+                    break;
+                case 67:   // c key (alt + c combination)
+                    if (e.altKey) $('#m-copy').trigger('click');
+                    break;
+                case 88:   // x key (alt + x combination)
+                    if (e.altKey) $('#m-cut').trigger('click');
+                    break;
+                case 86:   // v key (alt + v combination)
+                    if (e.altKey) $('#m-paste').trigger('click');
                     break;
             }
         },
@@ -104,7 +120,8 @@ define([
             $('#newTrackModal').modal('hide');
             
             // create new Track model and add it to the Tracks collection
-            var track = new TrackM({buffer: audioBuffer, file: file});
+            var name = 'Track ' + Audiee.Collections.Tracks.getIndexCount();
+                track = new TrackM({buffer: audioBuffer, file: file, name: name});
             Audiee.Collections.Tracks.add(track);
         },
 
@@ -124,6 +141,23 @@ define([
             Audiee.Display.zoomZero();
             Audiee.Views.Tracks.trigger('Audiee:zoomChange');
             Audiee.Views.Timeline.trigger('Audiee:zoomChange');
+        },
+
+        copy: function() {
+            Audiee.Views.Editor.setClipboard();
+        },
+
+        cut: function() {
+            Audiee.Views.Editor.setClipboard();
+            this.delete();
+        },
+
+        paste: function() {
+            Audiee.Views.Editor.pasteClipboard();
+        },
+
+        delete: function() {
+            Audiee.Views.Editor.deleteSelection();
         }
     });
 });

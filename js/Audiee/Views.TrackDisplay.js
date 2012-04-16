@@ -34,12 +34,14 @@ define([
                 'renderCursor',
                 'renderSelection',
                 'cursor',
-                'selection'
+                'selection',
+                'contextMenu'
             );
             this.model.bind('Audiee:zoomChange', this.renderDisplay);  
 
             // register mouse events
             $(this.el)
+                .on('contextmenu', this.wrapperClass, this.contextMenu)
                 .on('mousedown', this.wrapperClass, this.cursor)
                 .on('mouseup', this.wrapperClass, this.selection);
 
@@ -82,8 +84,6 @@ define([
         },
 
         cursor: function(e) {
-            e.preventDefault();  // context menu preparation
-
             // set active class to the selected track
             var $track = $(this.el).parent('.track'),
                 $canvasArray = $(this.wrapperClass, this.el).children('canvas');
@@ -99,8 +99,6 @@ define([
                 Audiee.Views.Editor.unsetMultiSelection();
                 this.renderCursor();                
             }
-
-            return false;
         },
 
         renderCursor: function() {
@@ -143,11 +141,11 @@ define([
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
             }
 
-            if (Audiee.Views.Editor.getActiveTrack() !== $track) {
+            if (Audiee.Views.Editor.getActiveTrack().data('cid') !== $track.data('cid')) {
                 Audiee.Views.Editor.setMultiSelection($track);
             }
 
-            this.renderSelection();               
+            this.renderSelection();   
         },
 
         renderSelection: function() {
@@ -160,7 +158,7 @@ define([
                 from, len, tmp, $canvasArray;
 
             // if there is a selection (from != to), clear all TrackDisplays and render the selection
-            if (selectionFrom !== selectionTo) {
+            if (!isNaN(selectionFrom) && selectionFrom !== selectionTo) {
                 $(this.wrapperClass).children('canvas').each(function() {
                     Audiee.Display.clearDisplay(this);
                 });
@@ -190,6 +188,10 @@ define([
                     } 
                 });                
             }
+        },
+
+        contextMenu: function(e) {
+            e.preventDefault();
         }
     });
 });

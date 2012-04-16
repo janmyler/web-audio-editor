@@ -27,7 +27,8 @@ define([
                 'changeTitle', 
                 'resizeView', 
                 'scrollHandler', 
-                'zoomHandler'
+                'zoomHandler',
+                'setClipboard'
                 /*'getActiveTrack',
                 'isActiveTrack',
                 'setActiveTrack', 
@@ -166,15 +167,82 @@ define([
         },
 
         setClipboard: function() {
-            
+            var clipboard = {},
+                $tracks = $('.track'),
+                that = this,
+                cid;
+
+            if (!isNaN(this.selectionFrom) && this.selectionFrom !== this.selectionTo) {
+                clipboard.from = this.selectionFrom;
+                clipboard.to = this.selectionTo;
+                clipboard.tracks = {};
+
+                var index1 = $tracks.index(this.getActiveTrack()),
+                    index2 = index1,
+                    tmp;
+
+                if (this.isMultiSelection()) {
+                    index2 = $tracks.index(this.getMultiSelection());
+                    if (index1 > index2) {  // swap indexes if needed
+                        tmp = index1;
+                        index1 = index2;
+                        index2 = tmp;
+                    }
+                }
+
+                $tracks.slice(index1, ++index2).each(function() {
+                    cid = $(this).data('cid');
+                    clipboard.tracks[cid] = Audiee.Collections.Tracks.getSnapshot(that.selectionFrom, that.selectionTo, cid);
+                });
+
+                this.clipboard = clipboard;
+            }
         },
 
         getClipboard: function() {
-
+            return this.clipboard;
         },
 
         eraseClipboard: function() {
+            this.clipboard = undefined; 
+        },
 
+        pasteClipboard: function() {
+            var cursor = this.getCursor(),
+                clipboard = this.getClipboard();
+            
+            if (typeof clipboard === 'undefined') // clipboard is empty
+                return;
+            
+            for (var cid in clipboard.tracks) {
+                Audiee.Collections.Tracks.pasteSelection(cid, cursor, clipboard.tracks[cid]);
+            }            
+        },
+
+        deleteSelection: function() {
+            var $tracks = $('.track'),
+                that = this,
+                cid;
+
+            if (!isNaN(this.selectionFrom) && this.selectionFrom !== this.selectionTo) {
+                var index1 = $tracks.index(this.getActiveTrack()),
+                    index2 = index1,
+                    tmp;
+
+                if (this.isMultiSelection()) {
+                    index2 = $tracks.index(this.getMultiSelection());
+                    if (index1 > index2) {  // swap indexes if needed
+                        tmp = index1;
+                        index1 = index2;
+                        index2 = tmp;
+                    }
+                }
+
+                $tracks.slice(index1, ++index2).each(function() {
+                    cid = $(this).data('cid');
+                    Audiee.Collections.Tracks.deleteSelection(that.selectionFrom, that.selectionTo, cid);
+                });
+            }
         }
     });
 });

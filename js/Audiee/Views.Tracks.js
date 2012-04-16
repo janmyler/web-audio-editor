@@ -34,11 +34,6 @@ define([
         },
 
         scrollChange: function() {
-            // NOTE: This solution is not working good!
-            // FIXME: rewrite for top scroll... for track-info
-            // var scrollTop = Audiee.Views.Editor.scrollTopOffset();
-            // $('div.track-info').css('margin-top', -scrollTop + 'px');     
-
             var scrollLeft = Audiee.Views.Editor.scrollLeftOffset();
             $('div.track-info').css('left', scrollLeft + 'px');
             this.collection.each(function(model) {

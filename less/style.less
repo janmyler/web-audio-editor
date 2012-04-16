@@ -120,7 +120,7 @@ body {
       background-color: #ddd;
       position: relative;
       float: left;
-      z-index: 300;
+      z-index: 550;
     }
 
     .track-name, .track-controls {
@@ -147,23 +147,31 @@ body {
       height: @trackHeight;
       margin-left: @infoWidth;
       position: relative;      
-      background-color: #d6d6d6;
+      background-color: #e5e5e5;
 
       .display-wrapper {
         height: @trackHeight - 20;
         position: absolute;
         top: 20px;
-        background-color: hsla(0, 100%, 100%, 0.2);
+        background-color: hsla(0, 0%, 78%, 0.2);
         z-index: 200;
 
         canvas {
-          float: left;
+          float: left;          
         }
       }
 
       // changes the cursor when the clip is moving
-      .ui-draggable-dragging .name-content {
-        cursor: move !important;
+      .ui-draggable-dragging, .ui-resizable-resizing {
+        z-index: 500;
+        .clip-display {
+          background: hsla(0, 0%, 60%, 0.6);
+        }        
+      }
+      .ui-draggable-dragging {
+        .name-content {
+          cursor: move !important;
+        }
       }
 
       .clip {
@@ -173,17 +181,26 @@ body {
 
         
         .clip-name {
+          border: 1px solid @grayDark;
+
           .name-content {
-            height: 18px;
+            height: 16px;
             overflow: hidden;
             margin-bottom: 0;
-            padding: 1px 2px; 
+            padding: 0 2px 2px; 
             white-space: nowrap;  
-            cursor: auto;         
+            cursor: default;         
           }
-
+          .edit {
+            height: 18px;
+          }
           .name-input {
-            margin-bottom: 0;
+            margin: -4px 0 0 1px;         
+            padding: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            font-style: italic;
           }
         }
 
@@ -209,15 +226,22 @@ body {
           cursor: e-resize;
         }
 
-        .clip-display canvas {
-          float: left;
+        .clip-display {
+          height: 100px;
+          border-left: 1px solid @grayLight;
+          border-right: 1px solid @grayLight;
+
+          canvas {
+            float: left;
+            margin-left: -1px;
+          }
         }
       }
     }
   }
   
   .active .track-display {
-    background-color: #E0C6A0;
+    background-color: #fff;
   }
 }
 
@@ -256,17 +280,11 @@ body {
   .nav > .active > a:hover .caret {
    	border-top-color: #777;
   }
-  .nav > li:first-child > a,
-  .nav > li:first-child > a:hover {
-  	border-left: 0;
-  	padding-left: 12px;
-  	-webkit-border-radius: 4px 0 0 4px;
-       -moz-border-radius: 4px 0 0 4px;
-            border-radius: 4px 0 0 4px;
-  }
+
   .nav > li:last-child > a {
   	border-right: 0;
   }
+
   .dropdown-menu {
   	-webkit-border-radius: 0 0 4px 4px;
        -moz-border-radius: 0 0 4px 4px;
@@ -275,8 +293,7 @@ body {
   .shortcut {
     float: right;
     font-size: 0.85em;
-  }
-
+  }  
 }
 //@media (min-width: 980px) {
 @media (min-width: 480px) {
@@ -297,6 +314,28 @@ body {
   display: block;
 }
 
+
+// styles for context menu
+.context-menu {
+  z-index: @zindexModal;
+  min-width: 0;
+  width: 150px;
+  display: block;
+
+  span.cm-color {
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+    padding: 0;
+    margin: 5px;
+    cursor: pointer;
+  }
+
+  span.cm-color:hover {
+
+  }
+}
 
 #app-frame { margin-top: 30px; padding-left: 0; padding-right: 0; }
 .row-fluid .inner { padding: 10px; }

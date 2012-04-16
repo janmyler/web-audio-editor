@@ -22,9 +22,18 @@ define([
         className: 'clip',
 
         initialize: function() {
-            _.bindAll(this, 'render', 'remove', 'soundwaveRender', 'updatePosition', 'scrollChange', '_clipWidth');
-            this.model.bind('change:startTime', this.soundwaveRender);  
+            _.bindAll(this, 
+                'render', 
+                'remove', 
+                'soundwaveRender',
+                'positionRender',
+                'updatePosition', 
+                'scrollChange', 
+                '_clipWidth'
+            );
+            this.model.bind('change:startTime', this.soundwaveRender);
             this.model.bind('change:endTime', this.soundwaveRender);
+            this.model.bind('change:trackPos', this.positionRender);
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
             this.model.collection.bind('Audiee:scroll', this.scrollChange);
@@ -76,19 +85,20 @@ define([
                     // grid: 5,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
-                        var length  = that.model.get('buffer').duration,
-                            loop, loopRemainder;
+                        var duration  = that.model.get('buffer').duration,
+                            loop = that.model.get('loop'),
+                            end = that.model.clipLength(),
+                            newStartTime, newEndTime, newTrackPos;
                         
+                        Audiee.Views.Editor.movingOn();  // blocks the selection while resizing
+
                         // resize from left or right border?
                         if (ui.originalPosition.left === ui.position.left) { // from right NOTE: should be ok now
                             // FIXME: overflows right track border...
-                            var endTime = Audiee.Display.px2sec(ui.size.width) + that.model.get('startTime');
-                            that.model.set('endTime', endTime % length);
+                            newEndTime = (Audiee.Display.px2sec(ui.size.width) + that.model.get('startTime')) % duration;
+                            loop = loop + Math.floor((that.model.get('endTime') + Audiee.Display.px2sec(ui.size.width) - end) / duration);
                         } else {  // from left
-                            var newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos'),
-                                newTrackPos;
-                            
-                            // console.log('left: ' + ui.position.left, 'trackPos: ' + that.model.get('trackPos'), 'newStartTime: ' +  newStartTime);
+                            newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos');
                             
                             if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track 
                                 if (newStartTime > 0) { // resize --> direction to the right NOTE: should be ok now
@@ -103,32 +113,28 @@ define([
                                 newTrackPos = Audiee.Display.px2sec(ui.position.left);
                             }
 
-                            newStartTime %= length;
-                            that.model.set('startTime', (newStartTime % length < 0) ? length - newStartTime : newStartTime);
-                            that.model.set('trackPos', newTrackPos);
+                            newStartTime %= duration;
+                            newStartTime = (newStartTime < 0) ? duration + newStartTime : newStartTime;
+                            loop = loop - Math.floor((that.model.get('startTime') + newTrackPos - that.model.get('trackPos')) / duration);
                         }
 
-                        loop = Math.floor(Audiee.Display.px2sec(ui.size.width) / length);
-                        loopRemainder = Audiee.Display.px2sec(ui.size.width) % length;
-
-                        // console.log('loop: ' + loop, 'loopRemainder: '+ loopRemainder);
-                        
-                        if((loopRemainder - that.model.get('endTime')) > 0) // FIXME: not always accurate
-                            loop += 1;
-
                         that.model.set('loop', loop);
-
-                        /*console.log(
-                            'startTime: ' + that.model.get('startTime'), 
-                            'endTime: ' + that.model.get('endTime'),
-                            'length: ' + that.model.get('length'),
-                            'loop: ' + that.model.get('loop')
-                        );*/
+                        if (typeof newTrackPos !== 'undefined')
+                            that.model.set('trackPos', newTrackPos);
+                        if (typeof newStartTime !== 'undefined')
+                            that.model.set('startTime', newStartTime);
+                        if (typeof newEndTime !== 'undefined')
+                            that.model.set('endTime', newEndTime);
                     },
                     stop: function() {
-                        // console.log('message');
+                        var from = that.model.get('trackPos'),
+                            to = from + that.model.clipLength(),
+                            trackCid = $(that.el).parents('.track').data('cid');
+
+                        Audiee.Views.Editor.movingOff();
+                        Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, that.model.cid);                        
                         that.soundwaveRender();
-                    } // usefull here?
+                    }
                 });
             
             // change clip name left offset if needed
@@ -142,7 +148,13 @@ define([
         },
 
         soundwaveRender: function() {
+            $(this.el).width(this._clipWidth());
             this.clipDisplay.render(this._clipWidth());  
+        },
+
+        positionRender: function() {
+            var left = Audiee.Display.sec2px(this.model.get('trackPos'));
+            $(this.el).css('left', left + 'px');
         },
 
         startMoving: function() {
@@ -150,10 +162,14 @@ define([
         },
 
         updatePosition: function(e) {
-            var offsetLeft = Audiee.Display.px2sec(e.target.offsetLeft);
-            this.model.set('trackPos', offsetLeft);
-            Audiee.Views.Editor.movingOff();
+            var from = Audiee.Display.px2sec(e.target.offsetLeft),
+                to = from + this.model.clipLength(),
+                trackCid = $(this.el).parents('.track').data('cid');
 
+            // delete space before movin clip into the new position
+            Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, this.model.cid);
+            this.model.set('trackPos', from);
+            Audiee.Views.Editor.movingOff();
         },
 
         scrollChange: function(e, ui) {
@@ -173,12 +189,9 @@ define([
         },
 
         _clipWidth: function() {
-            return Audiee.Display.sec2px(
-                this.model.get('endTime') 
-              - this.model.get('startTime') 
-              + this.model.get('loop')
-              * this.model.get('buffer').duration
-            );
-        }
+            return Audiee.Display.sec2px(this.model.clipLength());
+        },
+
+        
     });
 });

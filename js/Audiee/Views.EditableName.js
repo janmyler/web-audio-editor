@@ -8,8 +8,9 @@
 define([
     'underscore',
     'backbone',
-    'text!templates/EditableName.html'
-], function(_, Backbone, EditableNameT) {
+    'text!templates/EditableName.html',
+    'text!templates/ContextMenu.html'
+], function(_, Backbone, EditableNameT, ContextMenuT) {
     // sets the Mustache format delimiter: {{ variable }}
     _.templateSettings = {
         interpolate: /\{\{(.+?)\}\}/g
@@ -18,19 +19,19 @@ define([
     return Backbone.View.extend({
         // cached template function
         template: _.template(EditableNameT),
+        menu: _.template(ContextMenuT),
 
         // listeners to a model's changes
         initialize: function() {
-            _.bindAll(this, 'render', 'close', 'edit', 'colorChange', 'keyupHandler');
+            _.bindAll(this, 'render', 'close', 'edit', 'contextMenu', 'keyupHandler');
             this.model.bind('change:name', this.render);
             this.model.bind('change:color', this.render);
 
             // register mouse events
             $(this.el)
-                .on('dblclick', '.name-content', this.edit)
                 .on('keyup', '.name-input', this.keyupHandler)
                 .on('blur', '.name-input', this.close)
-                .on('contextmenu', '.display', this.colorChange);
+                .on('contextmenu', '.display', this.contextMenu);
 
             this.render();
         },
@@ -55,10 +56,10 @@ define([
 
         // goes to the close function when 'enter' is pressed
         keyupHandler: function(e) {
-            if (e.which == 13) {
+            if (e.which == 13) {  // enter key
                 this.model.set({name: this.input.val()});
                 $(this.el).removeClass('editing');     
-            } else if (e.which == 27) {
+            } else if (e.which == 27) {  // escape key
                 this.close();
             }               
         },
@@ -69,12 +70,46 @@ define([
             $(this.el).removeClass('editing');
         },
 
-        // shows color change dialog when 'RMB' is clicked
-        colorChange: function(e) {
+        // shows context menu change dialog when 'RMB' is clicked
+        contextMenu: function(e) {
             e.preventDefault();     // don't show the context menu
             if (this.options.hasColor && e.which == 3) {
-                var newColor = prompt('New color hex code?');
-                this.model.set({color: newColor});
+                $('body').append(this.menu);
+                var $contextMenu = $('ul.context-menu'),
+                    that = this;
+
+                $contextMenu.find('span.cm-color').each(function() {
+                    $(this).css('background', $(this).data('color'));
+                });
+                $contextMenu.css({
+                    top: e.clientY + 'px',
+                    left: e.clientX + 'px'
+                }).on('click', '#cm-rename', function() {
+                    that.edit();
+                }).on('click', '#cm-duplicate', function() {
+                    that.model.duplicate();
+                }).on('click', '#cm-remove', function() {
+                    that.model.destroy();
+                }).on('click', '.cm-color', function(e) {
+                    that.model.set('color', e.target.dataset.color);
+                }).on('click', '#cm-info', function() {
+                    console.log(
+                        'Info [sT:',
+                        that.model.get('startTime'),
+                        ', eT:',
+                        that.model.get('endTime'),
+                        ', l:',
+                        that.model.get('loop'),
+                        ', tP:',
+                        that.model.get('trackPos'),
+                        ']');
+                });
+
+                $(document).on('click', function(e) {
+                    $contextMenu.remove();
+                }).on('mousedown', '.clip-name', function(e) {
+                    $contextMenu.remove();
+                });
             }
             return false;
         }
