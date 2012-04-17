@@ -53,31 +53,44 @@ define([
                 ctx = $el.children('canvas')[0].getContext('2d'),
                 width = $el.width(),
                 height = $el.height(),
-                offsetLeft = Audiee.Views.Editor.scrollLeftOffset(),
-                minFrame = 50,      // min size of pixels
-                frame = Audiee.Display.sec2px(1),
-                i = offsetLeft % frame,
-                sec = Audiee.Display.px2sec(offsetLeft),
-                t = '';
+                minFrame = 50,                                          // minimal distance between two time labels (px)
+                intervals = Audiee.Display.getIntervals(minFrame),      // interval (sec) + division interval
+                interval = Audiee.Display.sec2px(intervals.interval),   // main time labels interval (px)
+                sub = interval / intervals.subdivision,                 // sub ticks interval (px)
+                offsetLeft = Audiee.Views.Editor.scrollLeftOffset(),    // left scroll offset (px)
+                timeLeft = Audiee.Display.px2sec(offsetLeft),
+                i, t, min, sec, millisec;
 
-
+            // prepare the context
             ctx.fillStyle = '#444';
             ctx.font="0.8em sans-serif";
             ctx.clearRect(0, 0, width, height);
-            for (; i < width; i += frame) {
-                if (sec % 60 < 10) {
-                    t = '' + Math.floor(sec / 60) + ':' + '0' + Math.floor(sec % 60);
-                } else {
-                    t = '' + Math.floor(sec / 60) + ':' + Math.floor(sec % 60);
-                }
 
-                if (Math.floor(Audiee.Display.px2sec(i) % 5) === 0) {
-                    ctx.fillRect(i, height, 1, -14);
-                    ctx.fillText(t, i, 12);
-                } else {
-                   ctx.fillRect(i, height, 1, -6);
-                }
-                sec++;
+            // draw only sub ticks first
+            i = sub - (offsetLeft % sub);
+            for (; i < width; i += sub) 
+                ctx.fillRect(i, height, 1, -5);
+            
+
+            // let's draw time labels
+            i = (offsetLeft > 0) ? interval - (offsetLeft % interval) : 0;
+            timeLeft += Audiee.Display.px2sec(i);
+
+            for (; i < width; i += interval) {
+                min = Math.floor(timeLeft / 60);
+                sec = Math.floor(timeLeft % 60);
+                if (intervals.interval < 1) // count milliseconds
+                    millisec = Math.round((timeLeft % 1) * 10) % 10;
+
+                t = min + ':';
+                t +=(sec < 10) ? '0' + sec : sec;
+                if (intervals.interval < 1) 
+                    t += ',' + millisec + '0';
+
+                ctx.fillRect(i, height, 1, -12);
+                ctx.fillText(t, i, 13);
+
+                timeLeft += intervals.interval;
             }
         }
     });

@@ -8,5 +8,4 @@
 
 + prehravani
 + timeline vykreslovani
-+ overlay klipu (vkladani a resize sousednich klipu, presun klipu nad klip...)
 + !! smazani klipu/vyjmuti, nektere to smaze az na nekolikaty pokus??

@@ -21,10 +21,7 @@ define([
 			solo: false,
 			// allow minimalization (view purpose)?
 			// minimalized: false,
-
-			// view border times (seconds)
-			// length: 3600, 		// 1 hour (default length)
-			length: 900		// 0.25 hour (default length)
+			length: 1920		// 32 minutes (default length)
 		},
 
 		// initialization

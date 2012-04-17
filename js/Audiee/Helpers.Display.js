@@ -24,11 +24,13 @@ define([
         }
 
         Display.prototype.zoomOut = function() {
-            this.zoomLevel *= 1.5;
+            if (this.zoomLevel * 1.5 < 60)
+                this.zoomLevel *= 1.5;
         };
 
         Display.prototype.zoomIn = function() {
-            this.zoomLevel /= 1.5;
+            if (this.zoomLevel / 1.5 > 0.005)
+                this.zoomLevel /= 1.5;
         };
 
         Display.prototype.zoomZero = function() {
@@ -41,6 +43,44 @@ define([
 
         Display.prototype.sec2px = function(sec) {
             return sec / this.zoomLevel * this.scale;
+        };
+
+        Display.prototype.getIntervals = function(frame) {
+            var mainInterval = Math.ceil(this.px2sec(frame * 100)),
+                subInterval;
+            
+            mainInterval =  mainInterval >  9000 ?   120 :  // 2 minutes
+                            mainInterval >  6000 ?    60 :  // 1 minute
+                            mainInterval >  3000 ?    30 :  // 30 seconds
+                            mainInterval >  1500 ?    20 :  // 20 seconds
+                            mainInterval >   800 ?    10 :  // 10 seconds
+                            mainInterval >   300 ?     5 :  //  5 seconds
+                            mainInterval >   150 ?     2 :  //  2 seconds
+                            mainInterval >    60 ?     1 :  //  1 second
+                            mainInterval >    30 ?   0.5 :  //  0.500 seconds
+                            mainInterval >     5 ?   0.2 :  //  0.200 seconds
+                                                     0.1 ;  //  0.100 seconds
+
+            subInterval =   mainInterval ==  120 ? 4 :
+                            mainInterval ==   60 ? 4 :
+                            mainInterval ==   30 ? 3 :  
+                            mainInterval ==   20 ? 4 :
+                            mainInterval ==   10 ? 4 :
+                            mainInterval ==    5 ? 5 :
+                            mainInterval ==    2 ? 4 :
+                            mainInterval ==    1 ? 4 :
+                            mainInterval ==  0.5 ? 5 :
+                            mainInterval ==  0.2 ? 4 :
+                                                   5 ;
+
+            return {
+                interval : mainInterval,
+                subdivision : subInterval
+            };
+        };
+
+        Display.prototype.getSubinterval = function(frame) {
+        
         };
 
         Display.prototype.frameRMS = function(buffer, index, frame) {
