@@ -19,8 +19,9 @@ define([
         className: 'track-controls',
 
         template: _.template(
-            '<button class="btn">M</button>' +
-            '<button class="btn">S</button>'
+            '<button class="btn mute">M</button>' +
+            '<button class="btn solo">S</button>' +
+            '<input type="range" class="volume" value="100">'
         ),
 
         initialize: function() {

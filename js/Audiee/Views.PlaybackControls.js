@@ -13,8 +13,8 @@ define([
 
         // DOM events listeners
         events: {
-            'click #play'       : 'test',
-            'click #stop'       : 'test',
+            'click #play'       : 'play',
+            'click #stop'       : 'stop',
             'click #seek-start' : 'test',
             'click #seek-end'   : 'test',
         },
@@ -36,6 +36,20 @@ define([
         // test debug only
         test: function(e) {
             alert('clicked: ' + e.srcElement.id);
+        },
+
+        play: function() {
+            var $play = $('#play');
+            Audiee.Player.play();
+
+            $play.addClass('playing');
+        },
+
+        stop: function() {
+            var $play = $('#play');
+            Audiee.Player.stop();
+
+            $play.removeClass('playing');
         }
     });
 });

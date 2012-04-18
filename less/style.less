@@ -66,6 +66,7 @@ body {
     width: 290px;
     min-width: 290px;
     margin: 1px 60% 0 30%;
+    .noTextSelection;
 
     .playing {
       .buttonBackground(lighten(@orange, 30%), lighten(@orange, 15%));      
@@ -141,6 +142,11 @@ body {
 
     .track-controls {
       height: 90px;
+
+      .volume {
+        width: 100px;
+        margin: 5px;
+      }
     }  
 
     .track-display {

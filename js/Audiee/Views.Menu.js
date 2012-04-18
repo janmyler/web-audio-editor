@@ -26,6 +26,7 @@ define([
         events: {
             'click #m-addtrack'     : 'addTrack',
             'click #m-removetrack'  : 'removeTrack',
+            'click #m-fullscreen'   : 'toggleFullscreen',
             'click #m-zoomin'   : 'zoomIn',
             'click #m-zoomout'  : 'zoomOut',
             'click #m-zoomzero' : 'zoomZero',
@@ -37,8 +38,9 @@ define([
         },
 
         initialize: function() {
-            _.bindAll(this, 'render', '_fileSelected', '_fileLoaded');
+            _.bindAll(this, 'render', '_fileSelected', '_fileLoaded', 'handleKey');
             $(document).on('keyup', this.handleKey);
+            this.enableHotkeys();
             this.el.bind('Audiee:fileLoaded', this._fileLoaded);
             this.render();
         },
@@ -48,35 +50,42 @@ define([
         },
 
         handleKey: function(e) {
+            if (!this.hotkeysEnabled)
+               return; 
+
             switch(e.which) {
-                case 46:   // delete key, alt + delete
-                    if (e.altKey)
+                case 46:   // delete key, shift + delete
+                    if (e.ctrlKey)
                         $('#m-removetrack').trigger('click');
                     else
                         $('#m-delete').trigger('click');
                     break;
-                case 78:   // n key (alt + n combination)
-                    if (e.altKey) $('#m-addtrack').trigger('click');
+                case 78:   // n key
+                    $('#m-addtrack').trigger('click');
                     break;
-                case 107:  // + key (alt + + combination)
-                    if (e.altKey) $('#m-zoomin').trigger('click');
+                case 107:  // + key
+                case 191: 
+                    $('#m-zoomin').trigger('click');
                     break;
-                case 109:  // - key (alt + - combination)
-                    if (e.altKey) $('#m-zoomout').trigger('click');
+                case 109:  // - key
+                case 187:
+                    $('#m-zoomout').trigger('click');
                     break;
-                case 48:   // 0 key (alt + 0 combination)
+                case 48:   // 0 key
                 case 96:
-                    if (e.altKey) $('#m-zoomzero').trigger('click');
+                    $('#m-zoomzero').trigger('click');
                     break;
-                case 67:   // c key (alt + c combination)
-                    if (e.altKey) $('#m-copy').trigger('click');
+                case 67:   // c key 
+                    $('#m-copy').trigger('click');
                     break;
-                case 88:   // x key (alt + x combination)
-                    if (e.altKey) $('#m-cut').trigger('click');
+                case 88:   // x key 
+                    $('#m-cut').trigger('click');
                     break;
-                case 86:   // v key (alt + v combination)
-                    if (e.altKey) $('#m-paste').trigger('click');
+                case 86:   // v key
+                    $('#m-paste').trigger('click');
                     break;
+                case 70:   // f key
+                    $('#m-fullscreen').trigger('click');
             }
         },
 
@@ -143,6 +152,17 @@ define([
             Audiee.Views.Timeline.trigger('Audiee:zoomChange');
         },
 
+        toggleFullscreen: function() {
+            var $html = $('html');
+
+            if ($html.hasClass('fullscreen')) 
+                document.webkitCancelFullScreen();
+            else
+                $html[0].webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            
+            $html.toggleClass('fullscreen');
+        },
+
         copy: function() {
             Audiee.Views.Editor.setClipboard();
         },
@@ -158,6 +178,16 @@ define([
 
         delete: function() {
             Audiee.Views.Editor.deleteSelection();
+        },
+
+        enableHotkeys: function() {
+            console.log('Enabling hotkeys');
+            this.hotkeysEnabled = true;
+        },
+
+        disableHotkeys: function() {
+            console.log('Disabling hotkeys');
+            this.hotkeysEnabled = false;
         }
     });
 });

@@ -72,7 +72,7 @@ define(function(require) {
 			hasColor: false
 		});
 		new PlaybackControlsV({model: Audiee.Models.Project});
-		new MenuV;		
+		Audiee.Views.Menu = new MenuV;		
 	};
 	
 	

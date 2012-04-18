@@ -50,6 +50,7 @@ define([
 
         // switches view into 'editing' mode
         edit: function() {
+            Audiee.Views.Menu.disableHotkeys();
             $(this.el).addClass('editing');
             this.input.focus().select();
         },
@@ -58,16 +59,16 @@ define([
         keyupHandler: function(e) {
             if (e.which == 13) {  // enter key
                 this.model.set({name: this.input.val()});
-                $(this.el).removeClass('editing');     
             } else if (e.which == 27) {  // escape key
                 this.close();
             }               
         },
 
-        // closes the 'editing' mode and saves the changes to the model
+        // closes the 'editing' mode and restores the previous name
         close: function() {
             this.input.val(this.model.get('name'));
             $(this.el).removeClass('editing');
+            Audiee.Views.Menu.enableHotkeys();
         },
 
         // shows context menu change dialog when 'RMB' is clicked

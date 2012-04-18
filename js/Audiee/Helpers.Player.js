@@ -13,9 +13,79 @@ define([
     return (function() {
         function Player() {
             this.context = new webkitAudioContext || new AudioContext;
+            this.nodes = [];
+            this.playing = false;
         }
 
-        Player.prototype.connectBuffer = function(buffer, from, to) {
+        Player.prototype.play = function() {
+            var that = this,
+                currentTime = this.context.currentTime;
+
+            if (this.playing)
+                this.stop();
+
+
+            // kazdej node bude mit loop
+            // note off se nastavi na clip.clipLength() --- NEJDE (bere to cas blbe a loopuje to jen tu cast)
+            // zmena volume se bude provadet z trackView – bde se volat metoda tady... gainNodes budou v objektu dle track cid
+            // smazani gainNode pri odstraneni tracku
+
+            Audiee.Collections.Tracks.each(function(track) {
+                track.clips.each(function(clip) {
+                    var loop = clip.get('loop'),
+                        trackPosition = clip.get('trackPos'),
+                        node, offset, duration;                    
+
+                    for (var i = 0; i <= loop; ++i) {
+                        node = that.context.createBufferSource();
+                        that.nodes.push(node);
+                        node.buffer = clip.get('buffer');
+                        node.connect(that.context.destination); // bude gainNode pro track
+                        
+                        // clip offset and duration times
+                        if (loop > 0) {
+                            if (i === 0) {
+                                offset = clip.get('startTime');
+                                duration = clip.get('buffer').duration - offset;
+                            } else if (i === loop) {
+                                offset = 0;
+                                duration = clip.get('endTime');
+                            } else {
+                                offset = 0;
+                                duration = clip.get('buffer').duration;
+                            }
+                        } else {    // loop === 0
+                            offset = clip.get('startTime');
+                            duration = clip.clipLength();
+                        }
+
+                        node.noteGrainOn(
+                            currentTime + trackPosition,
+                            offset,
+                            duration
+                        );
+
+                        trackPosition += duration;
+                    }
+                });
+            });
+
+            this.playing = true;
+        };
+
+        Player.prototype.stop = function() {
+            if (this.playing) {
+                for (var i = 0, len = this.nodes.length; i < len; ++i) {
+                    this.nodes[i].noteOff(0);
+                }
+
+                this.playing = false;
+            } else {
+                // zrusit prehravani od kurzoru
+            }
+        };
+
+        /*Player.prototype.connectBuffer = function(buffer, from, to) {
             if (!buffer)
                 return;
 
@@ -34,13 +104,7 @@ define([
             this.context.decodeAudioData(buffer, onsuccess);
             return; // FIXME: ??? 
         };
-        Player.prototype.connect = function(node) {
-
-        };
-        Player.prototype.disconnect = function(node) {
-
-        };
-        
+                
         Player.prototype.createNode = function(buffer) {
             var node = this.context.createBufferSource(),
                 onsuccess = function(audioBuffer) {
@@ -50,7 +114,7 @@ define([
 
 
             node.buffer = buffer;
-        };
+        };*/
 
         Player.prototype.loadFile = function(file, el) {
             var reader = new FileReader,
@@ -90,9 +154,6 @@ define([
             reader.readAsArrayBuffer(file);            
         };
 
-        Player.prototype.play = function() {
-
-        };
         return Player;
     })();
 });
