@@ -42,14 +42,26 @@ define([
                     gainNode = that.gainNodes[cid];
 
                 track.clips.each(function(clip) {
-                    var loop = clip.get('loop'),
-                        trackPosition = clip.get('trackPos'),
-                        node, offset, duration, cursor;                  
+                    var trackPosition = clip.get('trackPos'),
+                        startTime = clip.get('startTime'),
+                        endTime = clip.get('endTime'),
+                        loop = clip.get('loop'),
+                        duration = clip.get('buffer').duration,
+                        inClipStart = false,
+                        cursor = 0,
+                        node, offset;
 
                     if (Audiee.Views.Editor.isActiveTrack()) {
                         cursor = Audiee.Views.Editor.getCursor();
-                        
-                        // if (trackPosition <= cursor && trackPosition + clip.clipLength() > cursor)
+                        if (trackPosition + clip.clipLength() <= cursor)
+                            return;     // clip is before a cursor's position
+                        else if (trackPosition < cursor && trackPosition + clip.clipLength() > cursor) {
+                            // virtually split the clip
+                            startTime = (startTime + cursor - trackPosition) % duration;
+                            loop = loop - Math.floor((clip.get('startTime') + cursor - trackPosition) / duration);
+                            trackPosition = cursor;
+                            inClipStart = true;
+                        }
                     }
 
                     for (var i = 0; i <= loop; ++i) {
@@ -61,22 +73,25 @@ define([
                         // clip offset and duration times
                         if (loop > 0) {
                             if (i === 0) {
-                                offset = clip.get('startTime');
-                                duration = clip.get('buffer').duration - offset;
+                                offset = startTime;
+                                duration = duration - offset;
                             } else if (i === loop) {
                                 offset = 0;
-                                duration = clip.get('endTime');
+                                duration = endTime;
                             } else {
                                 offset = 0;
-                                duration = clip.get('buffer').duration;
+                                duration = duration;
                             }
                         } else {    // loop === 0
-                            offset = clip.get('startTime');
-                            duration = clip.clipLength();
+                            offset = startTime;
+                            if (inClipStart)
+                                duration = endTime - startTime;
+                            else
+                                duration = clip.clipLength();
                         }
 
                         node.noteGrainOn(
-                            currentTime + trackPosition,
+                            currentTime + trackPosition - cursor,
                             offset,
                             duration
                         );
