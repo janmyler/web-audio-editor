@@ -79,6 +79,7 @@ define([
                 width -= maxWidth;
             } while (width > 0);
 
+            this.clearDisplay();
             this.renderCursor();
             this.renderSelection();
         },
@@ -93,7 +94,7 @@ define([
                     offset = e.offsetX + index * this.maxWidth,
                     position = offset % this.maxWidth;
                 
-                this.deleteSelection();
+                this.clearDisplay();
                 Audiee.Views.Editor.setActiveTrack($track);
                 Audiee.Views.Editor.setCursor(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.unsetMultiSelection();
@@ -129,9 +130,8 @@ define([
                 $canvasArray = $track.find(this.wrapperClass).children('canvas'),   // canvas array within a track display
                 selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth;   // total offset in the track display
 
-            if (Audiee.Views.Editor.isSelection()) {
-                this.deleteSelection();
-            }
+            if (Audiee.Views.Editor.isSelection()) 
+                this.clearDisplay();
 
             // store the selectionTo value in the editor view 
             if (e.shiftKey) {
@@ -194,7 +194,7 @@ define([
             }
         },
 
-        deleteSelection: function() {
+        clearDisplay: function() {
             var selectionFrom = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor()),
                 selectionTo = Audiee.Display.sec2px(Audiee.Views.Editor.getSelectionTo()) + 1,
                 indexFrom = Math.floor(selectionFrom / this.maxWidth),
@@ -225,7 +225,6 @@ define([
                     
                     for (var index = indexFrom; index <= indexTo; ++index) {
                         Audiee.Display.clearDisplay($canvasArray.eq(index)[0], from, len);
-                        console.log('deleting selection from:', from, 'to: ', len, selectionFrom, selectionTo);
                         from = 0;
                         len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
                     } 
@@ -236,11 +235,5 @@ define([
         contextMenu: function(e) {
             e.preventDefault();
         },
-
-        clearDisplay: function() {
-            $(this.el).find(this.wrapperClass).children('canvas').each(function() {
-                Audiee.Display.clearDisplay(this);
-            });
-        }
     });
 });

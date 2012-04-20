@@ -124,12 +124,12 @@ define([
         },
 
         unsetActiveTrack: function() {
+            Audiee.Views.Tracks.clearDisplays();
+            
             if (typeof this.activeTrack !== 'undefined') {
                 this.activeTrack.removeClass('active');
                 this.activeTrack = undefined;
-            }
-
-            Audiee.Views.Tracks.clearDisplays();
+            }            
         },
 
         setSelectionFrom: function(position) {

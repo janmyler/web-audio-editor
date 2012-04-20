@@ -109,11 +109,9 @@ define([
                 for (var i = 0, len = this.nodes.length; i < len; ++i) {
                     this.nodes[i].noteOff(0);
                 }
-
                 this.playing = false;
             } else {
                 Audiee.Views.Editor.unsetActiveTrack();
-                // zrusit prehravani od kurzoru
             }
         };
 
