@@ -93,9 +93,9 @@ define([
                     offset = e.offsetX + index * this.maxWidth,
                     position = offset % this.maxWidth;
                 
+                this.deleteSelection();
                 Audiee.Views.Editor.setActiveTrack($track);
-                Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
-                Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(offset));
+                Audiee.Views.Editor.setCursor(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.unsetMultiSelection();
                 this.renderCursor();        
             } else {
@@ -114,11 +114,6 @@ define([
                 position = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor()),
                 index = Math.floor(position / this.maxWidth);
 
-            // clear track-display (all tracks) 
-            $(this.wrapperClass).children('canvas').each(function() {
-                Audiee.Display.clearDisplay(this);
-            });
-
             // draw the cursor
             Audiee.Display.drawCursor($canvasArray.eq(index)[0], position % this.maxWidth);
         },
@@ -134,13 +129,17 @@ define([
                 $canvasArray = $track.find(this.wrapperClass).children('canvas'),   // canvas array within a track display
                 selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth;   // total offset in the track display
 
+            if (Audiee.Views.Editor.isSelection()) {
+                this.deleteSelection();
+            }
+
             // store the selectionTo value in the editor view 
             if (e.shiftKey) {
                 var from = Audiee.Views.Editor.getCursor(),
                     to = Audiee.Views.Editor.getSelectionTo(),
                     middle = Audiee.Display.sec2px(from + (to - from) / 2);
                 if (selectionTo >= middle) {
-                    Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
+                    Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo), true);    
                 } else {
                     Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(selectionTo));    
                 }
@@ -168,10 +167,6 @@ define([
 
             // if there is a selection (from != to), clear all TrackDisplays and render the selection
             if (!isNaN(selectionFrom) && selectionFrom !== selectionTo) {
-                $(this.wrapperClass).children('canvas').each(function() {
-                    Audiee.Display.clearDisplay(this);
-                });
-
                 var index1 = $tracks.index(Audiee.Views.Editor.getActiveTrack()),
                     index2 = index1;
                 
@@ -192,6 +187,45 @@ define([
                     
                     for (var index = indexFrom; index <= indexTo; ++index) {
                         Audiee.Display.drawSelection($canvasArray.eq(index)[0], from, len);
+                        from = 0;
+                        len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
+                    } 
+                });                
+            }
+        },
+
+        deleteSelection: function() {
+            var selectionFrom = Audiee.Display.sec2px(Audiee.Views.Editor.getCursor()),
+                selectionTo = Audiee.Display.sec2px(Audiee.Views.Editor.getSelectionTo()) + 1,
+                indexFrom = Math.floor(selectionFrom / this.maxWidth),
+                indexTo = Math.floor(selectionTo / this.maxWidth),
+                $tracks = $('.track'),
+                that = this,
+                from, len, tmp, $canvasArray;
+
+            // if there is a selection (from != to), clear all TrackDisplays and render the selection
+            if (!isNaN(selectionFrom)) {
+                var index1 = $tracks.index(Audiee.Views.Editor.getActiveTrack()),
+                    index2 = index1;
+                
+                if (Audiee.Views.Editor.isMultiSelection()) {
+                    index2 = $tracks.index(Audiee.Views.Editor.getMultiSelection());
+                    if (index1 > index2) {  // swap indexes if needed
+                        tmp = index1;
+                        index1 = index2;
+                        index2 = tmp;
+                    }
+                } 
+
+                selectionTo %= this.maxWidth;   
+                $tracks.slice(index1, ++index2).each(function() {
+                    $canvasArray = $(this).find(that.wrapperClass).children('canvas');
+                    from = selectionFrom % that.maxWidth;
+                    len = (indexFrom !== indexTo) ? (that.maxWidth - from) : (selectionTo - from);
+                    
+                    for (var index = indexFrom; index <= indexTo; ++index) {
+                        Audiee.Display.clearDisplay($canvasArray.eq(index)[0], from, len);
+                        console.log('deleting selection from:', from, 'to: ', len, selectionFrom, selectionTo);
                         from = 0;
                         len = (index != indexTo - 1) ? that.maxWidth : selectionTo;
                     } 

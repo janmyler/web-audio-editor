@@ -136,12 +136,26 @@ define([
             this.selectionFrom = position;
         },
 
-        setSelectionTo: function(position) {
-            if (position < this.selectionFrom) {
-                this.selectionFrom = position;
-            } else {
+        setCursor: function(position) {
+            this.originalCursor = position;
+            this.selectionFrom = position;
+            this.selectionTo = position;
+        },
+
+        setSelectionTo: function(position, forced) {
+            if (typeof forced !== 'undefined') {
                 this.selectionTo = position;
-            } 
+            } else {
+                if (position < this.originalCursor) {
+                    this.selectionFrom = position;
+                } else {
+                    this.selectionTo = position;
+                } 
+            }
+        },
+
+        isSelection: function() {
+            return this.selectionFrom !== this.selectionTo;
         },
 
         setMultiSelection: function($track) {

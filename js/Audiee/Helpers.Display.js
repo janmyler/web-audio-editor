@@ -95,9 +95,9 @@ define([
 
         };
 
-        Display.prototype.clearDisplay = function(canvas) {
+        Display.prototype.clearDisplay = function(canvas, from, to) {
             var ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(from || 0, 0, to || canvas.width, canvas.height);
         };
 
         Display.prototype.drawSound = function(canvas, audioBuffer, totalWidth, offset) {
