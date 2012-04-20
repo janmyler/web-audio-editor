@@ -18,9 +18,10 @@ define([
         className: 'track',
         
         initialize: function () {
-            _.bindAll(this, 'render', 'remove', 'zoomChange');
+            _.bindAll(this, 'render', 'remove', 'zoomChange', 'clearDisplay');
             this.model.bind('destroy', this.remove);
             this.model.bind('Audiee:zoomChange', this.zoomChange);
+            this.model.bind('Audiee:clearDisplay', this.clearDisplay);
         },
 
         render: function() {
@@ -68,6 +69,10 @@ define([
         zoomChange: function() {
             var width = Audiee.Display.sec2px(this.model.get('length'));
             $(this.el).width(width);
+        },
+
+        clearDisplay: function() {
+            this.trackDisplay.clearDisplay();
         }
     });
 });

@@ -33,7 +33,8 @@ define([
             'click #m-copy'     : 'copy',
             'click #m-cut'      : 'cut',
             'click #m-paste'    : 'paste',
-            'click #m-delete'   : 'delete'
+            'click #m-delete'   : 'delete',
+            'click #m-split'    : 'split'
             
         },
 
@@ -86,6 +87,10 @@ define([
                     break;
                 case 70:   // f key
                     $('#m-fullscreen').trigger('click');
+                    break;
+                case 69:   // e key
+                    $('#m-split').trigger('click');
+                    break;
             }
         },
 
@@ -176,17 +181,19 @@ define([
             Audiee.Views.Editor.pasteClipboard();
         },
 
+        split: function() {
+            Audiee.Views.Editor.splitClip();
+        },
+
         delete: function() {
             Audiee.Views.Editor.deleteSelection();
         },
 
         enableHotkeys: function() {
-            console.log('Enabling hotkeys');
             this.hotkeysEnabled = true;
         },
 
         disableHotkeys: function() {
-            console.log('Disabling hotkeys');
             this.hotkeysEnabled = false;
         }
     });

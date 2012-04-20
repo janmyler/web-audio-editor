@@ -124,8 +124,12 @@ define([
         },
 
         unsetActiveTrack: function() {
-            this.activeTrack.removeClass('active').siblings().removeClass('active');
-            this.activeTrack = undefined;
+            if (typeof this.activeTrack !== 'undefined') {
+                this.activeTrack.removeClass('active');
+                this.activeTrack = undefined;
+            }
+
+            Audiee.Views.Tracks.clearDisplays();
         },
 
         setSelectionFrom: function(position) {
@@ -134,9 +138,7 @@ define([
 
         setSelectionTo: function(position) {
             if (position < this.selectionFrom) {
-                var tmp = this.selectionFrom;
                 this.selectionFrom = position;
-                this.selectionTo = tmp;
             } else {
                 this.selectionTo = position;
             } 
@@ -243,6 +245,17 @@ define([
                     Audiee.Collections.Tracks.deleteSelection(that.selectionFrom, that.selectionTo, cid);
                 });
             }
+        },
+
+        splitClip: function() {
+            var $track = this.getActiveTrack(),
+                cursor = this.getCursor(),
+                cid;
+
+            if (typeof $track !== 'undefined')
+                cid = $track.data('cid');
+
+            Audiee.Collections.Tracks.getByCid(cid).deleteSelection(cursor, cursor);
         }
     });
 });

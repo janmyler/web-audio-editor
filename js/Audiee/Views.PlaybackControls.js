@@ -21,7 +21,12 @@ define([
 
         // listeners to a model's changes
         initialize: function() {
+            _.bindAll(this, 'handleKey');
             this.render();
+            this.pressingKey = false;
+            $(document)
+                .on('keydown', this.handleKey)
+                .on('keyup', this.handleKey);
         },
 
         // render function
@@ -50,6 +55,26 @@ define([
             Audiee.Player.stop();
 
             $play.removeClass('playing');
+        },
+
+        handleKey: function(e) {
+            if (!Audiee.Views.Menu.hotkeysEnabled)
+               return; 
+
+            switch(e.which) {
+                case 32: 
+                    if (e.type === 'keydown' && !this.pressingKey) {
+                        if (Audiee.Player.playing) 
+                            $('#stop').trigger('click');
+                        else
+                            $('#play').trigger('click');
+
+                        this.pressingKey = true;
+                    } else if (e.type === 'keyup') {
+                        this.pressingKey = false;
+                    }
+                    break;
+            }
         }
     });
 });

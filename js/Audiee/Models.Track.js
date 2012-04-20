@@ -31,6 +31,7 @@ define([
 			this.bind('change:name', this.resetDuplicates);
 			this.clips = new ClipsC;
 			this.initClip();
+			Audiee.Player.initTrack(this.cid);
 		},
 
 		initClip: function() {
@@ -43,6 +44,7 @@ define([
 		},
 
 		remove: function() {
+			Audiee.Player.releaseTrack(this.cid);
 			this.destroy();
 		},
 

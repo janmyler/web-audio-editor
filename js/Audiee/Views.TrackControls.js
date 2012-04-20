@@ -25,13 +25,29 @@ define([
         ),
 
         initialize: function() {
-            _.bindAll(this, 'render');
-            this.render();
+            _.bindAll(this, 'render', 'volumeChange', 'solo', 'mute');
+            this.render();            
+            $('input.volume', this.el).on('change', this.volumeChange);
         },
 
         render: function() {
             $(this.el).html(this.template());
             return this;
+        },
+
+        volumeChange: function() {
+            var volume = $('input.volume', this.el).val() / 100,
+                cid = $(this.el).parents('.track').data('cid');
+
+            Audiee.Player.volumeChange(volume, cid);
+        },
+
+        mute: function() {
+
+        },
+
+        solo: function() {
+
         }
     });
 });

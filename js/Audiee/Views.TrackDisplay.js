@@ -44,7 +44,7 @@ define([
                 .on('contextmenu', this.wrapperClass, this.contextMenu)
                 .on('mousedown', this.wrapperClass, this.cursor)
                 .on('mouseup', this.wrapperClass, this.selection);
-
+                
             this.render();
         },
 
@@ -97,8 +97,12 @@ define([
                 Audiee.Views.Editor.setSelectionFrom(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(offset));
                 Audiee.Views.Editor.unsetMultiSelection();
-                this.renderCursor();                
+                this.renderCursor();        
+            } else {
+                this.selection(e);
             }
+
+            $(this.wrapperClass).on('mousemove', this.selection);        
         },
 
         renderCursor: function() {
@@ -123,8 +127,11 @@ define([
             if (Audiee.Views.Editor.isMoving())
                 return;
 
-            var $canvasArray = $(this.wrapperClass, this.el).children('canvas'),   // canvas array within a track display
-                $track = $(e.target).parents('.track'),
+            if (e.type === 'mouseup') 
+                $(this.wrapperClass).off('mousemove');
+
+            var $track = $(e.target).parents('.track'),
+                $canvasArray = $track.find(this.wrapperClass).children('canvas'),   // canvas array within a track display
                 selectionTo = e.offsetX + $canvasArray.index($(e.target)) * this.maxWidth;   // total offset in the track display
 
             // store the selectionTo value in the editor view 
@@ -143,6 +150,8 @@ define([
 
             if (Audiee.Views.Editor.getActiveTrack().data('cid') !== $track.data('cid')) {
                 Audiee.Views.Editor.setMultiSelection($track);
+            } else {
+                Audiee.Views.Editor.unsetMultiSelection();
             }
 
             this.renderSelection();   
@@ -192,6 +201,12 @@ define([
 
         contextMenu: function(e) {
             e.preventDefault();
+        },
+
+        clearDisplay: function() {
+            $(this.el).find(this.wrapperClass).children('canvas').each(function() {
+                Audiee.Display.clearDisplay(this);
+            });
         }
     });
 });

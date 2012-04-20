@@ -46,6 +46,12 @@ define([
                 model.trigger('Audiee:zoomChange');
                 model.clips.trigger('Audiee:zoomChange');
             });
+        },
+
+        clearDisplays: function() {
+            this.collection.each(function(model) {
+                model.trigger('Audiee:clearDisplay');
+            });
         }
     });
 });
