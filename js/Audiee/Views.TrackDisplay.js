@@ -147,7 +147,7 @@ define([
                 Audiee.Views.Editor.setSelectionTo(Audiee.Display.px2sec(selectionTo));    
             }
 
-            if (Audiee.Views.Editor.getActiveTrack().data('cid') !== $track.data('cid')) {
+            if (Audiee.Views.Editor.isActiveTrack() && Audiee.Views.Editor.getActiveTrack().data('cid') !== $track.data('cid')) {
                 Audiee.Views.Editor.setMultiSelection($track);
             } else {
                 Audiee.Views.Editor.unsetMultiSelection();

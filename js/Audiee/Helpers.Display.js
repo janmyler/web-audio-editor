@@ -20,7 +20,8 @@ define([
             // 1px * 1/4 = 0.25sec
             this.zoomLevel = 1;
             this.scale = 20; 
-            this.subpixels = 5;
+            this.subpixels = 5;            
+            this.playbackCursorFollowing = true;
         }
 
         Display.prototype.zoomOut = function() {
@@ -80,7 +81,7 @@ define([
         };
 
         Display.prototype.getSubinterval = function(frame) {
-        
+            // nothing here so far        
         };
 
         Display.prototype.frameRMS = function(buffer, index, frame) {
@@ -92,7 +93,7 @@ define([
         };
 
         Display.prototype.frameMax = function(buffer, index, frame) {
-
+            // nothing here so far
         };
 
         Display.prototype.clearDisplay = function(canvas, from, to) {
@@ -164,6 +165,33 @@ define([
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(from, 0, length, canvas.height);
         };    
+
+        Display.prototype.showPlaybackPosition = function(position) {
+            if (typeof position === 'undefined')
+                return;
+
+            var $cursor = $('#playback-position'),
+                tracksCount = Audiee.Collections.Tracks.length,
+                trackHeight = $('.track').height(),
+                editorWidth = Audiee.Views.Editor.el.width(),
+                editorScroll = Audiee.Views.Editor.el.scrollLeft();
+
+                Audiee.Views.PlaybackControls.updateTime(this.px2sec(position));
+            position += 120;  // track controls width
+
+            $cursor.height(tracksCount * trackHeight)
+                   .css('left', position + 'px')
+                   .show();
+
+            if (this.playbackCursorFollowing && ((position > (editorScroll + editorWidth / 2)) || position < editorScroll)) {
+                Audiee.Views.Editor.el.scrollLeft(position - editorWidth / 2);
+            }
+
+        };
+
+        Display.prototype.hidePlaybackPosition = function() {
+            $('#playback-position').hide();
+        };
 
         return Display;
     })();

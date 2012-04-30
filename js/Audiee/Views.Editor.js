@@ -29,14 +29,6 @@ define([
                 'scrollHandler', 
                 'zoomHandler',
                 'setClipboard'
-                /*'getActiveTrack',
-                'isActiveTrack',
-                'setActiveTrack', 
-                'unsetActiveTrack', 
-                'getCursor',
-                'setSelectionFrom',
-                'setSelectionTo',
-                'getSelectionTo'*/
             );
             this.model.bind('change:name', this.changeTitle);
             this.moving = false;

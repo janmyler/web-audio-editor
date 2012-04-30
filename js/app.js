@@ -71,7 +71,7 @@ define(function(require) {
 			el: '#project-name',
 			hasColor: false
 		});
-		new PlaybackControlsV({model: Audiee.Models.Project});
+		Audiee.Views.PlaybackControls = new PlaybackControlsV({model: Audiee.Models.Project});
 		Audiee.Views.Menu = new MenuV;		
 	};
 	

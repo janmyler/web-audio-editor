@@ -16,6 +16,8 @@ define([
             this.nodes = [];
             this.gainNodes = {};
             this.playing = false;
+            this.playbackFrom;
+            this.playbackPositionInterval;
         }
 
         Player.prototype.initTrack = function(cid) {
@@ -33,6 +35,10 @@ define([
         Player.prototype.play = function() {
             var that = this,
                 currentTime = this.context.currentTime;
+            
+            this.playbackFrom = currentTime;
+            if (Audiee.Views.Editor.isActiveTrack())
+                this.playbackFrom -= Audiee.Views.Editor.getCursor();
 
             if (this.playing)
                 this.stop();
@@ -53,6 +59,7 @@ define([
 
                     if (Audiee.Views.Editor.isActiveTrack()) {
                         cursor = Audiee.Views.Editor.getCursor();
+
                         if (trackPosition + clip.clipLength() <= cursor)
                             return;     // clip is before a cursor's position
                         else if (trackPosition < cursor && trackPosition + clip.clipLength() > cursor) {
@@ -98,10 +105,12 @@ define([
 
                         trackPosition += duration;
                     }
+
                 });
             });
 
             this.playing = true;
+            this.playbackPositionInterval = setInterval("Audiee.Player.updatePlaybackPosition(Audiee.Player.playbackFrom)", 50); 
         };
 
         Player.prototype.stop = function() {
@@ -112,8 +121,26 @@ define([
                 this.playing = false;
             } else {
                 Audiee.Views.Editor.unsetActiveTrack();
+                Audiee.Views.PlaybackControls.updateTime();
+                Audiee.Display.showPlaybackPosition(0);
             }
+
+            if (typeof this.playbackPositionInterval !== 'undefined')
+                clearInterval(this.playbackPositionInterval);
+            Audiee.Display.hidePlaybackPosition();
         };
+
+        Player.prototype.updatePlaybackPosition = function(startTime) {
+            if (this.playing && typeof startTime !== 'undefined') {
+                var newTime = this.context.currentTime - startTime;
+                if (newTime >= Audiee.Collections.Tracks.first().get('length'))
+                    $('#stop').trigger('click');
+                else
+                    Audiee.Display.showPlaybackPosition(Audiee.Display.sec2px(newTime));
+            } else {
+                Audiee.Display.hidePlaybackPosition();
+            }
+        }
 
         Player.prototype.volumeChange = function(volume, cid) {
             this.gainNodes[cid].gain.value = volume;

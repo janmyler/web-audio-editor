@@ -21,6 +21,7 @@ define([
 
         render: function() {
             this.addAll();
+            $(this.el).append('<div id="playback-position">');
             return this;
         },
 

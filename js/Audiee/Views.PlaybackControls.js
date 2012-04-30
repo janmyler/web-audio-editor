@@ -13,10 +13,9 @@ define([
 
         // DOM events listeners
         events: {
-            'click #play'       : 'play',
-            'click #stop'       : 'stop',
-            'click #seek-start' : 'test',
-            'click #seek-end'   : 'test',
+            'click #play'     : 'play',
+            'click #stop'     : 'stop',
+            'click #follow'   : 'follow'
         },
 
         // listeners to a model's changes
@@ -31,16 +30,27 @@ define([
 
         // render function
         render: function() {
-            var time = this.model.get('currTime'),
-                min  = Math.floor(time / 60),
-                sec  = time % 60;
-            this.el.children('#time-display').val(min + ' : ' + sec);
+            this.updateTime();
             return this;
         },
 
-        // test debug only
-        test: function(e) {
-            alert('clicked: ' + e.srcElement.id);
+        updateTime: function(currentTime) {
+            if (typeof currentTime === 'undefined')
+                currentTime = 0;
+
+            var min  = Math.floor(currentTime / 60),
+                sec  = currentTime % 60,
+                i;
+
+
+            // number to string conversion and string shortening
+            sec += '';            
+            i = sec.indexOf('.');
+            if (i !== -1)
+                sec = sec.substring(0, i + 4);
+
+            this.el.children('#time-display').val(min + ' : ' + sec);
+            /*this.el.children('#time-display').val(min + ' : ' + sec + '.' + msec);*/
         },
 
         play: function() {
@@ -55,6 +65,11 @@ define([
             Audiee.Player.stop();
 
             $play.removeClass('playing');
+        },
+
+        follow: function() {
+            Audiee.Display.playbackCursorFollowing = !Audiee.Display.playbackCursorFollowing;
+            $('#follow').toggleClass('following');
         },
 
         handleKey: function(e) {

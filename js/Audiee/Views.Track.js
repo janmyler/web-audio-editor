@@ -38,7 +38,7 @@ define([
                 model: this.model
             }),
             this.trackControls = new TrackControlsV({
-                // TODO: code...
+                model: this.model
             });
 
             // track-info element completion

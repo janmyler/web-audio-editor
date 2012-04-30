@@ -75,16 +75,33 @@ body {
     #time-display {
       width: 100px;
       text-align: right;
-      margin: 5px 4px 0 0;
+      margin: 5px 6px 0 0;
       font-size: 18px;
       cursor: default;
       .noTextSelection;
+    }
 
+    #follow {
+      .icon-eye-close {
+        display: block;
+      }
+      .icon-eye-open {
+        display: none;
+      }
+    }      
+
+    #follow.following {
+      .icon-eye-close {
+        display: none;
+      }
+      .icon-eye-open {
+        display: block;
+      }
     }
 
     // time-display and stop button right margin
     :nth-child(3) {
-      margin-right: 4px;
+      margin-right: 6px;
     }
   }
 }
@@ -118,7 +135,7 @@ body {
     .track-info {
       width: @infoWidth;
       overflow: hidden;
-      background-color: #ddd;
+      background-color: #fff;
       position: relative;
       float: left;
       z-index: 550;
@@ -136,7 +153,11 @@ body {
       }
 
       .name-input {
-        margin-bottom: 0;
+        margin: 2px 0 2px 1px;
+        border: none;
+        background: transparent;
+        box-shadow: none;  
+        font-style: italic;      
       }
     }
 
@@ -248,6 +269,14 @@ body {
   
   .active .track-display {
     background-color: #fff;
+  }
+
+  #playback-position {
+    width: 1px;
+    position: absolute;
+    top: 0;
+    background-color: red;
+    z-index: 500;
   }
 }
 
