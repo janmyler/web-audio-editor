@@ -6,5 +6,6 @@
 + velikost pameti pro zalozku..., hlaseni velikosti zabrane pameti v ramci sandboxu -- nejspis nejde...
 + zmena nastaveni vzorkovaci frekvence hmmm ... taky nejspis nejde menit (zatim?)
 
++ solo
 + track analyser?
 + !! smazani klipu/vyjmuti, nektere to smaze az na nekolikaty pokus??

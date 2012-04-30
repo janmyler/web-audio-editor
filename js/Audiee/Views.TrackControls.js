@@ -68,17 +68,45 @@ define([
             this.model.set('muted', !muted);
             if (muted) {
                 // track was muted -- restores previous gain value
-                Audiee.Player.volumeChange(this.model.get('gain'), this.model.cid);
+                if (!this.model.get('solo'))
+                    Audiee.Player.volumeChange(this.model.get('gain'), this.model.cid);
             } else {
-                // track is beeing muted
-                Audiee.Player.volumeChange(0, this.model.cid);
+                // track is beeing muted (only if is not set as solo track)
+                if (!this.model.get('solo'))
+                    Audiee.Player.volumeChange(0, this.model.cid);
             }
         },
 
         solo: function() {
-            var solo = this.model.get('solo');
-            
-            this.model.set('muted', !this.model.get('muted'));
+            this.model.set('solo', !this.model.get('solo'));
+            var soloTracks = Audiee.Collections.Tracks.filter(
+                                function(model) { 
+                                    return model.get('solo') === true;
+                                }
+                            ),
+                otherTracks = Audiee.Collections.Tracks.filter(
+                                function(model) {
+                                    return model.get('solo') === false;
+                                }
+                            );
+
+            // no track is solo, restore unmuted tracks' volume
+            if (soloTracks.length === 0) {
+                Audiee.Collections.Tracks.each(function(model) {
+                    if (model.get('muted') === false) {
+                        Audiee.Player.volumeChange(model.get('gain'), model.cid);
+                    } else {
+                        Audiee.Player.volumeChange(0, model.cid);
+                    }
+                });
+            } else {
+                _.each(soloTracks, function(model) {
+                    Audiee.Player.volumeChange(model.get('gain'), model.cid);
+                });
+                _.each(otherTracks, function(model) {
+                    Audiee.Player.volumeChange(0, model.cid);
+                });
+            }
         }
     });
 });
