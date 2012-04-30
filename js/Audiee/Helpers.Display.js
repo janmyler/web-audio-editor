@@ -176,17 +176,21 @@ define([
                 editorWidth = Audiee.Views.Editor.el.width(),
                 editorScroll = Audiee.Views.Editor.el.scrollLeft();
 
-                Audiee.Views.PlaybackControls.updateTime(this.px2sec(position));
+            Audiee.Views.PlaybackControls.updateTime(this.px2sec(position));
             position += 120;  // track controls width
 
             $cursor.height(tracksCount * trackHeight)
                    .css('left', position + 'px')
                    .show();
 
+            /* NOTE: Removed due to appearance issues.
             if (this.playbackCursorFollowing && ((position > (editorScroll + editorWidth / 2)) || position < editorScroll)) {
                 Audiee.Views.Editor.el.scrollLeft(position - editorWidth / 2);
+            }*/
+            
+            if (this.playbackCursorFollowing && ((position > (editorScroll + editorWidth)) || position < editorScroll)) {
+                Audiee.Views.Editor.el.scrollLeft(position - 120);
             }
-
         };
 
         Display.prototype.hidePlaybackPosition = function() {
