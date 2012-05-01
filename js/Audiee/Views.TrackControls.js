@@ -20,9 +20,9 @@ define([
         className: 'track-controls',
 
         template: _.template(
-            '<button class="btn mute {{ muted }}" data-toggle="button">M</button>' +
-            '<button class="btn solo {{ solo }}" data-toggle="button">S</button>' +
-            '<input type="range" class="volume" value="{{ gain }}">'
+            '<button class="btn mute {{ muted }}" data-toggle="button" title="mute">M</button>' +
+            '<button class="btn solo {{ solo }}" data-toggle="button" title="solo">S</button>' +
+            '<input type="range" class="volume" value="{{ gain }}" title="volume">'
         ),
 
         initialize: function() {
@@ -54,7 +54,8 @@ define([
                 cid = $(this.el).parents('.track').data('cid');
 
             this.model.set('gain', volume);
-            Audiee.Player.volumeChange(volume, cid);
+            
+            Audiee.Player.volumeChange(volume, cid);  // zmenit v souvislosti se solo
 
             if ($('button.mute', this.el).hasClass('active')) {
                 $('button.mute', this.el).button('toggle');

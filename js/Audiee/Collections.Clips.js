@@ -57,6 +57,7 @@ define([
 
         deleteSelection: function(from, to, except) {
             var that = this,
+                deleteRequest = [],
                 trackPos, end, startTime, endTime, loop, duration, newLoop, newEndTime, newStartTime;
 
             this.each(function(model) {
@@ -93,8 +94,8 @@ define([
                             });
                             that.add(clip);   
                         } else if (trackPos >= from && end <= to) {
-                            // clip begins and ends within the selection (removes the clip)
-                            that.remove(model);
+                            // clip begins and ends within the selection (prepares the clip for a removal)
+                            deleteRequest.push(model);
                         } else if (trackPos < from && end <= to) {  
                             // clip begins before the selection and ends within the selection (edits the endTime)
                             newEndTime = (startTime + from - trackPos) % duration;          
@@ -112,6 +113,9 @@ define([
                     }
                 }
             });
+            
+            // removes the selected clips
+            this.remove(deleteRequest);    
         },
 
         addDuplicate: function(clip) {
