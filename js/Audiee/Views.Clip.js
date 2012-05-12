@@ -58,17 +58,16 @@ define([
                 stop: this.updatePosition,
                 // scroll?
             }).css('position', 'absolute');
-              
         },
 
         render: function() {
-            var left = Audiee.Display.sec2px(this.model.get('trackPos')),
+            var left  = Audiee.Display.sec2px(this.model.get('trackPos')),
                 width = this._clipWidth(),
-                that = this;
+                that  = this;
 
             // console.log('Clip.render() ', left, width);
 
-            $(this.el).children().detach().end()  // empty an element, but save the event listeners etc.
+            $(this.el).children().detach().end()  // detach() deletes element's content but saves event listeners etc.
                 .css('left', left + 'px')                    
                 .width(width)  
                 .resizable('destroy')
@@ -85,9 +84,9 @@ define([
                     // grid: 5,
                     // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
-                        var duration  = that.model.get('buffer').duration,
-                            loop = that.model.get('loop'),
-                            end = that.model.clipLength(),
+                        var duration = that.model.get('buffer').duration,
+                            loop     = that.model.get('loop'),
+                            end      = that.model.clipLength(),
                             newStartTime, newEndTime, newTrackPos;
                         
                         Audiee.Views.Editor.movingOn();  // blocks the selection while resizing
@@ -96,26 +95,26 @@ define([
                         if (ui.originalPosition.left === ui.position.left) { // from right NOTE: should be ok now
                             // FIXME: overflows right track border...
                             newEndTime = (Audiee.Display.px2sec(ui.size.width) + that.model.get('startTime')) % duration;
-                            loop = loop + Math.floor((that.model.get('endTime') + Audiee.Display.px2sec(ui.size.width) - end) / duration);
+                            loop       = loop + Math.floor((that.model.get('endTime') + Audiee.Display.px2sec(ui.size.width) - end) / duration);
                         } else {  // from left
                             newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos');
                             
                             if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track 
                                 if (newStartTime > 0) { // resize --> direction to the right NOTE: should be ok now
                                     newStartTime += that.model.get('startTime');
-                                    newTrackPos = Audiee.Display.px2sec(ui.position.left);
+                                    newTrackPos  = Audiee.Display.px2sec(ui.position.left);
                                 } else {  // resize <-- direction to the left NOTE: should be ok now
                                     newStartTime = that.model.get('startTime');
-                                    newTrackPos = 0;
+                                    newTrackPos  = 0;
                                 }
                             } else { // clip is somewhere else 
                                 newStartTime += that.model.get('startTime');
-                                newTrackPos = Audiee.Display.px2sec(ui.position.left);
+                                newTrackPos  = Audiee.Display.px2sec(ui.position.left);
                             }
 
                             newStartTime %= duration;
                             newStartTime = (newStartTime < 0) ? duration + newStartTime : newStartTime;
-                            loop = loop - Math.floor((that.model.get('startTime') + newTrackPos - that.model.get('trackPos')) / duration);
+                            loop         = loop - Math.floor((that.model.get('startTime') + newTrackPos - that.model.get('trackPos')) / duration);
                         }
 
                         that.model.set('loop', loop);
@@ -127,8 +126,8 @@ define([
                             that.model.set('endTime', newEndTime);
                     },
                     stop: function() {
-                        var from = that.model.get('trackPos'),
-                            to = from + that.model.clipLength(),
+                        var from     = that.model.get('trackPos'),
+                            to       = from + that.model.clipLength(),
                             trackCid = $(that.el).parents('.track').data('cid');
 
                         Audiee.Views.Editor.movingOff();
@@ -137,7 +136,7 @@ define([
                     }
                 });
             
-            // change clip name left offset if needed
+            // change clip's name left offset if needed
             this.scrollChange();
 
             return this;
@@ -162,11 +161,11 @@ define([
         },
 
         updatePosition: function(e) {
-            var from = Audiee.Display.px2sec(e.target.offsetLeft),
-                to = from + this.model.clipLength(),
+            var from     = Audiee.Display.px2sec(e.target.offsetLeft),
+                to       = from + this.model.clipLength(),
                 trackCid = $(this.el).parents('.track').data('cid');
 
-            // delete space before movin clip into the new position
+            // deletes the space before moving clip into the new position
             Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, this.model.cid);
             this.model.set('trackPos', from);
             Audiee.Views.Editor.movingOff();
@@ -174,10 +173,10 @@ define([
 
         scrollChange: function(e, ui) {
             var scrollLeft = Audiee.Views.Editor.scrollLeftOffset(),
-                left = Audiee.Display.px2sec(scrollLeft),
-                trackPos = (typeof ui !== 'undefined') ? Audiee.Display.px2sec(ui.position.left) : this.model.get('trackPos'),
-                width = this._clipWidth(),
-                offset = left - trackPos;
+                left       = Audiee.Display.px2sec(scrollLeft),
+                trackPos   = (typeof ui !== 'undefined') ? Audiee.Display.px2sec(ui.position.left) : this.model.get('trackPos'),
+                width      = this._clipWidth(),
+                offset     = left - trackPos;
 
             if (left > trackPos && left < (trackPos + width)) {
                 $(this.editableName.el).css('padding-left', Audiee.Display.sec2px(offset))
@@ -190,8 +189,6 @@ define([
 
         _clipWidth: function() {
             return Audiee.Display.sec2px(this.model.clipLength());
-        },
-
-        
+        },        
     });
 });

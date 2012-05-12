@@ -1,44 +1,21 @@
 /* the humans responsible & colophon */
 /* humanstxt.org */
 
-
 /* TEAM */
   Jan Myler
   Site: http://janmyler.com
   Twitter: janmyler
   Location: Brno, Czech Republic
 
-/* THANKS */
-  Names (& URL):
-
 /* SITE */
-  Standards: HTML5, CSS3
-  Components: Modernizr, jQuery
-  Software:
+  Standards:  HTML5, CSS3
+  Components: jQuery, Backbone.js, Require.js, LESS, Web Audio API
+  Software:   Sublime Text 2
 
-/* Below is only H5BP star – it's so nice-looking  :) */
-
-
-                               -o/-
-                               +oo//-
-                              :ooo+//:
-                             -ooooo///-
-                             /oooooo//:
-                            :ooooooo+//-
-                           -+oooooooo///-
-           -://////////////+oooooooooo++////////////::
-            :+ooooooooooooooooooooooooooooooooooooo+:::-
-              -/+ooooooooooooooooooooooooooooooo+/::////:-
-                -:+oooooooooooooooooooooooooooo/::///////:-
-                  --/+ooooooooooooooooooooo+::://////:-
-                     -:+ooooooooooooooooo+:://////:--
-                       /ooooooooooooooooo+//////:-
-                      -ooooooooooooooooooo////-
-                      /ooooooooo+oooooooooo//:
-                     :ooooooo+/::/+oooooooo+//-
-                    -oooooo/::///////+oooooo///-
-                    /ooo+::://////:---:/+oooo//:
-                   -o+/::///////:-      -:/+o+//-
-                   :-:///////:-            -:/://
-                     -////:-                 --//:
-                       --                       -:
+      .o.                         .o8   o8o                      
+     .888.                       "888   `"'                      
+    .8"888.     oooo  oooo   .oooo888  oooo   .ooooo.   .ooooo.  
+   .8' `888.    `888  `888  d88' `888  `888  d88' `88b d88' `88b 
+  .88ooo8888.    888   888  888   888   888  888ooo888 888ooo888 
+ .8'     `888.   888   888  888   888   888  888    .o 888    .o 
+o88o     o8888o  `V88V"V8P' `Y8bod88P" o888o `Y8bod8P' `Y8bod8P' 

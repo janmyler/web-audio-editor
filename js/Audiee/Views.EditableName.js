@@ -21,7 +21,7 @@ define([
         template: _.template(EditableNameT),
         menu: _.template(ContextMenuT),
 
-        // listeners to a model's changes
+        // listeners to model's changes
         initialize: function() {
             _.bindAll(this, 'render', 'close', 'edit', 'contextMenu', 'keyupHandler');
             this.model.bind('change:name', this.render);

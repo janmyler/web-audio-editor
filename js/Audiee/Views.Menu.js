@@ -1,7 +1,7 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * View for application menu.
+ * View for an application menu.
  */
 
 define([
@@ -10,10 +10,13 @@ define([
     'text!templates/Menu.html',
     'text!templates/NewtrackModal.html',
     'text!templates/AlertModal.html',
+    'text!templates/InfoModal.html',
+    'text!templates/AboutAudiee.html',
+    'text!templates/HelpAudiee.html',
     'Audiee/Models.Track',
     'plugins/modal',
     'plugins/dropdown'
-], function(_, Backbone, MenuT, ModalT, AlertT, TrackM) {
+], function(_, Backbone, MenuT, ModalT, AlertT, InfoT, AboutT, HelpT, TrackM) {
 
     return Backbone.View.extend({
         // parent DOM element
@@ -27,15 +30,16 @@ define([
             'click #m-addtrack'     : 'addTrack',
             'click #m-removetrack'  : 'removeTrack',
             'click #m-fullscreen'   : 'toggleFullscreen',
-            'click #m-zoomin'   : 'zoomIn',
-            'click #m-zoomout'  : 'zoomOut',
-            'click #m-zoomzero' : 'zoomZero',
-            'click #m-copy'     : 'copy',
-            'click #m-cut'      : 'cut',
-            'click #m-paste'    : 'paste',
-            'click #m-delete'   : 'delete',
-            'click #m-split'    : 'split'
-            
+            'click #m-zoomin'       : 'zoomIn',
+            'click #m-zoomout'      : 'zoomOut',
+            'click #m-zoomzero'     : 'zoomZero',
+            'click #m-copy'         : 'copy',
+            'click #m-cut'          : 'cut',
+            'click #m-paste'        : 'paste',
+            'click #m-delete'       : 'delete',
+            'click #m-split'        : 'split',
+            'click #m-about'        : 'about',
+            'click #m-help'         : 'help'
         },
 
         initialize: function() {
@@ -55,7 +59,7 @@ define([
                return; 
 
             switch(e.which) {
-                case 46:   // delete key, shift + delete
+                case 46:   // delete key, ctrl + delete
                     if (e.ctrlKey)
                         $('#m-removetrack').trigger('click');
                     else
@@ -195,6 +199,28 @@ define([
 
         disableHotkeys: function() {
             this.hotkeysEnabled = false;
+        },
+
+        about: function() {
+            var tpl = (_.template(InfoT))({
+                    title: 'About Audiee',
+                    content: AboutT
+                }),
+                $tpl = $(tpl);
+
+            $tpl.on('hide', function() { $tpl.remove() })
+                .modal();           // show the modal window
+        },
+
+        help: function() {
+            var tpl = (_.template(InfoT))({
+                    title: 'Audiee Help',
+                    content: HelpT
+                }),
+                $tpl = $(tpl);
+
+            $tpl.on('hide', function() { $tpl.remove() })
+                .modal();           // show the modal window
         }
     });
 });

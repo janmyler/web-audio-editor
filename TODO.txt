@@ -1,10 +1,11 @@
 # List of TODOs
-+ Jaka je maximalni velikost souboru, kterou muze nahrat FileReader? Aby nespadlo nahraveni?
++ Jaka je maximalni velikost souboru, kterou muze nahrat FileReader, aby nespadlo nahraveni?
 + Pomocne ikonove menu do #editor-view (napr. lupa, vyber, atd.) – kde ukladat vybrany nastroj?
-+ Prehravani, sestaveni Audio stromu a pusteni playbacku
++ Maximalni velikost pameti pro zalozku prohlizece, hlaseni velikosti zabrane pameti v ramci sandboxu?
++ Zmena nastaveni vzorkovaci frekvence Audio API? [nelze]
++ Track analyser?
 
-+ velikost pameti pro zalozku..., hlaseni velikosti zabrane pameti v ramci sandboxu -- nejspis nejde...
-+ zmena nastaveni vzorkovaci frekvence hmmm ... taky nejspis nejde menit (zatim?)
-
-+ track analyser?
-+ prehravani od kurzoru pri loopu klipu obcas udela ulet (hraje spatne)
++ Prehravani od kurzoru pri loopu klipu obcas nefunguje spravne.
++ Predelani obrazku (favicon/apple icons).
++ About a help sekce v menu – dopsat texty.
++ Pri zmene hlasitosti u Tracku, zacne hrat (i kdyz je zvoleny jiny track jako solo)!

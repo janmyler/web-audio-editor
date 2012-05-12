@@ -36,7 +36,9 @@ define([
 
         scrollChange: function() {
             var scrollLeft = Audiee.Views.Editor.scrollLeftOffset();
+            
             $('div.track-info').css('left', scrollLeft + 'px');
+            
             this.collection.each(function(model) {
                 model.clips.trigger('Audiee:scroll');
             });

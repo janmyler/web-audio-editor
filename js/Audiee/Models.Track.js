@@ -82,8 +82,8 @@ define([
 
 		duplicate: function() {
 			var newTrack = this.clone(),
-				newName = newTrack.get('name'),
-				match = newName.match(/\(\d+\)$/),
+				newName  = newTrack.get('name'),
+				match    = newName.match(/\(\d+\)$/),
 				index;
 
 			newTrack.clips.reset(this.clips.toJSON());

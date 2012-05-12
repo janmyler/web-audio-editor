@@ -13,20 +13,21 @@ define([
 		// model reference
 		model: ClipM,
 
+        // returns a snapshot of selected area
         getSnapshot: function(from, to) {
             var snapshot = [],
                 trackPos, end, offset, startTime, endTime, loop, duration;
 
             this.each(function(model) {
                 trackPos = model.get('trackPos');
-                end = trackPos + model.clipLength();
+                end      = trackPos + model.clipLength();
                 
                 if (trackPos < to && end > from) {  // clip within the range of selection
-                    loop = model.get('loop');
-                    duration = model.get('buffer').duration;
-                    offset = (trackPos < from) ? 0 : trackPos - from;
+                    loop      = model.get('loop');
+                    duration  = model.get('buffer').duration;
+                    offset    = (trackPos < from) ? 0 : trackPos - from;
                     startTime = model.get('startTime');
-                    endTime = model.get('endTime');
+                    endTime   = model.get('endTime');
 
                     if (trackPos < from) {  // clip begins before the selection
                         loop -= Math.floor((startTime + from - trackPos) / duration);
@@ -55,6 +56,7 @@ define([
             return snapshot;
         },
 
+        // deletes the selected area
         deleteSelection: function(from, to, except) {
             var that = this,
                 deleteRequest = [],
@@ -63,34 +65,35 @@ define([
             this.each(function(model) {
                 if (model.cid !== except) {
                     trackPos = model.get('trackPos');
-                    end = trackPos + model.clipLength();
+                    end      = trackPos + model.clipLength();
                     
                     if (trackPos < to && end > from) {  // clip within the range of selection
-                        loop = model.get('loop');
-                        duration = model.get('buffer').duration;
+                        loop      = model.get('loop');
+                        duration  = model.get('buffer').duration;
                         startTime = model.get('startTime');
-                        endTime = model.get('endTime');
+                        endTime   = model.get('endTime');
 
                         if (trackPos < from && end > to) {
                             // clip begins before the selection and ends after the selection (splits the clip)
+                            
                             // for the first clip
                             newEndTime = (startTime + from - trackPos) % duration;              
-                            newLoop = loop + Math.floor((endTime + from - end) / duration);    
+                            newLoop    = loop + Math.floor((endTime + from - end) / duration);    
                             model.set('loop', newLoop);
                             model.set('endTime', newEndTime);
 
                             // for the second clip
                             newStartTime = (startTime + to - trackPos) % duration;              
-                            newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
+                            newLoop      = loop - Math.floor((startTime + to - trackPos) / duration);
 
                             var clip = new ClipM({
-                                name: model.get('name'),
-                                color: model.get('color'),
-                                trackPos: to,
-                                startTime: newStartTime,
-                                loop: newLoop,
-                                endTime: endTime,
-                                buffer: model.get('buffer')
+                                name:       model.get('name'),
+                                color:      model.get('color'),
+                                trackPos:   to,
+                                startTime:  newStartTime,
+                                loop:       newLoop,
+                                endTime:    endTime,
+                                buffer:     model.get('buffer')
                             });
                             that.add(clip);   
                         } else if (trackPos >= from && end <= to) {
@@ -99,13 +102,13 @@ define([
                         } else if (trackPos < from && end <= to) {  
                             // clip begins before the selection and ends within the selection (edits the endTime)
                             newEndTime = (startTime + from - trackPos) % duration;          
-                            newLoop = loop + Math.floor((endTime + from - end) / duration); 
+                            newLoop    = loop + Math.floor((endTime + from - end) / duration); 
                             model.set('loop', newLoop);
                             model.set('endTime', newEndTime);
                         } else if (trackPos >= from && end > to) {
                             // clip begins within the selection and ends after the selection (edits the startTime)
                             newStartTime = (startTime + to - trackPos) % duration;          
-                            newLoop = loop - Math.floor((startTime + to - trackPos) / duration);
+                            newLoop      = loop - Math.floor((startTime + to - trackPos) / duration);
                             model.set('loop', newLoop);
                             model.set('trackPos', to);
                             model.set('startTime', newStartTime);
@@ -118,9 +121,10 @@ define([
             this.remove(deleteRequest);    
         },
 
+        // inserts the duplicate of a selected clip
         addDuplicate: function(clip) {
             var from = clip.get('trackPos'),
-                to = from + clip.clipLength();
+                to   = from + clip.clipLength();
             this.deleteSelection(from, to);
             this.add(clip);
         }

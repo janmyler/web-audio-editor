@@ -42,7 +42,6 @@ define([
                 sec  = currentTime % 60,
                 i;
 
-
             // number to string conversion and string shortening
             sec += '';            
             i = sec.indexOf('.');
@@ -50,10 +49,12 @@ define([
                 sec = sec.substring(0, i + 4);
 
             this.el.children('#time-display').val(min + ' : ' + sec);
-            /*this.el.children('#time-display').val(min + ' : ' + sec + '.' + msec);*/
         },
 
         play: function() {
+            if (Audiee.Collections.Tracks.length <= 0)
+                return;
+
             var $play = $('#play');
             Audiee.Player.play();
 
@@ -61,6 +62,9 @@ define([
         },
 
         stop: function() {
+            if (Audiee.Collections.Tracks.length <= 0)
+                return;
+            
             var $play = $('#play');
             Audiee.Player.stop();
 

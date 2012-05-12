@@ -31,11 +31,11 @@ define([
         render: function(totalWidth) {    
             // calculate width and height
             var clipWidth = totalWidth,
-                maxWidth = 20000,
-                width = 0,
-                height = 100,
-                offset = Audiee.Display.sec2px(this.model.get('startTime'));
-                $el = $(this.el);
+                maxWidth  = 20000,
+                width     = 0,
+                height    = 100,
+                offset    = Audiee.Display.sec2px(this.model.get('startTime'));
+                $el       = $(this.el);
 
             $el.empty();
 
@@ -44,8 +44,6 @@ define([
                     width = maxWidth;
                 else 
                     width = clipWidth;  
-
-                // console.log('width: ' + width);
 
                 $el.append(this.template({
                     width: width,
@@ -69,6 +67,5 @@ define([
         getLastCanvas: function() {
             return $(this.el).find('canvas').last()[0];
         }
-
     });
 });

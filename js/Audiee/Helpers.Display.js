@@ -1,7 +1,7 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
  * 
- * This helper object provides functions related to drawing waveform,
+ * This helper object provides functions related to drawing waveforms,
  * zoom level, etc.
  */
 
@@ -25,12 +25,12 @@ define([
         }
 
         Display.prototype.zoomOut = function() {
-            if (this.zoomLevel * 1.5 < 60)
+            if (this.zoomLevel * 1.5 < 60)      // limitation of maximum zoom level
                 this.zoomLevel *= 1.5;
         };
 
         Display.prototype.zoomIn = function() {
-            if (this.zoomLevel / 1.5 > 0.005)
+            if (this.zoomLevel / 1.5 > 0.005)   // limitation of minimum zoom level
                 this.zoomLevel /= 1.5;
         };
 
@@ -46,6 +46,7 @@ define([
             return sec / this.zoomLevel * this.scale;
         };
 
+        // used for timeline ticks rendering
         Display.prototype.getIntervals = function(frame) {
             var mainInterval = Math.ceil(this.px2sec(frame * 100)),
                 subInterval;
@@ -103,8 +104,6 @@ define([
 
         Display.prototype.drawSound = function(canvas, audioBuffer, totalWidth, offset) {
             var ctx   = canvas.getContext('2d'),
-                // frame = Math.floor(audioBuffer.length / totalWidth / this.subpixels),
-                // duration = (totalWidth > this.sec2px(audioBuffer.duration)) ? this.sec2px(audioBuffer.duration) : totalWidth;
                 frame = audioBuffer.length / this.sec2px(audioBuffer.duration) / this.subpixels,
                 ch1   = audioBuffer.getChannelData(0),
                 ch2   = undefined,
@@ -113,28 +112,26 @@ define([
                 posX  = 0,
                 i     = (offset * frame * this.subpixels) % audioBuffer.length;
 
-            // console.log('Display.drawSound()');
-            // console.log('frame[',frame, '], start:i[', i, ']');
             if (audioBuffer.numberOfChannels > 1)
                 ch2 = audioBuffer.getChannelData(1);
             
-            // draws just a channel 1 data (dummy version)
             ctx.fillStyle = 'red';
             ctx.beginPath();
             ctx.moveTo(posX, mid);
-            // draws the samples
+            
+            // draws just a channel 1 data (dummy version)
             while(posX <= canvas.width) {
                 val = ch1[Math.floor(i)];
                 // val = this.frameRMS(ch1, Math.floor(i), frame);
                 
-                /*if (ch2)
-                    val = (val + ch2[Math.floor(i)]) / 2;*/
+                // if (ch2)
+                //     val = (val + ch2[Math.floor(i)]) / 2;
 
                 i = (i + frame) % audioBuffer.length;
 
                 ctx.lineTo(posX, (val * mid) + mid); // FIXME: plus and minus signs must be switched [+v,-^] to [+^,-v]
                 
-                // draw splitting lines (start and end of the clip)
+                // draws splitting lines (start and end of the clip)
                 if (i >= 0 && i <= frame) {
                     ctx.globalCompositeOperation = 'destination-over';
                     ctx.fillRect(posX, 0, 1, 10);
@@ -144,8 +141,6 @@ define([
 
                 posX += 1 / this.subpixels;
             }
-
-            // console.log('next expected i [',i ,']');
 
             ctx.stroke();
         };
@@ -171,9 +166,9 @@ define([
                 return;
 
             var $cursor = $('#playback-position'),
-                tracksCount = Audiee.Collections.Tracks.length,
-                trackHeight = $('.track').height(),
-                editorWidth = Audiee.Views.Editor.el.width(),
+                tracksCount  = Audiee.Collections.Tracks.length,
+                trackHeight  = $('.track').height(),
+                editorWidth  = Audiee.Views.Editor.el.width(),
                 editorScroll = Audiee.Views.Editor.el.scrollLeft();
 
             Audiee.Views.PlaybackControls.updateTime(this.px2sec(position));

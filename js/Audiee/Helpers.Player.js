@@ -8,14 +8,24 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'text!templates/AlertModal.html',
     'plugins/modal'
 ], function($, _, Backbone, AlertT) {
     return (function() {
         function Player() {
-            this.context = new webkitAudioContext || new AudioContext;
-            this.nodes = [];
+            // browser compatibility test
+            if (typeof webkitAudioContext === 'undefined' && typeof AudioContext === 'undefined') {
+                var tpl = (_.template(AlertT))({
+                    message: 'Your browser is not supported yet, try using Google Chrome.'
+                });
+                $(tpl).modal();   
+            } else {
+                this.context = new webkitAudioContext || new AudioContext;
+            }
+            
+            this.nodes     = [];
             this.gainNodes = {};
-            this.playing = false;
+            this.playing   = false;
             this.playbackFrom;
             this.playbackPositionInterval;
         }
@@ -36,25 +46,30 @@ define([
             var that = this,
                 currentTime = this.context.currentTime;
             
+            // starts playback from the beginning
             this.playbackFrom = currentTime;
+
+            // starts playback from the cursor position
             if (Audiee.Views.Editor.isActiveTrack())
                 this.playbackFrom -= Audiee.Views.Editor.getCursor();
 
+            // stops previous playback
             if (this.playing)
                 this.stop();
 
+            // constructs the audio tree
             Audiee.Collections.Tracks.each(function(track) {
                 var cid = track.cid,
                     gainNode = that.gainNodes[cid];
 
                 track.clips.each(function(clip) {
                     var trackPosition = clip.get('trackPos'),
-                        startTime = clip.get('startTime'),
-                        endTime = clip.get('endTime'),
-                        loop = clip.get('loop'),
-                        duration = clip.get('buffer').duration,
-                        inClipStart = false,
-                        cursor = 0,
+                        startTime     = clip.get('startTime'),
+                        endTime       = clip.get('endTime'),
+                        loop          = clip.get('loop'),
+                        duration      = clip.get('buffer').duration,
+                        inClipStart   = false,
+                        cursor        = 0,
                         node, offset;
 
                     if (Audiee.Views.Editor.isActiveTrack()) {
@@ -63,11 +78,11 @@ define([
                         if (trackPosition + clip.clipLength() <= cursor)
                             return;     // clip is before a cursor's position
                         else if (trackPosition < cursor && trackPosition + clip.clipLength() > cursor) {
-                            // virtually split the clip
-                            startTime = (startTime + cursor - trackPosition) % duration;
-                            loop = loop - Math.floor((clip.get('startTime') + cursor - trackPosition) / duration);
+                            // virtually splits the clip
+                            startTime     = (startTime + cursor - trackPosition) % duration;
+                            loop          = loop - Math.floor((clip.get('startTime') + cursor - trackPosition) / duration);
                             trackPosition = cursor;
-                            inClipStart = true;
+                            inClipStart   = true;
                         }
                     }
 
@@ -97,6 +112,7 @@ define([
                                 duration = clip.clipLength();
                         }
 
+                        // sets the clip's playback start time
                         node.noteGrainOn(
                             currentTime + trackPosition - cursor,
                             offset,
@@ -133,6 +149,7 @@ define([
         Player.prototype.updatePlaybackPosition = function(startTime) {
             if (this.playing && typeof startTime !== 'undefined') {
                 var newTime = this.context.currentTime - startTime;
+                
                 if (newTime >= Audiee.Collections.Tracks.first().get('length'))
                     $('#stop').trigger('click');
                 else
@@ -146,6 +163,7 @@ define([
             this.gainNodes[cid].gain.value = volume;
         };        
 
+        // NOTE: Maybe move to different module... 
         Player.prototype.loadFile = function(file, el) {
             var reader = new FileReader,
                 that   = this;
@@ -162,13 +180,24 @@ define([
                         $(el).trigger('Audiee:fileLoaded', [audioBuffer, file]);    
                     },
                     onerror = function() {
-                        console.log('Error while loading file ' + file.name);
+                        // on error - show alert modal
+                        var tpl = (_.template(AlertT))({
+                            message: 'Error while loading the file ' + file.name + '.'
+                        }),
+                        $tpl = $(tpl);
+
+                        $tpl.on('hide', function() { $tpl.remove() })
+                        .modal();           // show the modal window
+
+                        // hide the new track modal
+                        $('#newTrackModal').modal('hide');
                     };
 
                     that.context.decodeAudioData(e.target.result, onsuccess, onerror);
                 }
             };
 
+            // NOTE: Maybe move to different module... 
             reader.onprogress = function(e) {
                 if (e.lengthComputable) {
                     $progress = $('.progress', '#newTrackModal');
@@ -180,8 +209,8 @@ define([
                     $progress.children().width(loaded + '%');
                 }
             };
-            
-            reader.readAsArrayBuffer(file);            
+                
+            reader.readAsArrayBuffer(file);  
         };
 
         return Player;
