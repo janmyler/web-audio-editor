@@ -220,6 +220,7 @@ define([
                 $tpl = $(tpl);
 
             $tpl.on('hide', function() { $tpl.remove() })
+                .width(680).css('max-height', 530 + 'px')
                 .modal();           // show the modal window
         }
     });

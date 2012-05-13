@@ -41,6 +41,16 @@ define([
 
         getIndexCount: function() {
             return this.indexCount;
+        },
+
+        isAnySolo: function() {
+            var soloTracks = this.filter(
+                function(model) { 
+                    return model.get('solo') === true;
+                }
+            );
+
+            return soloTracks.length > 0;
         }
 	});
 });

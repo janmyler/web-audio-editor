@@ -9,7 +9,7 @@
 
 /* SITE */
   Standards:  HTML5, CSS3
-  Components: jQuery, Backbone.js, Require.js, LESS, Web Audio API
+  Components: jQuery, Backbone.js, Require.js, LESS, Web Audio API, Twitter Bootstrap
   Software:   Sublime Text 2
 
       .o.                         .o8   o8o                      

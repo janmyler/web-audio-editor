@@ -76,7 +76,7 @@ define([
                         cursor = Audiee.Views.Editor.getCursor();
 
                         if (trackPosition + clip.clipLength() <= cursor)
-                            return;     // clip is before a cursor's position
+                            return;     // clip is before the cursor position
                         else if (trackPosition < cursor && trackPosition + clip.clipLength() > cursor) {
                             // virtually splits the clip
                             startTime     = (startTime + cursor - trackPosition) % duration;
@@ -90,19 +90,19 @@ define([
                         node = that.context.createBufferSource();
                         that.nodes.push(node);
                         node.buffer = clip.get('buffer');
-                        node.connect(gainNode); // bude gainNode pro track
+                        node.connect(gainNode);  // connects node to track's gain node
                         
                         // clip offset and duration times
                         if (loop > 0) {
-                            if (i === 0) {
+                            if (i === 0) {           // first subclip
                                 offset = startTime;
                                 duration = duration - offset;
-                            } else if (i === loop) {
+                            } else if (i === loop) { // last subclip
                                 offset = 0;
                                 duration = endTime;
                             } else {
                                 offset = 0;
-                                duration = duration;
+                                duration = clip.get('buffer').duration;
                             }
                         } else {    // loop === 0
                             offset = startTime;

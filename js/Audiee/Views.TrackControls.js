@@ -53,10 +53,16 @@ define([
             var volume = $('input.volume', this.el).val() / 100,
                 cid = $(this.el).parents('.track').data('cid');
 
+            // sets the new volume value into the model
             this.model.set('gain', volume);
-            
-            Audiee.Player.volumeChange(volume, cid);  // zmenit v souvislosti se solo
 
+            // change GainNode's volume only
+            //  + if there are no solo tracks
+            //  + or there are solo tracks and this track is one of them
+            if (!Audiee.Collections.Tracks.isAnySolo() || this.model.get('solo'))
+                Audiee.Player.volumeChange(volume, cid);  
+
+            // disables the mute if it was activated
             if ($('button.mute', this.el).hasClass('active')) {
                 $('button.mute', this.el).button('toggle');
                 this.mute();
@@ -69,7 +75,7 @@ define([
             this.model.set('muted', !muted);
             if (muted) {
                 // track was muted -- restores previous gain value
-                if (!this.model.get('solo'))
+                if (!Audiee.Collections.Tracks.isAnySolo() || this.model.get('solo'))
                     Audiee.Player.volumeChange(this.model.get('gain'), this.model.cid);
             } else {
                 // track is beeing muted (only if is not set as solo track)
