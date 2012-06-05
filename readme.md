@@ -1,7 +1,7 @@
 # [Web Audio Editor](http://www.stud.fit.vutbr.cz/~xmyler00/audiee/)
 
 Edit your audio easily and quickly right in your web browser. 
-** This version is more or less experimental and has only limited functionality. **
+**This version is more or less experimental and has only limited functionality.**
 
 ## Project information
 
