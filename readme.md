@@ -1,23 +1,20 @@
-# [Web Audio Editor](#real-app-link)
+# [Web Audio Editor](http://www.stud.fit.vutbr.cz/~xmyler00/audiee/)
 
 Edit your audio easily and quickly right in your web browser. 
-
-
-## Quick start
-
-Here will be quick start guide.
-
-
-## Features
-
-* Comprehensive list of features.
-* Will be here.
-* Of course. 
-
+** This version is more or less experimental and has only limited functionality. **
 
 ## Project information
 
-* Source: http://github.com/janmyler/web-audio-editor
-* Web: -- unknown yet --
-* Docs: -- unknown yet --
-* Twitter: -- unknown yet ---
+* Source: https://github.com/janmyler/web-audio-editor
+* Web: http://www.stud.fit.vutbr.cz/~xmyler00/audiee/
+* Tutorial video: http://www.youtube.com/watch?v=l67Jk9Vbms8
+
+## Features
+
+* Open and display WAVE/MP3 audio files.
+* Zoom in/out audio waveform.
+* Audio tracks containing editable audio clips.
+* Audio clips are movable, resizable. Can be looped and splitted easily.
+* Editing functions such as Cut, Copy, Paste and Delete.
+* Multitrack selection tool.
+* and more...
