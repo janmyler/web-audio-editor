@@ -1,7 +1,13 @@
 /**
- * Author: Jan Myler <honza.myler@gmail.com>
- * 
- * View for the collection of audio clips (each track has its own collection of clips).
+ * View for a collection of audio clips
+ *
+ * @file        Views.Clips.js
+ * @author      Jan Myler <honza.myler[at]gmail.com>
+ * @copyright   Copyright 2012, Jan Myler (http://janmyler.com)
+ * @license     MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
  */
 
 define([

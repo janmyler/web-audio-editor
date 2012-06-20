@@ -1,8 +1,13 @@
 /**
- * Author: Jan Myler <honza.myler@gmail.com>
- * Filename: editable_name_view.js
- * 
- * View for editing the name titles (e.g. project name, track name etc.).
+ * View for an editable name title (e.g. project name, track name etc.)
+ *
+ * @file        Views.EditableName.js
+ * @author      Jan Myler <honza.myler[at]gmail.com>
+ * @copyright   Copyright 2012, Jan Myler (http://janmyler.com)
+ * @license     MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
  */
 
 define([

@@ -1,8 +1,14 @@
 /**
- * Author: Jan Myler <honza.myler@gmail.com>
- * 
  * This helper object provides functions related to drawing waveforms,
  * zoom level, etc.
+ *
+ * @file        Helpers.Display.js
+ * @author      Jan Myler <honza.myler[at]gmail.com>
+ * @copyright   Copyright 2012, Jan Myler (http://janmyler.com)
+ * @license     MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
  */
 
 define([

@@ -1,7 +1,13 @@
 /**
- * Author: Jan Myler <honza.myler@gmail.com>
- * 
- * View for a single editor track.
+ * View for a single editor track
+ *
+ * @file        Views.Track.js
+ * @author      Jan Myler <honza.myler[at]gmail.com>
+ * @copyright   Copyright 2012, Jan Myler (http://janmyler.com)
+ * @license     MIT License (http://www.opensource.org/licenses/mit-license.php)
+ *
+ * Licensed under The MIT License
+ * Redistributions of files must retain the above copyright notice.
  */
 
 define([
