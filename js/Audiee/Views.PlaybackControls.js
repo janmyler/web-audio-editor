@@ -1,6 +1,6 @@
 /**
  * Author: Jan Myler <honza.myler@gmail.com>
- * 
+ *
  * View for main playback controls.
  */
 
@@ -38,17 +38,24 @@ define([
             if (typeof currentTime === 'undefined')
                 currentTime = 0;
 
-            var min  = Math.floor(currentTime / 60),
-                sec  = currentTime % 60,
-                i;
+            var hour = Math.floor(currentTime / 60 / 60);
+            currentTime -= hour * 60 * 60;
 
-            // number to string conversion and string shortening
-            sec += '';            
-            i = sec.indexOf('.');
-            if (i !== -1)
-                sec = sec.substring(0, i + 4);
+            var minute = Math.floor(currentTime / 60);
+            currentTime -= minute * 60;
 
-            this.el.children('#time-display').val(min + ' : ' + sec);
+            var second = Math.floor(currentTime);
+            currentTime -= second;
+
+            var milli = '' + Math.floor(currentTime * 1000);
+
+            if (minute < 10) minute = '0' + minute;
+            if (second < 10) second = '0' + second;
+            while (milli.length < 3) {
+                milli = '0' + milli;
+            }
+
+            this.el.children('#time-display').val(hour + ':' + minute + ':' + second + '.' + milli);
         },
 
         play: function() {
@@ -64,7 +71,7 @@ define([
         stop: function() {
             if (Audiee.Collections.Tracks.length <= 0)
                 return;
-            
+
             var $play = $('#play');
             Audiee.Player.stop();
 
@@ -78,12 +85,12 @@ define([
 
         handleKey: function(e) {
             if (!Audiee.Views.Menu.hotkeysEnabled)
-               return; 
+               return;
 
             switch(e.which) {
-                case 32: 
+                case 32:
                     if (e.type === 'keydown' && !this.pressingKey) {
-                        if (Audiee.Player.playing) 
+                        if (Audiee.Player.playing)
                             $('#stop').trigger('click');
                         else
                             $('#play').trigger('click');
