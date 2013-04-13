@@ -1,4 +1,4 @@
-# [Web Audio Editor](http://www.stud.fit.vutbr.cz/~xmyler00/audiee/)
+# [Web Audio Editor](http://app.audiee.com)
 
 Edit your audio easily and quickly right in your web browser. 
 **This version is more or less experimental and has only limited functionality.**
@@ -6,7 +6,7 @@ Edit your audio easily and quickly right in your web browser.
 ## Project information
 
 * Source: https://github.com/janmyler/web-audio-editor
-* Web: http://www.stud.fit.vutbr.cz/~xmyler00/audiee/
+* Web: http://app.audiee.com
 * Tutorial video: http://www.youtube.com/watch?v=l67Jk9Vbms8
 
 ## Features
