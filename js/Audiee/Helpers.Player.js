@@ -24,11 +24,11 @@ define([
                 var tpl = (_.template(AlertT))({
                     message: 'Your browser is not supported yet, try using Google Chrome.'
                 });
-                $(tpl).modal();   
+                $(tpl).modal();
             } else {
-                this.context = new webkitAudioContext || new AudioContext;
+                this.context = new (window.AudioContext || window.webkitAudioContext)();
             }
-            
+
             this.nodes     = [];
             this.gainNodes = {};
             this.playing   = false;
@@ -38,7 +38,7 @@ define([
 
         Player.prototype.initTrack = function(cid) {
             if (typeof this.gainNodes[cid] === 'undefined') {
-                this.gainNodes[cid] = this.context.createGainNode();
+                this.gainNodes[cid] = this.context.createGain();
                 this.gainNodes[cid].connect(this.context.destination);
             }
         };
@@ -51,7 +51,7 @@ define([
         Player.prototype.play = function() {
             var that = this,
                 currentTime = this.context.currentTime;
-            
+
             // starts playback from the beginning
             this.playbackFrom = currentTime;
 
@@ -97,7 +97,7 @@ define([
                         that.nodes.push(node);
                         node.buffer = clip.get('buffer');
                         node.connect(gainNode);  // connects node to track's gain node
-                        
+
                         // clip offset and duration times
                         if (loop > 0) {
                             if (i === 0) {           // first subclip
@@ -119,7 +119,7 @@ define([
                         }
 
                         // sets the clip's playback start time
-                        node.noteGrainOn(
+                        node.start(
                             currentTime + trackPosition - cursor,
                             offset,
                             duration
@@ -132,13 +132,13 @@ define([
             });
 
             this.playing = true;
-            this.playbackPositionInterval = setInterval("Audiee.Player.updatePlaybackPosition(Audiee.Player.playbackFrom)", 50); 
+            this.playbackPositionInterval = setInterval("Audiee.Player.updatePlaybackPosition(Audiee.Player.playbackFrom)", 50);
         };
 
         Player.prototype.stop = function() {
             if (this.playing) {
                 for (var i = 0, len = this.nodes.length; i < len; ++i) {
-                    this.nodes[i].noteOff(0);
+                    this.nodes[i].stop(0);
                 }
                 this.playing = false;
             } else {
@@ -155,7 +155,7 @@ define([
         Player.prototype.updatePlaybackPosition = function(startTime) {
             if (this.playing && typeof startTime !== 'undefined') {
                 var newTime = this.context.currentTime - startTime;
-                
+
                 if (newTime >= Audiee.Collections.Tracks.first().get('length'))
                     $('#stop').trigger('click');
                 else
@@ -167,23 +167,24 @@ define([
 
         Player.prototype.volumeChange = function(volume, cid) {
             this.gainNodes[cid].gain.value = volume;
-        };        
+        };
 
-        // NOTE: Maybe move to different module... 
+        // NOTE: Maybe move to different module...
         Player.prototype.loadFile = function(file, el) {
             var reader = new FileReader,
+                fileTypes = ['audio/mpeg', 'audio/mp3', 'audio/wave', 'audio/wav'],
                 that   = this;
-            
-            if (!file.type.match('audio.mp3') && !file.type.match('audio.wav')) {
+
+            if (fileTypes.indexOf(file.type) < 0) {
                 throw('Unsupported file format!');
             }
-            
+
             reader.onloadend = function(e) {
                 if (e.target.readyState == FileReader.DONE) { // DONE == 2
                     $('.progress').children().width('100%');
-                    
+
                     var onsuccess = function(audioBuffer) {
-                        $(el).trigger('Audiee:fileLoaded', [audioBuffer, file]);    
+                        $(el).trigger('Audiee:fileLoaded', [audioBuffer, file]);
                     },
                     onerror = function() {
                         // on error - show alert modal
@@ -203,20 +204,20 @@ define([
                 }
             };
 
-            // NOTE: Maybe move to different module... 
+            // NOTE: Maybe move to different module...
             reader.onprogress = function(e) {
                 if (e.lengthComputable) {
                     $progress = $('.progress', '#newTrackModal');
                     if ($progress.hasClass('hide'))
                         $progress.fadeIn('fast');
-                    
+
                     // show loading progress
                     var loaded = Math.floor(e.loaded / e.total * 100);
                     $progress.children().width(loaded + '%');
                 }
             };
-                
-            reader.readAsArrayBuffer(file);  
+
+            reader.readAsArrayBuffer(file);
         };
 
         return Player;
