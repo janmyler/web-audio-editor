@@ -28,13 +28,13 @@ define([
         className: 'clip',
 
         initialize: function() {
-            _.bindAll(this, 
-                'render', 
-                'remove', 
+            _.bindAll(this,
+                'render',
+                'remove',
                 'soundwaveRender',
                 'positionRender',
-                'updatePosition', 
-                'scrollChange', 
+                'updatePosition',
+                'scrollChange',
                 '_clipWidth'
             );
             this.model.bind('change:startTime', this.soundwaveRender);
@@ -43,7 +43,7 @@ define([
             this.model.bind('destroy', this.remove);
             this.model.collection.bind('Audiee:zoomChange', this.render);
             this.model.collection.bind('Audiee:scroll', this.scrollChange);
-            
+
             this.editableName = new EditableNameV({
                 model: this.model,
                 className: 'clip-name',
@@ -74,9 +74,9 @@ define([
             // console.log('Clip.render() ', left, width);
 
             $(this.el).children().detach().end()  // detach() deletes element's content but saves event listeners etc.
-                .css('left', left + 'px')                    
-                .width(width)  
-                .resizable('destroy')
+                .css('left', left + 'px')
+                .width(width)
+                // .resizable('destroy')
                 .append(this.editableName.el)
                 .append('<div class="ui-resizable-handle ui-resizable-w">')
                 .append('<div class="ui-resizable-handle ui-resizable-e">')
@@ -87,14 +87,12 @@ define([
                         e: '.ui-resizable-e'
                     },
                     containment: 'parent',  // TODO: remove this? (track resizing with clip...)
-                    // grid: 5,
-                    // start: function(e) {console.log(e);},
                     resize: function(e, ui) {
                         var duration = that.model.get('buffer').duration,
                             loop     = that.model.get('loop'),
                             end      = that.model.clipLength(),
                             newStartTime, newEndTime, newTrackPos;
-                        
+
                         Audiee.Views.Editor.movingOn();  // blocks the selection while resizing
 
                         // resize from left or right border?
@@ -104,8 +102,8 @@ define([
                             loop       = loop + Math.floor((that.model.get('endTime') + Audiee.Display.px2sec(ui.size.width) - end) / duration);
                         } else {  // from left
                             newStartTime = Audiee.Display.px2sec(ui.position.left) - that.model.get('trackPos');
-                            
-                            if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track 
+
+                            if (that.model.get('trackPos') <= 0.05) {   // clip is at the very beginning of the track
                                 if (newStartTime > 0) { // resize --> direction to the right NOTE: should be ok now
                                     newStartTime += that.model.get('startTime');
                                     newTrackPos  = Audiee.Display.px2sec(ui.position.left);
@@ -113,7 +111,7 @@ define([
                                     newStartTime = that.model.get('startTime');
                                     newTrackPos  = 0;
                                 }
-                            } else { // clip is somewhere else 
+                            } else { // clip is somewhere else
                                 newStartTime += that.model.get('startTime');
                                 newTrackPos  = Audiee.Display.px2sec(ui.position.left);
                             }
@@ -137,11 +135,11 @@ define([
                             trackCid = $(that.el).parents('.track').data('cid');
 
                         Audiee.Views.Editor.movingOff();
-                        Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, that.model.cid);                        
+                        Audiee.Collections.Tracks.deleteSelection(from, to, trackCid, that.model.cid);
                         that.soundwaveRender();
                     }
                 });
-            
+
             // change clip's name left offset if needed
             this.scrollChange();
 
@@ -154,7 +152,7 @@ define([
 
         soundwaveRender: function() {
             $(this.el).width(this._clipWidth());
-            this.clipDisplay.render(this._clipWidth());  
+            this.clipDisplay.render(this._clipWidth());
         },
 
         positionRender: function() {
@@ -195,6 +193,6 @@ define([
 
         _clipWidth: function() {
             return Audiee.Display.sec2px(this.model.clipLength());
-        },        
+        },
     });
 });
