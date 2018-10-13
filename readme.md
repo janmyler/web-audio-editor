@@ -1,4 +1,4 @@
-# [Web Audio Editor](http://audiee.io)
+# [Web Audio Editor](http://janmyler.github.io/web-audio-editor/)
 
 Edit your audio easily and quickly right in your web browser.
 
